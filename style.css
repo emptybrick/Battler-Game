@@ -26,7 +26,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-image: url('/images/pokemongame-border.png');
+    background-image: url('images/pokemongame-border.png');
     background-size: cover;
     background-position: center;
     padding: 260px 310px;
@@ -424,6 +424,7 @@ h6 {
     bottom: 20px
 }
 
+.opponentImage.gym,
 .playerText,
 .opponentText.battle {
     display: flex;

@@ -8,7 +8,6 @@ const searchForPokemon = document.querySelector('#search-for-pokemon');
 const starterButton = document.querySelectorAll('.starter-pokemon');
 const nextAreaButton = document.querySelectorAll('.next-area');
 const lastAreaButton = document.querySelectorAll('.last-area')
-// const runAwayButton = document.querySelector('#run-away');
 const leaveButton = document.querySelectorAll(".leave");
 const pageNextButton = document.querySelectorAll("#page-next");
 const pagePreviousButton = document.querySelectorAll("#page-previous");
@@ -18,14 +17,13 @@ const healButton = document.querySelector('.poke-button.heal');
 const checkCollection = document.querySelector('.poke-button.collection');
 const switchPokemonButton = document.querySelectorAll('.switch-pokemon');
 const useRareCandy = document.querySelector('.use-rare-candy');
-const actionButton = document.querySelectorAll('.dynamic-button');
+const dynamicButton = document.querySelectorAll('.dynamic-button');
 const gameClearButton = document.querySelector('#game-clear-button');
 const eliteFourButton = document.querySelectorAll('.elite-four-button');
+const usePotion = document.querySelectorAll('.use-potion');
 
 const party = [];
 
-// when area is marked as completed the gym button needs to be disabled, and when 
-// indigo plateu is marked complete go gameClear condition
 const areas = [
     { location: "palletTown", completed: false, type: "normal", condition: () => party.length >= 3 },
     { location: "pewterCity", completed: false, badge: 'Boulder', type: "rock", condition: () => badges.includes('Boulder') },
@@ -63,11 +61,13 @@ let nextPage = null;
 let lastPage = null;
 let activeSlot = '';
 let encounter = '';
+let oppName = '';
 
 let currentPokemon = [];
 let oppCurrentPokemon = [];
 let wildPokemonFound = [];
 let oppParty = [];
+
 
 
 
@@ -109,6 +109,7 @@ function resetGame() {
     lastPage = null;
     activeSlot = '';
     encounter = '';
+    oppName = '';
 
     currentPokemon = [];
     oppCurrentPokemon = [];
@@ -164,6 +165,19 @@ function switchScreen(screenClass) {
         disableButtons('.use-rare-candy');
     };
 
+    if (screenClass === 'gym' || screenClass === 'battle') {
+        disableButtons('.use-rare-candy');
+        disableButtons('.switch-pokemon.party');
+        enableButtons('.dynamic-button');
+        enableButtons('.use-potion')
+        enableButtons('.switch-pokemon.gym')
+        enableButtons('.switch-pokemon.battle')
+    }
+
+    if (screenClass === 'gym') {
+        // disableButtons('.leave');
+    }
+
 
     // console.log("current area is: ", currentArea)
     // console.log('screen class is: ', screenClass)
@@ -194,7 +208,31 @@ function enableButtons(selector) {
 
 // function to choose random pokemon
 function chooseRandomPokemon(pokedex) {
-    const eligiblePokemon = pokedex.filter(pokemon => pokemon.rarity > 0);
+
+    let possiblePokemon = null;
+
+    switch (currentArea) {
+        case 'pewterCity':
+            possiblePokemon = pokedex.filter(pokemon => pokemon.maxhp < 40);
+            break;
+        case 'ceruleanCity':
+            possiblePokemon = pokedex.filter(pokemon => pokemon.maxhp < 50);
+            break;
+        case 'vermilionCity':
+            possiblePokemon = pokedex.filter(pokemon => pokemon.maxhp < 60);
+            break;
+        case 'celadonCity':
+            possiblePokemon = pokedex.filter(pokemon => pokemon.maxhp < 70);
+            break;
+        case 'fuchsiaCity':
+            possiblePokemon = pokedex.filter(pokemon => pokemon.maxhp < 80);
+            break;
+        default:
+            possiblePokemon = pokedex.filter(pokemon => pokemon.maxhp < 100);
+            break;
+    };
+
+    const eligiblePokemon = possiblePokemon.filter(pokemon => pokemon.rarity > 0);
     const totalWeight = eligiblePokemon.reduce((sum, pokemon) => sum + pokemon.rarity, 0);
     const randomValue = Math.random() * totalWeight;
     let currentWeight = 0;
@@ -340,9 +378,9 @@ function updatePartyDisplay() {
 };
 
 // function to set current pokemon, this will be used for battles and highlighting under party status to show whos current
-function updateCurrentPokemon() {
-    console.log('trying to set current pokemon as ', currentPokemon.name)
-};
+// function updateCurrentPokemon() {
+//     console.log('trying to set current pokemon as ', currentPokemon.name)
+// };
 
 // function to run when buying items to add item and remove gold
 function buyItem(itemName) {
@@ -400,7 +438,7 @@ function switchPokemon() {
 
     const healthCheck = party.every(pokemon => pokemon.hp <= 0);
 
-    if (healthCheck) {
+    if (!healthCheck) {
         if (party.length < 2) {
             console.log('you only have 1 pokemon');
             return;
@@ -427,14 +465,28 @@ function switchPokemon() {
     };
 };
 
+
+// issue with indexOf() is that if theres multiple of the same object it only looks for the first.
+// need a better way to switch pokemon
 function switchPokemonOpp() {
-    let currentIndex = oppParty.indexOf(oppCurrentPokemon);
-    currentIndex = (currentIndex + 1) % oppParty.length;
-    oppCurrentPokemon = oppParty[currentIndex];
+
+    const healthCheck = oppParty.every(pokemon => pokemon.hp <= 0);
+
+    if (!healthCheck) {
+        let currentIndex = oppParty.indexOf(oppCurrentPokemon);
+        currentIndex = (currentIndex + 1) % oppParty.length;
+        oppCurrentPokemon = oppParty[currentIndex];
+    } else {
+        if (encounter === 'gym') {
+            const dynamicButtonGymTextElement = document.querySelector('dynamic-button.gym');
+            dynamicButtonGymTextElement = 'Accept Badge';
+        }
+        // getRewards();  
+    }
     //update battle display function?
 };
 
-// function to evolve, will look for 10xp, 20xp, or 30xp values if they hit them it does different things
+// function to evolve, will look for 10-50xp values if they hit them it does different things
 function evolution(pokemonToEvolve, evolvesInto) {
     let removePokemon = party.indexOf(pokemonToEvolve);
     party.splice(removePokemon, 1, evolvesInto);
@@ -442,13 +494,9 @@ function evolution(pokemonToEvolve, evolvesInto) {
     console.log('current pokemon is now: ', currentPokemon, "pokemon to evolve was/is: ", pokemonToEvolve, "\npokemon evolves into is: ", evolvesInto)
     console.log('pokemon to remove is: ', removePokemon);
     updatePartyDisplay();
-    // check for 10xp, if so search for pokemon that has evolves from and swap them
-    // if else check for 20xp, if so search for poke ... ^
-    // if else check for 30 xp, if so add more to max hp and hp=maxHP
-    // else do nothing
-    // have a special mathRadom for evee evolution to choose 1 of 3
 };
 
+// fuction that runs when currentPokemon gains xp
 function updateXP() {
     if (currentPokemon.name === "Eevee") {
         if (currentPokemon.xp === currentPokemon.maxxp) {
@@ -479,8 +527,8 @@ function updateXP() {
             evolution(currentPokemon, evolvedForm);
         }
         else if (currentPokemon.xp === currentPokemon.maxxp && !evolvedForm) {
+            currentPokemon.xp = currentPokemon.maxxp
             currentPokemon.maxhp += 30;
-            currentPokemon.hp = currentPokemon.maxhp
             console.log("pokemon has reached maxxp, added 30 max hp, total is now: ", currentPokemon.hp);
         } else {
             console.log('pokemon not ready to evolve');
@@ -489,20 +537,45 @@ function updateXP() {
     updatePartyDisplay();
 };
 
+// sets up initial battle state (screen and images) should only run once
 function battleSetup(eventText) {
 
     let battleType = eventText.trim();
+    let leaveButtonTextElement = document.querySelector('.leave.battle');
+    let dynamicButtonGymTextElement = document.querySelector('.dynamic-button.gym');
+    let dynamicButtonBattleTextElement = document.querySelector('.dynamic-button.battle');
 
     if (battleType === 'Trainer Battle') {
 
+        leaveButtonTextElement.textContent = "Leave";
         encounter = 'trainerBattle'
 
         const playerTextElement = document.querySelector('.playerText.battle');
         const playerImageElement = document.querySelector(".playerImage-battle");
         playerTextElement.textContent = `You sent out ${currentPokemon.name}!`;
         playerImageElement.src = currentPokemon.image
+        let possibleOppParty = null;
 
-        const possibleOppParty = pokedex.filter(pokemon => pokemon.hp < 60);
+        switch (currentArea) {
+            case 'pewterCity':
+                possibleOppParty = pokedex.filter(pokemon => pokemon.hp < 40);
+                break;
+            case 'ceruleanCity':
+                possibleOppParty = pokedex.filter(pokemon => pokemon.hp < 50);
+                break;
+            case 'vermilionCity':
+                possibleOppParty = pokedex.filter(pokemon => pokemon.hp < 60);
+                break;
+            case 'celadonCity':
+                possibleOppParty = pokedex.filter(pokemon => pokemon.hp < 70);
+                break;
+            case 'fuchsiaCity':
+                possibleOppParty = pokedex.filter(pokemon => pokemon.hp < 80);
+                break;
+            default:
+                possibleOppParty = pokedex.filter(pokemon => pokemon.hp < 100);
+                break;
+        };
 
         if (possibleOppParty.length < 4) {
             console.log('opponent party is less than 4', possibleOppParty)
@@ -530,8 +603,10 @@ function battleSetup(eventText) {
         console.log("opponents party: ", oppParty);
     }
 
-    if (battleType === 'Search For Wild Pokemon') {
+    else if (battleType === 'Search For Wild Pokemon') {
 
+        leaveButton.textContent = "Run Away";
+        dynamicButtonBattleTextElement.textContent = "Attack";
         encounter = 'wildPokemon';
 
         const playerTextElement = document.querySelector('.playerText.battle');
@@ -558,14 +633,17 @@ function battleSetup(eventText) {
 
         };
     }
-    if (battleType === 'Gym') {
+    else if (battleType === 'Gym') {
+        console.log('setting up gym leader battle')
 
+        dynamicButtonGymTextElement.textContent = "Challenge";
+        // leaveButtonTextElement.textContent = "Leave";
         encounter = 'gym'
 
-        const playerTextElement = document.querySelector('.playerText.gym');
-        const playerImageElement = document.querySelector(".playerImage-gym");
-        playerTextElement.textContent = `You sent out ${currentPokemon.name}!`;
-        playerImageElement.src = currentPokemon.image
+        // const playerTextElement = document.querySelector('.playerText.gym');
+        // const playerImageElement = document.querySelector(".playerImage-gym");
+        // playerTextElement.textContent = `You sent out ${currentPokemon.name}!`;
+        // playerImageElement.src = currentPokemon.image
 
         switchScreen('gym');
         // updateGymButton();
@@ -573,37 +651,40 @@ function battleSetup(eventText) {
         const foundArea = areas.find((area) => area.location === currentArea)
         const foundGymLeader = leaders.find((leader) => leader.location === foundArea.location)
 
+        oppName = foundGymLeader.name
         oppParty = structuredClone(foundGymLeader.leaderParty);
 
         oppCurrentPokemon = oppParty[0];
 
-        // const opponentTextElement = document.querySelector('.opponentText.gym p');
-        // opponentTextElement.textContent = `You dare challenge me? I am ${foundGymLeader.name}!`;
 
         const leaderImageElement = document.querySelector('.opponentImage-leader');
         leaderImageElement.src = foundGymLeader.leaderimage
 
-        const opponentImageElement = document.querySelector('.opponentImage-gym');
-        opponentImageElement.src = oppCurrentPokemon.image;
+        // const opponentImageElement = document.querySelector('.opponentImage-gym');
+        // opponentImageElement.src = oppCurrentPokemon.image;
 
-        const opponentTextElement = document.querySelector('.opponentImage.gym p');
-        opponentTextElement.textContent = (`${foundGymLeader.name} sent out ${oppCurrentPokemon.name}!`)
+        const opponentTextElement = document.querySelector('.opponentImage.gym');
+        opponentTextElement.textContent = (`You dare challenge me? I am ${oppName}!`)
+
+        disableButtons('.use-potion');
+        disableButtons('.switch-pokemon');
 
         console.log('area found: ', foundArea);
         console.log('gym leader found: ', foundGymLeader);
         console.log("gym leaders party is: ", oppParty);
 
         // resolveBattle(foundGymLeader, 'gymLeader');
-        foundArea.completed = true;
-        getBadge(foundArea.badge);
+        // foundArea.completed = true;
+        // getBadge(foundArea.badge);
 
         // console.log(areas);
         // console.log(badges);
-    };
+    }
 
-    if (battleType === 'Lorelei' || battleType === 'Bruno' ||
+    else if (battleType === 'Lorelei' || battleType === 'Bruno' ||
         battleType === 'Agatha' || battleType === 'Lance') {
-        encounter = 'gym'
+        encounter = 'elite'
+        oppName = battleType;
 
         const playerTextElement = document.querySelector('.playerText.gym');
         const playerImageElement = document.querySelector(".playerImage-gym");
@@ -614,7 +695,7 @@ function battleSetup(eventText) {
 
         switchScreen('gym');
         // updateGymButton();
-
+        
         switch (battleType) {
             case "Lorelei":
                 eliteImage = loreleiImage;
@@ -649,7 +730,7 @@ function battleSetup(eventText) {
         eliteOpponentImageElement.src = oppCurrentPokemon.image;
 
         const eliteOpponentTextElement = document.querySelector('.opponentImage.gym p');
-        eliteOpponentTextElement.textContent = (`${battleType} sent out ${oppCurrentPokemon.name}!`);
+        eliteOpponentTextElement.textContent = (`${oppName} sent out ${oppCurrentPokemon.name}!`);
 
         // updateAreaButton();
         // updatePartyDisplay();
@@ -659,6 +740,10 @@ function battleSetup(eventText) {
 
 // function for when action is clicked or resolveBattle is called for to compare hp values and switch pokemon out
 function resolveBattle(encounterData, encounterType) {
+
+    let dynamicButtonBattleTextElement = document.querySelector('.dynamic-button.battle');
+    let dynamicButtonGymTextElement = document.querySelector('.dynamic-button.gym');
+    let leaveButtonTextElement = document.querySelector('.leave');
 
     if (encounterType === "wildPokemon") {
         console.log('trying to resolve wild pokemon battle')
@@ -676,22 +761,25 @@ function resolveBattle(encounterData, encounterType) {
         }
         if (wildPokemon.hp <= 0) {
             wildPokemon.hp = 0;
-            throwPokeball(wildPokemon);
-            getRewards('wildpokemon');
-            console.log('trying to catch', wildPokemon)
             encounter = '';
-            updatePartyDisplay();
-        };
+            currentPokemon.xp += 1;
+            dynamicButtonBattleTextElement.textContent = "Throw Pokéball";
+            leaveButtonTextElement.textContent = "Leave";
+            disableButtons('.use-potion');
+            disableButtons('.switch-pokemon.battle');
+        }
+        updatePartyDisplay();
     }
 
     // need to figure out the check for party.length to see if there are any pokemon with HP (remove from party or look for hp > 0?)
     // also figure out a way to display opponent party?  and make it so hp cant show negative in display
-    if (encounterType === 'trainerBattle') {
-        console.log('trying to resolve trainer battle')
-        console.log('trainers current pokemon is: ', oppCurrentPokemon)
-        console.log('trainers party is: ', oppParty)
+    else if (encounterType === 'trainerBattle') {
+        // console.log('trying to resolve trainer battle')
+        // console.log('trainers current pokemon is: ', oppCurrentPokemon)
+        // console.log('trainers party is: ', oppParty)
+        const healthCheck = oppParty.every(pokemon => pokemon.hp > 0);
         let oppPartyArray = encounterData;
-        if (oppPartyArray.length < 1) {
+        if (!healthCheck) {
             oppPartyArray = [];
             encounter = '';
             console.log('opponent has no more pokemon left')
@@ -720,6 +808,7 @@ function resolveBattle(encounterData, encounterType) {
                 oppCurrentPokemon.hp -= 50;
                 if (oppCurrentPokemon.hp <= 0) {
                     oppCurrentPokemon.hp = 0;
+                    currentPokemon.xp += 1;
                     switchPokemonOpp();
 
                     const opponentTextElement = document.querySelector('.opponentText.battle');
@@ -730,16 +819,17 @@ function resolveBattle(encounterData, encounterType) {
                 }
             };
         };
-
-        if (encounterType === "gymLeader") {
-            console.log('trying to resolve gym leader battle')
-            let gymLeaderParty = encounterData;
-            if (gymLeaderParty.length < 1) {
-                console.log(`congratulations you defeated "placeholder for name"`)
-            }
-        };
     }
-}
+
+    else if (encounterType === "gymLeader") {
+        console.log('trying to resolve gym leader battle')
+        let gymLeaderParty = encounterData;
+        if (gymLeaderParty.length < 1) {
+            console.log(`congratulations you defeated "placeholder for name"`)
+        }
+    };
+};
+
 
 // should rewards show in the display and leave button needs to be pressed?
 function getRewards(rewardType) {
@@ -764,13 +854,21 @@ function getRewards(rewardType) {
 
 // how can i have it disable action button until conditions are right?  same for switch pokemon and leave/runaway
 function throwPokeball(randomPokemon) {
+
+    // throwPokeball(wildPokemon);
+    // getRewards('wildpokemon');
+    // console.log('trying to catch', wildPokemon)
+    // updatePartyDisplay();
+    let leaveButtonTextElement = document.querySelector('.leave');
+    leaveButtonTextElement.textContent = 'Leave';
+
     console.log(party)
     const pokeBall = items.find(item => item.name === 'pokeball');
     const partyPokemon = party.find(p => p.name === randomPokemon.name)
     const collectionPokemon = collection.find(p => p.name === randomPokemon.name)
     if (partyPokemon || collectionPokemon) {
         console.log('You already have this pokemon, you decide to leave it alone');
-
+        disableButtons('.dynamic-button');
         const opponentTextElement = document.querySelector('.opponentText.battle');
         opponentTextElement.textContent = `You already have a ${randomPokemon.name}, you leave it alone.`;
         // disableButtons('action');
@@ -796,10 +894,11 @@ function throwPokeball(randomPokemon) {
                 // console.log(collection);
             };
         };
-    };
+    }
+    disableButtons('.dynamic-button');
     updatePartyDisplay();
     updateItemDisplay();
-}
+};
 
 function heal() {
     party.forEach(pokemon => pokemon.hp = pokemon.maxhp);
@@ -818,18 +917,6 @@ pokeMartBuyButton.forEach((button) => {
 });
 
 gym.addEventListener('click', (event) => battleSetup(event.target.textContent));
-// switchScreen('gym');
-// const foundArea = areas.find((area) => area.location === currentArea)
-// foundArea.completed = true;
-// getBadge(foundArea.badge);
-
-// console.log(areas);
-// console.log(badges);
-// updatePartyDisplay();
-
-// updateAreaButton();
-// updateGymButton();
-// });
 
 playAgainButton.forEach((button) => {
     button.addEventListener('click', resetGame);
@@ -934,27 +1021,58 @@ leaveButton.forEach((leave) => {
             oppCurrentPokemon = [];
             wildPokemonFound = [];
             oppParty = [];
+            oppName = '';
         }
     });
 });
 
-// get button class="dynamic-button battle"
-// need to know if its wildpokemon vs trainer? to pass resolveBattle info?
-actionButton.forEach((button) => {
+// text content changes based on conditions (should allow for multiple actions on 1 button)
+dynamicButton.forEach((button) => {
     button.addEventListener('click', () => {
         console.log('click action');
         // console.log(button)
         // console.log(button.textContent)
-        switch (encounter) {
-            case "wildPokemon":
-                resolveBattle(wildPokemonFound, encounter);
-                break;
-            case "trainerBattle":
-                resolveBattle(oppParty, encounter);
+        if (button.textContent === 'Attack') {
+            switch (encounter) {
+                case "wildPokemon":
+                    resolveBattle(wildPokemonFound, encounter);
+                    break;
+                case "trainerBattle":
+                    resolveBattle(oppParty, encounter);
+                    break;
+                case "gym":
+                    resolveBattle(oppParty, encounter);
+                    break;
+            }
         }
-        // console.log(wildPokemonFound);
-        // console.log(oppParty);
-        // battleSetup();
+        else if (button.textContent === 'Throw Pokéball') {
+
+            console.log('throwing pokeball');
+            throwPokeball(wildPokemonFound);
+        }
+        else if (button.textContent === 'Challenge') {
+
+            console.log(oppName, oppCurrentPokemon.name)
+            const playerTextElement = document.querySelector('.playerText.gym');
+            const playerImageElement = document.querySelector(".playerImage-gym");
+            playerTextElement.textContent = `You sent out ${currentPokemon.name}!`;
+            playerImageElement.src = currentPokemon.image
+            const opponentImageElement = document.querySelector('.opponentImage.gym');
+            opponentImageElement.src = oppCurrentPokemon.image;
+
+            const opponentTextElement = document.querySelector('.opponentImage.gym p');
+            // opponentTextElement.textContent = `${oppName} sent out ${oppCurrentPokemon.name}!`;
+            const dynamicButtonGymTextElement = document.querySelector('.dynamic-button.gym');
+            dynamicButtonGymTextElement.textContent = "Attack";
+            enableButtons('.switch-pokemon');
+            enableButtons('.use-potion');
+
+        }
+        else if (button.textContent === "Accept Badge") {
+            const foundArea = areas.find((area) => area.location === currentArea)
+            foundArea.completed = true;
+            getBadge(foundArea.badge);
+        }
     });
 });
 
@@ -997,9 +1115,20 @@ eliteFourButton.forEach((button) => {
     });
 });
 
-// // need to set up button switches
-// <button id="main-button acceptChallenge active">Accept Challenge</button>
-// <button id="main-button throwPokeball">Throw Poké Ball</button>
-// <button id="main-button attack">Attack</button>
-// <button id="main-button acceptBadge">Accept Badge</button>
-// <button id="main-button acceptDefeat">Accept Defeat</button>
+usePotion.forEach((button) => {
+    button.addEventListener('click', () => {
+        let potion = items.find(item => item.name === 'potion');
+        if (currentPokemon.hp >= currentPokemon.maxhp) {
+            console.log('pokemon already at full hp');
+        } else {
+            currentPokemon.hp += 20;
+            potion -= 1;
+            if (currentPokemon.hp > currentPokemon.maxhp) {
+                currentPokemon.hp = currentPokemon.maxhp;
+            };
+            updatePartyDisplay();
+            updateItemDisplay();
+        };
+    });
+});
+
