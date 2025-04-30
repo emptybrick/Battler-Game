@@ -1,0 +1,749 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.nabla-uniquifier {
+    font-family: "Nabla", system-ui;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    font-variation-settings:
+        "EDPT" 100,
+        "EHLT" 12;
+}
+
+.bangers-regular {
+    font-family: "Bangers", system-ui;
+    font-weight: 400;
+    font-style: normal;
+  }
+  
+
+#game-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-image: url('/images/pokemongame-border.png');
+    background-size: cover;
+    background-position: center;
+    padding: 260px 310px;
+    border: 10px solid rgb(0, 0, 0);
+    border-radius: 10px;
+}
+
+#game-window-border {
+    margin-left: 5px;
+    margin-bottom: 5px;
+    margin-top: 3px;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgb(141, 141, 141);
+}
+
+.header-box {
+    width: 1200px;
+    display: flex;
+    justify-content: center;
+    padding: 10px 0;
+
+}
+
+header {
+    font-size: 49px;
+    font-family: "Nabla";
+    background-color: rgba(74, 104, 173, 0.89);
+    border-radius: 10px;
+    padding-bottom: 5px 20px;
+    text-align: center;
+    border: 2px solid black;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.game-window {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    width: 1200px;
+}
+
+.left-section,
+.middle-section,
+.right-section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#area,
+#itemBag,
+#party,
+#rules,
+#main {
+    color: black;
+    background-color: rgba(136, 161, 199, 0.853);
+    border-radius: 10px;
+    border: 2px solid black;
+    padding: 10px;
+    text-align: center;
+}
+
+button {
+    display: flex;
+    border-radius: 5px;
+    padding: 6px 12px;
+    border: 1px solid black;
+    background-color: white;
+}
+
+button:hover {
+    background-color: #c3e1ff;
+    transform: scale(1.05);
+}
+
+button:active {
+    background-color: #014b9b;
+    transform: scale(.95);
+    color: white;
+}
+
+.right-section {
+    flex: 1.3;
+}
+
+.left-section {
+    flex: 1.2;
+}
+
+.middle-section {
+    flex: 3;
+}
+
+#badgeStatus {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+}
+
+.icon {
+    opacity: 0.3;
+}
+
+.icon.active {
+    opacity: 1;
+}
+
+#rules {
+    height: 660px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+#rules-buttons {
+    display: flex;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    gap: 10px;
+}
+
+.rules-text {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    align-items: center;
+    padding: 5px;
+    margin: 0;
+    max-height: 550px; 
+}
+
+.page {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    opacity: 0;
+    pointer-events: none;
+    box-sizing: border-box;
+    
+}
+
+.page.active {
+    display: block;
+    opacity: 1;
+    pointer-events: all;
+}
+
+#area {
+    display: flex;
+    flex-direction: column;
+    height: 150px;
+    justify-content: space-around;
+    align-items: center;
+}
+
+#party {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    height: 400px
+}
+
+#party .rules-title {
+    margin-bottom: 10px;
+}
+
+#itemBag {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    height: 250px;
+}
+
+#areaButtons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+}
+
+#areaInfo {
+    padding: 10px;
+}
+
+#badgeStatus {
+    padding: 10px;
+}
+
+.playerPokemonParty,
+#items,
+li {
+    list-style-type: none;
+}
+
+h3 {
+    background: #ffffff;
+    border-radius: 10px;
+    border: 2px solid #333;
+    width: 95%;
+    padding: 5px;
+    font-size: 20px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    text-decoration: underline;
+    margin: auto;
+
+}
+
+h4 {
+    background: #c8c7c7;
+    border-radius: 10px;
+    border: 2px solid #333;
+    width: 95%;
+    padding: 5px;
+
+    margin: auto;
+}
+
+.playerPokemonParty {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.partyMember {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 5px;
+    padding: 11px;
+    border: 1px solid black;
+    background-color: rgba(255, 255, 255, 0.491);
+}
+
+.partyMember.active {
+    background-color:  rgba(255, 215, 0, 0.866);
+    border: 3px solid rgb(0, 0, 0);
+}
+
+#gold,
+#pokeBall,
+#potion,
+#rareCandy {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.name {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    text-align: left;
+    max-height: 20px;
+}
+
+.hp,
+.xp,
+#goldTotal,
+#potionTotal,
+#pokeBallTotal,
+#rareCandyTotal {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    gap: 5px;
+}
+
+#goldTotal,
+#potionTotal,
+#pokeBallTotal,
+#rareCandyTotal {
+    padding-right: 5px;
+}
+
+.item {
+    max-width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 5px;
+    padding: 8px;
+    border: 1px solid black;
+    background-color: rgba(255, 255, 255, 0.491);
+}
+
+h5,
+h6 {
+    margin: 0;
+}
+
+h6 {
+    font-size: 14px;
+}
+
+.playAgainButton {
+    margin-bottom: 20px;
+}
+
+.party-buttons {
+    display: flex;
+    max-width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    padding-top: 5px 5px;
+}
+
+.party-buttons .party {
+    font-size: 12px;
+    width: 90px;
+}
+
+#items {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding-top: 10px;
+}
+
+#badgeStatus {
+    width: 100%;
+    border-radius: 5px;
+    padding: 6px 12px;
+    border: 1px solid black;
+    background-color: rgba(255, 255, 255, 0.502);
+}
+
+#main {
+    height: 500px;
+    position: relative;
+    overflow: hidden;
+}
+
+.main-screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    opacity: 0;
+    pointer-events: none;
+    box-sizing: border-box;
+    margin: auto;
+}
+
+.main-screen.active {
+    display: block;
+    opacity: 1;
+    pointer-events: all;
+}
+
+.left-side,
+.right-side,
+.bottom-side {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.opponentText,
+.playerText,
+.opponentImage,
+.playerImage {
+    background: #f0f0f0ad;
+    border: 2px solid #333;
+    width: 45%;
+    margin: 10px;
+    height: 200px;
+    border-radius: 10px;
+}
+
+.opponentImage.battle,
+.playerImage {
+    display: flex;
+    justify-content: center;
+    position: relative;    
+}
+
+.opponentImage-gym {
+    width: 180px;
+    position: relative;
+    bottom: 20px
+}
+
+.playerText,
+.opponentText.battle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+}
+
+.opponentImage.gym p {
+    position: relative;
+    bottom: 30px;
+    background-color: rgba(220, 20, 60, 0);
+    color: #000000;
+    border: none;
+    font-size: 20px;
+}
+
+.opponentText {
+    position: relative;
+}
+
+
+
+.bottom-side {
+    position: relative;
+    gap: 20px;
+    padding-bottom: 10px;
+}
+
+button:disabled,
+.disabled {
+    background: #999;
+    opacity: 0.5;
+    border: 2px solid #333;
+}
+
+.elite-buttons p,
+.start-buttons p {
+    background: #ffffff00;
+    border: 2px solid #33333300;
+    font-size: 18px;
+}
+
+.elite-buttons p {
+    font-size: 12px;
+}
+
+.elite-buttons {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.main-screen.area.indigoPlateau .areaGoals {
+    margin-top: 70px;
+    margin-bottom: 30px;
+    padding: 0;
+}
+
+.main-screen.area.indigoPlateau {
+    justify-content: flex-start;
+}
+
+.main-screen.area.gameOver .areaGoals {
+    margin: 0;
+    padding: 0;
+    padding-bottom: 10px;
+}
+
+#game-clear-button {
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    width: 200px;
+    height: 75px;
+    font-size: 25px;
+    font-family: "Bangers";
+    margin-bottom: 0px;
+    border-radius: 20px;
+    color: #ffffff;
+    background-image: url('images/platinum-background.jpg');
+}
+
+#game-clear-button.active {
+    display: none;
+    opacity: 0;
+    pointer-events: none;
+}
+
+#start-button-left,
+#start-button-right {
+    display: flex;
+    gap: 20px;
+}
+
+.elite-four-button,
+.starter-pokemon {
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid #333;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    background-color: #f0f0f0d5;
+    text-align: center;
+}
+
+p,
+ul {
+    background: #f0f0f0e0;
+    border-radius: 10px;
+    border: 2px solid #333;
+    width: 90%;
+    padding: 5px;
+    justify-self: center;
+}
+
+#rules p,
+#rules ul {
+    width: 95%;
+}
+
+.area-button {
+    display: flex;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    gap: 10px;
+}
+
+.leaveButton {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+}
+
+.areaTitle {
+    width: 90%;
+    position: absolute;
+    top: 20px;
+    background: #f0f0f0fe;
+    border-radius: 10px;
+    border: 2px solid #333;
+    width: 95%;
+    padding: 5px;
+}
+
+.main-screen.area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: end;
+}
+
+.main-screen.area.start {
+    justify-content: flex-end;
+}
+
+.areaGoals {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 90%;
+    gap: 10px;
+    font-size: 18px;
+    padding-bottom: 50px;
+}
+
+.main-screen.area {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+#pokecenter-buttons {
+    display: flex;
+    height: 120px;
+    width: 300px;
+    padding-bottom: 40px;
+}
+
+.main-screen.area.pokecenter .areaGoals,
+.main-screen.area.pokemart .areaGoals {
+    padding-bottom: 0;
+}
+
+.main-screen.area.start .areaGoals {
+    padding-bottom: 10px;
+}
+
+.main-screen.area.pokecenter-collection-box,
+.collection-box {
+    padding: 0;
+    margin: 0;
+}
+
+.main-screen.area.pokecenter-collection-box .leaveButton {
+    position: absolute;
+    top: 10px;
+    right: 50px;
+} 
+
+.main-screen.area.pokecenter-collection-box p {
+    align-self: flex-start;
+    width: auto;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: 18px;
+    margin-left: 12px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    background-color: #f8fcff;
+}
+
+.collection-box h3 {
+    text-decoration: none;
+    background-color: #ffffffd4;
+}
+
+.collection-box {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    height: 100%;
+    margin-bottom: 5px;
+}
+
+#party-status-collection,
+#collection-list {
+    border: 2px solid black;
+    background-color: #c3e1ff5f;
+    border-radius: 10px;
+}
+
+.collection-box h3 {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    width: 300px;
+    max-width: 90%;
+}
+ 
+.poke-button {
+    justify-content: center;
+    align-items: center;
+    background: #f0f0f0ec;
+    border: 2px solid #333;
+    margin: 10px;
+    border-radius: 10px;
+    width: 200px;
+}
+
+.main-screen.area.start {
+    background-image: url('images/start-screen.jpg');
+}
+
+.main-screen.area.palletTown {
+    background-image: url('images/pallet-town.jpg');
+}
+
+.main-screen.area.pewterCity {
+    background-image: url('images/pewter-city.jpg');
+}
+
+.main-screen.area.ceruleanCity {
+    background-image: url('images/cerulean-city.jpg');
+}
+
+.main-screen.area.vermilionCity {
+    background-image: url('images/vermilion-city.jpg');
+}
+
+.main-screen.area.celadonCity {
+    background-image: url('images/celadon-city.jpg');
+}
+
+.main-screen.area.fuchsiaCity {
+    background-image: url('images/fuchsia-city.jpg');
+}
+
+.main-screen.area.saffronCity {
+    background-image: url('images/saffron-city.jpg');
+}
+
+.main-screen.area.cinnabarIsland {
+    background-image: url('images/cinnabar-island.jpg');
+}
+
+.main-screen.area.viridianCity {
+    background-image: url('images/viridian-city.jpg');
+}
+
+.main-screen.area.indigoPlateau {
+    background-image: url('images/indigo-plateau.jpg');
+}
+
+.main-screen.area.battle {
+    background-image: url('images/battle-background.jpg');
+}
+
+.main-screen.area.gym {
+    background-image: url('images/gym-background.jpg');
+}
+
+.main-screen.area.pokemart {
+    background-image: url('images/pokemart.png');
+}
+
+.main-screen.area.pokecenter {
+    background-image: url('images/pokecenter.jpg');
+}
+
+.main-screen.area.pokecenter-collection-box {
+    background-image: url('images/collection-box.jpg');
+}
+
+.main-screen.area.gameOver {
+    background-image: url('images/game-over.jpg');
+}
+
+.main-screen.area.gameCleared {
+    background-image: url('images/game-cleared.png');
+}

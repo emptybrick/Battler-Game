@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1200, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>GA Battler Project 1</title>
+    <link rel="stylesheet" href="./style.css">
+    <script defer src="./data.js"></script>
+    <script defer src="./app.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nabla&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div id="game-box">
+        <div id="game-window-border">
+            <div class="header-box">
+                <header>Bricks Pokemon Adventure - Battle the Elite Four!</header>
+            </div>
+
+            <div class="game-window">
+                <div class="left-section">
+                    <div id="party">
+                        <div class="rules-title">
+                            <h3>Pokemon Party</h3>
+                        </div>
+                        <div class="playerPokemonParty status">
+
+                            <div class="partyMember slot-1">
+                                <div class="name party">Empty</div>
+                                <div class="hp party">
+                                    <h5>HP:</h5>
+                                    <div class="slot1Hp party">-</div>
+                                </div>
+                                <div class="xp party">
+                                    <h5>XP:</h5>
+                                    <div class="slot1Xp party">-</div>
+                                </div>
+                            </div>
+
+                            <div class="partyMember slot-2">
+                                <div class="name party">Empty</div>
+                                <div class="hp party">
+                                    <h5>HP:</h5>
+                                    <div class="slot2Hp party">-</div>
+                                </div>
+                                <div class="xp party">
+                                    <h5>XP:</h5>
+                                    <div class="slot2Xp party">-</div>
+                                </div>
+                            </div>
+
+                            <div class="partyMember slot-3">
+                                <div class="name party">Empty</div>
+                                <div class="hp party">
+                                    <h5>HP:</h5>
+                                    <div class="slot3Hp party">-</div>
+                                </div>
+                                <div class="xp party">
+                                    <h5>XP:</h5>
+                                    <div class="slot3Xp party">-</div>
+                                </div>
+                            </div>
+
+                            <div class="partyMember slot-4">
+                                <div class="name party">Empty</div>
+                                <div class="hp party">
+                                    <h5>HP:</h5>
+                                    <div class="slot4Hp party">-</div>
+                                </div>
+                                <div class="xp party">
+                                    <h5>XP:</h5>
+                                    <div class="slot4Xp party">-</div>
+                                </div>
+                            </div>
+
+                            <div class="partyMember slot-5">
+                                <div class="name party">Empty</div>
+                                <div class="hp party">
+                                    <h5>HP:</h5>
+                                    <div class="slot5Hp party">-</div>
+                                </div>
+                                <div class="xp party">
+                                    <h5>XP:</h5>
+                                    <div class="slot5Xp party">-</div>
+                                </div>
+                            </div>
+
+                            <div class="partyMember slot-6">
+                                <div class="name party">Empty</div>
+                                <div class="hp party">
+                                    <h5>HP:</h5>
+                                    <div class="slot6Hp party">-</div>
+                                </div>
+                                <div class="xp party">
+                                    <h5>XP:</h5>
+                                    <div class="slot6Xp party">-</div>
+                                </div>
+                            </div>
+                            <div class="party-buttons">
+                                <button class="switch-pokemon party" disabled>Switch Pokemon</button>
+                                <button class="use-rare-candy party" disabled>Use Rare Candy</button>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div id="itemBag">
+                        <div class="rules-title">
+                            <h3>Item Bag</h3>
+                        </div>
+                        <div id="items">
+                            <div class="item">
+                                <div id="gold">
+                                    <div class="name">
+                                        <img src="images/gold.png" class="gold-icon">
+                                        <h6>Gold</h6>
+                                    </div>
+                                    <h5>Total:</h5>
+                                    <div id="goldTotal">-</div>
+                                </div>
+                            </div>
+                            <div class="item">
+                                <div id="pokeBall">
+                                    <div class="name">
+                                        <img src="images/poke-ball.png" class="poke-ball-icon">
+                                        <h6>Poké Balls</h6>
+                                    </div>
+                                    <h5>Total:</h5>
+                                    <div id="pokeBallTotal">-</div>
+                                </div>
+                            </div>
+                            <div class="item">
+                                <div id="potion">
+                                    <div class="name">
+                                        <img src="images/potion.png" class="potion-icon">
+                                        <h6>Potions</h6>
+                                    </div>
+                                    <h5>Total:</h5>
+                                    <div id="potionTotal">-</div>
+                                </div>
+                            </div>
+                            <div class="item">
+                                <div id="rareCandy">
+                                    <div class="name">
+                                        <img src="images/rare-candy.png" class="rare-candy-icon">
+                                        <h6>Rare Candy</h6>
+                                    </div>
+                                    <h5>Total:</h5>
+                                    <div id="rareCandyTotal">-</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="middle-section">
+                    <div id="area">
+                        <div id="badgeStatus">
+                            <img src="images/boulder.png" class="icon Boulder">
+                            <img src="images/cascade.png" class="icon Cascade">
+                            <img src="images/thunder.png" class="icon Thunder">
+                            <img src="images/rainbow.png" class="icon Rainbow">
+                            <img src="images/soul.png" class="icon Soul">
+                            <img src="images/marsh.png" class="icon Marsh">
+                            <img src="images/volcano.png" class="icon Volcano">
+                            <img src="images/earth.png" class="icon Earth">
+                        </div>
+                        <div id="areaButtons">
+                            <button id="gym" disabled>Gym</button>
+                            <button id="poke-mart" disabled>Poké Mart</button>
+                            <button id="poke-center" disabled>Poké Center</button>
+                            <button id="trainer-battle" disabled>Trainer Battle</button>
+                            <button id="search-for-pokemon" disabled>Search For Wild Pokemon</button>
+                        </div>
+                    </div>
+                    <div id="main">
+                        <div class="main-screen area start active">
+                            <div class="areaTitle">
+                                <h2>Your epic journey awaits, Trainer!
+                                    Pick your Starter Pokémon and charge toward glory!</h2>
+                            </div>
+                            <div class="areaGoals">
+                                <p>After choosing a starting pokemon, you will be given an Item Bag
+                                </p>
+                            </div>
+
+                            <div class="start-buttons">
+                                <div id="start-button-left">
+                                    <button class="starter-pokemon">
+                                        <p>Pikachu</p>
+                                        <img src="images/pikachu.png" alt="Pikachu" class="image pikachu">
+                                    </button>
+                                    <button class="starter-pokemon">
+                                        <p>Bulbasaur</p>
+                                        <img src="images/bulbasaur.png" alt="Bulbasaur" class="image bulbasaur">
+                                    </button>
+                                </div>
+                                <div id="start-button-right">
+                                    <button class="starter-pokemon">
+                                        <p>Charmander</p>
+                                        <img src="images/charmander.png" alt="Charmander" class="image charmander">
+                                    </button>
+                                    <button class="starter-pokemon">
+                                        <p>Squirtle</p>
+                                        <img src="images/squirtle.png" alt="Squirtle" class="image squirtle">
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="main-screen area palletTown">
+                            <div class="areaTitle">
+                                <h2>Welcome to Pallet Town</h2>
+                            </div>
+                            <div class="areaGoals">
+                                <p>Pallet Town is your beloved hometown! From your earliest memories,
+                                    you've been captivated by Pokémon, dreaming of becoming a legendary Trainer.
+                                    Now, your journey begins.</p>
+                                <p>Area Goal: Catch 2 wild Pokemon.</p>
+                                <p>After you have a party of at least 3 pokemon you can proceed.</p>
+                            </div>
+                            <div class="area-button">
+                                <button class="next-area palletTown" disabled>Go to Next Area </button>
+                            </div>
+                        </div>
+
+                        <div class="main-screen area pewterCity">
+                            <div class="areaTitle">
+                                <h2>Welcome to Pewter City</h2>
+                            </div>
+                            <div class="areaGoals">
+                                <p>Area Goal: Defeat Brock the Gym Leader.</p>
+                                <p>After you acquire the Boulder Badge you can go to the Next Area.</p>
+                            </div>
+                            <div class="area-button">
+                                <button class="last-area">Return to Last Area</button>
+                                <button class="next-area pewterCity" disabled>Go to Next Area </button>
+                            </div>
+                        </div>
+
+                        <div class="main-screen area ceruleanCity">
+                            <div class="areaTitle">
+                                <h2>Welcome to Cerulean City</h2>
+                            </div>
+                            <div class="areaGoals">
+                                <p>Area Goal: Defeat Misty the Gym Leader.</p>
+                                <p>After you acquire the Cascade Badge you can go to the Next Area.</p>
+                            </div>
+                            <div class="area-button">
+                                <button class="last-area">Return to Last Area</button>
+                                <button class="next-area ceruleanCity" disabled>Go to Next Area </button>
+                            </div>
+                        </div>
+
+                        <div class="main-screen area vermilionCity">
+                            <div class="areaTitle">
+                                <h2>Welcome to Vermilion City</h2>
+                            </div>
+                            <div class="areaGoals">
+                                <p>Area Goal: Defeat Lt. Surge the Gym Leader.</p>
+                                <p>After you acquire the Thunder Badge you can go to the Next Area.</p>
+                            </div>
+                            <div class="area-button">
+                                <button class="last-area">Return to Last Area</button>
+                                <button class="next-area vermilionCity" disabled>Go to Next Area </button>
+                            </div>
+                        </div>
+
+                        <div class="main-screen area celadonCity">
+                            <div class="areaTitle">
+                                <h2>Welcome to Celadon City</h2>
+                            </div>
+                            <div class="areaGoals">
+                                <p>Area Goal: Defeat Erika the Gym Leader.</p>
+                                <p>After you acquire the Rainbow Badge you can go to the Next Area.</p>
+                            </div>
+                            <div class="area-button">
+                                <button class="last-area">Return to Last Area</button>
+                                <button class="next-area celadonCity" disabled>Go to Next Area </button>
+                            </div>
+                        </div>
+
+                        <div class="main-screen area fuchsiaCity">
+                            <div class="areaTitle">
+                                <h2>Welcome to Fuschia City</h2>
+                            </div>
+                            <div class="areaGoals">
+                                <p>Area Goal: Defeat Koga the Gym Leader.</p>
+                                <p>After you acquire the Soul Badge you can go to the Next Area.</p>
+                            </div>
+                            <div class="area-button">
+                                <button class="last-area">Return to Last Area</button>
+                                <button class="next-area fuchsiaCity" disabled>Go to Next Area </button>
+                            </div>
+                        </div>
+
+                        <div class="main-screen area saffronCity">
+                            <div class="areaTitle">
+                                <h2>Welcome to Saffron City</h2>
+                            </div>
+                            <div class="areaGoals">
+                                <p>Area Goal: Defeat Sabrina the Gym Leader.</p>
+                                <p>After you acquire the Marsh Badge you can go to the Next Area.</p>
+                            </div>
+                            <div class="area-button">
+                                <button class="last-area">Return to Last Area</button>
+                                <button class="next-area saffronCity" disabled>Go to Next Area </button>
+                            </div>
+                        </div>
+
+                        <div class="main-screen area cinnabarIsland">
+                            <div class="areaTitle">
+                                <h2>Welcome to Cinnabar Island</h2>
+                            </div>
+                            <div class="areaGoals">
+                                <p>Area Goal: Defeat Blaine the Gym Leader.</p>
+                                <p>After you acquire the Volcano Badge you can go to the Next Area.</p>
+                            </div>
+                            <div class="area-button">
+                                <button class="last-area">Return to Last Area</button>
+                                <button class="next-area cinnabarIsland" disabled>Go to Next Area</button>
+                            </div>
+                        </div>
+
+                        <div class="main-screen area viridianCity">
+                            <div class="areaTitle">
+                                <h2>Welcome to Viridian City</h2>
+                            </div>
+                            <div class="areaGoals">
+                                <p>Area Goal: Defeat Giovanni the Gym Leader.</p>
+                                <p>After you acquire the Earth Badge you can go to the Next Area.</p>
+                            </div>
+                            <div class="area-button">
+                                <button class="last-area">Return to Last Area</button>
+                                <button class="next-area viridianCity" disabled>Go to Next Area</button>
+                            </div>
+                        </div>
+
+                        <div class="main-screen area indigoPlateau">
+                            <div class="areaTitle">
+                                <h2>Welcome to Indigo Plateau</h2>
+                            </div>
+                            <div class="areaGoals">
+                                <p>Area Goal: Defeat the Elite Four!</p>
+                                <p>Beat all of the Elite Four and be crowned the greatest Pokemon Trainer!</p>
+                            </div>
+                            <div class="elite-buttons">
+                                <button class="elite-four-button lorelei">
+                                    <p>Lorelei</p>
+                                    <img src="images/lorelei-icon.png" alt="Lorelei" class="image lorelei">
+                                </button>
+                                <button class="elite-four-button bruno">
+                                    <p>Bruno</p>
+                                    <img src="images/bruno-icon.png" alt="Bruno" class="image bruno">
+                                </button>
+                                <button class="elite-four-button agatha">
+                                    <p>Agatha</p>
+                                    <img src="images/agatha-icon.png" alt="Agatha" class="image agatha">
+                                </button>
+                                <button class="elite-four-button lance">
+                                    <p>Lance</p>
+                                    <img src="images/lance-icon.png" alt="Lance" class="image lance">
+                                </button>
+                            </div>
+                            <div>
+                                <button id="game-clear-button">Claim Victory!</button>
+                            </div>
+                            <div class="area-button">
+                                <button class="last-area">Return to Last Area</button>
+                            </div>
+                        </div>
+
+                        <div class="main-screen area battle">
+                            <div class="left-side battle">
+                                <div class="opponentText battle"></div>
+                                <div class="opponentImage battle"><img class="opponentImage-battle" src="" alt=""></div>
+                            </div>
+                            <div class="right-side battle">
+                                <div class="playerImage battle"><img class="playerImage-battle" src="" alt=""></div>
+                                <div class="playerText battle"></div>
+                            </div>
+                            <div class="bottom-side battle">
+                                <button class="dynamic-button battle">Action</button>
+                                <button class="switch-pokemon battle" disabled>Switch Pokemon</button>
+                                <button class="use-potion battle">Use Potion</button>
+                                <button class="leave battle">Leave</button>
+                            </div>
+                        </div>
+
+                        <div class="main-screen area gym">
+                            <div class="left-side gym">
+                                <div class="opponentText gym"><img class="opponentImage-leader" src="" alt=""></div>
+                                <div class="opponentImage gym"><img class="opponentImage-gym" src="" alt=""><p></p></div>
+                            </div>
+                            <div class="right-side gym">
+                                <div class="playerImage gym"><img class="playerImage-gym" src="" alt=""></div>
+                                <div class="playerText gym"></div>
+                            </div>
+                            <div class="bottom-side gym">
+                                <button class="dynamic-button gym">Action</button>
+                                <button class="switch-pokemon gym" disabled>Switch Pokemon</button>
+                                <button class="use-potion gym">Use Potion</button>
+                                <button class="leave gym">Leave</button>
+                            </div>
+                        </div>
+
+                        <div class="main-screen area pokemart">
+                            <div class="areaTitle">
+                                <h2>Welcome to the Poké Mart</h2>
+                            </div>
+                            <div class="areaGoals">
+                                <p>Use the "Buy Poké Ball" button to buy 1 Poké Ball for 1 gold.</p>
+                                <p>Use the "Buy Potion" button to buy 1 Potion for 2 gold.</p>
+                            </div>
+                            <div id="pokecenter-buttons">
+                                <button class="poke-button mart">Buy Poké Ball</button>
+                                <button class="poke-button mart">Buy Potion</button>
+                            </div>
+                            <div class="leaveButton">
+                                <button class="leave">Leave</button>
+                            </div>
+                        </div>
+
+                        <div class="main-screen area pokecenter">
+                            <div class="areaTitle">
+                                <h2>Welcome to the Pokémon Center</h2>
+                            </div>
+                            <div class="areaGoals">
+                                <p>Use the "Heal Pokémon" button to heal your party back to full health.</p>
+                                <p>The check collection button will open your collection where you can transfer Pokémon
+                                    to
+                                    and
+                                    from your party.</p>
+                            </div>
+                            <div id="pokecenter-buttons">
+                                <button class="poke-button heal">Heal Pokémon</button>
+                                <button class="poke-button collection">Check Collection</button>
+                            </div>
+                            <div class="leaveButton">
+                                <button class="leave">Leave</button>
+                            </div>
+                        </div>
+
+                        <div class="main-screen area pokecenter-collection-box">
+                            <p>View and manage your Pokémon party and collection.</p>
+                            <div class="collection-box">
+                                <div id="party-status-collection">
+                                    <h3>Party</h3>
+                                </div>
+                                <div id="collection-list">
+                                    <h3>Collection</h3>
+                                </div>
+                            </div>
+                            <div class="leaveButton">
+                                <button class="leave">Leave Collection</button>
+                            </div>
+                        </div>
+
+
+
+                        <div class="main-screen area gameOver">
+                            <div class="areaTitle">
+                                <h2>Game Over</h2>
+                            </div>
+                            <div class="areaGoals">
+                                <p>Oh no, Trainer! Your team has fainted in the heat of battle!</p>
+                                <p>The Kanto region is full of challenges, but a true Champion rises from every setback.
+                                    Your
+                                    next shot at greatness starts now!
+
+                                </p>
+                            </div>
+                            <div class="playAgainButton"><button id="play-again">Try Again</button></div>
+                        </div>
+
+                        <div class="main-screen area gameCleared">
+                            <div class="areaTitle">
+                                <h2>Game Cleared</h2>
+                            </div>
+                            <div class="areaGoals">
+                                <p>You’ve conquered the Indigo Plateau and become the Pokémon League Champion!</p>
+                                <p>Your journey through Kanto was legendary—defeating Gym Leaders, capturing rare
+                                    Pokémon,
+                                    and
+                                    mastering every challenge. The crowd roars as you stand victorious under the starry
+                                    skies!
+                                </p>
+                                <p>Now, take your place in the Hall of Fame and prepare for new adventures!</p>
+                            </div>
+                            <div class="playAgainButton"><button id="play-again">Play Again</button></div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="right-section">
+                    <div id="rules">
+                        <div class="page page1 active">
+                            <div class="rules-title">
+                                <h3>Game Rules and Explanations</h3>
+                            </div>
+                            <div class="rules-text">
+                                <h4>Introduction</h4>
+                                <p>Win Condition: Defeat the Elite Four at Indigo Plateau to become the Pokémon
+                                    Champion. </p>
+                                <p> Lose Condition: If all Pokémon in your party reach 0 HP, it’s Game Over. You can
+                                    restart
+                                    from
+                                    the
+                                    beginning. </p>
+                                <p>Getting Started: Choose a Starter Pokémon: select one of four Starter Pokémon to
+                                    begin your
+                                    journey
+                                    in Pallet Town.</p>
+                                <p>Party and Inventory: Your chosen Pokémon is added to your party (up to 6
+                                    Pokémon). You also
+                                    start
+                                    with a small amount of Gold and basic items (Pokeballs and Potions).</p>
+                                <p>Explore Areas: Navigate through 10 areas, each with unique Pokémon types,
+                                    trainers, and Gyms.
+                                </p>
+                            </div>
+                            <div id="rules-buttons">
+                                <button id="page-next">Next</button>
+                            </div>
+                        </div>
+                        <div class="page page2">
+                            <div class="rules-title">
+                                <h3>Game Rules and Explanations</h3>
+                            </div>
+                            <div class="rules-text">
+                                <h4>Areas and Progression</h4>
+                                <p>Each area has an increased chance to encounter a specific Pokémon type:</p>
+                                <ul>
+                                    <li>Pallet Town (Normal)</li>
+                                    <li>Pewter City (Rock)</li>
+                                    <li>Cerulean City (Water)</li>
+                                    <li>Celadon City (Grass)</li>
+                                    <li>Fuchsia City (Poison)</li>
+                                    <li>Saffron City (Psychic)</li>
+                                    <li>Cinnabar Island (Fire)</li>
+                                    <li>Viridian City (Ground)</li>
+                                    <li>Vermilion City (Electric)</li>
+                                    <li>Indigo Plateau (Dragon)</li>
+                                </ul>
+                                <p> Use “Return to Return to Last Area” or “Go to Next Area Go to Next Area ”
+                                    buttons to move
+                                    between areas.</p>
+                                <p>Gym Challenges: Each area (except Pallet Town) has a Gym with
+                                    a Gym
+                                    Leader.
+                                    Defeat them to earn a Gym Badge.</p>
+                                <p>Collect all 8 badges to challenge the Elite Four at Indigo Plateau.</p>
+                            </div>
+                            <div id="rules-buttons">
+                                <button id="page-previous">Previous</button>
+                                <button id="page-next">Next</button>
+                            </div>
+                        </div>
+                        <div class="page page3">
+                            <div class="rules-title">
+                                <h3>Game Rules and Explanations</h3>
+                            </div>
+                            <div class="rules-text">
+                                <h4>Pokémon Party and Management</h4>
+                                <p>Party Size: You can have up to 6 Pokémon in your party. Extra Pokémon are stored
+                                    in your
+                                    Collection.</p>
+                                <p>Party Order: Outside of battle, rearrange your party using up/down arrows on the
+                                    Party Status
+                                    screen.</p>
+                                <p>HP (Hit Points): Each Pokémon has an HP value representing its health. If a
+                                    Pokémon’s HP
+                                    reaches
+                                    0, it faints and the next Pokémon in your party takes its place automatically.
+                                </p>
+                                <p>Collection: View and manage stored Pokémon at the Pokécenter. Transfer Pokémon
+                                    between your
+                                    party
+                                    and Collection using arrows next to each Pokémon.</p>
+                            </div>
+                            <div id="rules-buttons">
+                                <button id="page-previous">Previous</button>
+                                <button id="page-next">Next</button>
+                            </div>
+                        </div>
+                        <div class="page page4">
+                            <div class="rules-title">
+                                <h3>Game Rules and Explanations</h3>
+                            </div>
+                            <div class="rules-text">
+                                <h4>Battles</h4>
+                                <p>Battles are turn-based and occur when encountering wild Pokémon, battling
+                                    trainers, or
+                                    challenging Gym Leaders/Elite Four.</p>
+                                <h4>Battle Types</h4>
+                                <p>Wild Pokémon Battles: Search for wild Pokémon in an area. Each area has a higher
+                                    chance of
+                                    spawning Pokémon of a specific type (e.g., Water in Cerulean City).</p>
+                                <p>Trainer Battles: Battle NPC trainers with set Pokémon parties (relevant to the
+                                    area’s type).
+                                    You
+                                    cannot catch their Pokémon.</p>
+                                <p>Gym Battles: Fight Gym Leaders with stronger Pokémon parties. Winning earns a Gym
+                                    Badge.</p>
+                                <p>Elite Four: The final challenge at Indigo Plateau, featuring tough opponents.</p>
+                            </div>
+                            <div id="rules-buttons">
+                                <button id="page-previous">Previous</button>
+                                <button id="page-next">Next</button>
+                            </div>
+                        </div>
+                        <div class="page page5">
+                            <div class="rules-title">
+                                <h3>Game Rules and Explanations</h3>
+                            </div>
+                            <div class="rules-text">
+                                <h4>Battle Actions</h4>
+                                <p>Accept Challenge: Starts a Trainer, Gym, or Elite Four battle.</p>
+                                <p>Attack: Your Pokémon attacks the opponent. The Pokémon with higher HP wins the
+                                    exchange, but
+                                    its HP is reduced by the opponent’s HP. The loser’s HP is set to 0.
+                                </p>
+                                <p>Throw Pokéball: Available only in wild Pokémon battles after HP is 0. Catches the
+                                    Pokémon,
+                                    adding it to your party (or Collection if your party is full).
+                                </p>
+                                <p>Use Potion: Restores 20 HP to your current Pokémon. Can be used at any time
+                                    during a battle.
+                                </p>
+                                <p>Switch Pokémon: Select the next Pokémon in your party to fight.
+                                </p>
+                                <p>Run Away: Ends a wild Pokémon battle and returns you to the Area screen. Not
+                                    available in
+                                    Trainer, Gym, or Elite Four battles.</p>
+                            </div>
+                            <div id="rules-buttons">
+                                <button id="page-previous">Previous</button>
+                                <button id="page-next">Next</button>
+                            </div>
+                        </div>
+                        <div class="page page6">
+                            <div class="rules-title">
+                                <h3>Game Rules and Explanations</h3>
+                            </div>
+                            <div class="rules-text">
+                                <h4>Battle Actions Cont.</h4>
+
+                                <p>Accept Gym Badge: Claims a badge after defeating a Gym Leader.</p>
+                                <p>Accept Defeat: Returns to the Area screen after a battle.</p>
+                            </div>
+                            <div class="rules-text">
+                                <h4>Battle Outcomes</h4>
+                                <p>Victory: Defeat all opponent Pokémon (their HP reaches 0).</p>
+                                <p>Defeat: If all your party Pokémon reach 0 HP, it’s Game Over.</p>
+                                <p>Rewards: Gold and a chance of Rare Candy wild Pokémon and varies trainer battles.
+                                </p>
+                                <p>Rare Candy gives +1 EXP to a Pokémon (used outside of battle).</p>
+                                <p>EXP: Pokémon gain 1 EXP per battle won.</p>
+                            </div>
+                            <div id="rules-buttons">
+                                <button id="page-previous">Previous</button>
+                                <button id="page-next">Next</button>
+                            </div>
+                        </div>
+                        <div class="page page7">
+                            <div class="rules-title">
+                                <h3>Game Rules and Explanations</h3>
+                            </div>
+                            <div class="rules-text">
+                                <h4>Pokémon Growth</h4>
+                                <p>Experience (EXP): Pokémon gain EXP from battles. At 10 EXP, a Pokémon evolves
+                                    into its next
+                                    form (if available) or gains bonus HP (amount TBD) if it cannot evolve. Final
+                                    evolutions
+                                    require 30 EXP.</p>
+                                <p>Evolution: Pokémon can only evolve if they have an evolved form (tracked via an
+                                    “evolvesFrom”
+                                    property).</p>
+                                <p>Power: A Pokémon’s strength is based on its HP. Higher HP means better
+                                    performance in
+                                    battles.</p>
+                            </div>
+                            <div class="rules-text">
+                                <h4>Poké Center</h4>
+                                <p>Heal Pokémon: Restores all party Pokémon to full HP.</p>
+                                <p>Check Collection: View and transfer Pokémon between your party and Collection.
+                                </p>
+                                <p>Leave: Returns to the Area screen.</p>
+                                <div id="rules-buttons">
+                                    <button id="page-previous">Previous</button>
+                                    <button id="page-next">Next</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="page page8">
+                            <div class="rules-title">
+                                <h3>Game Rules and Explanations</h3>
+                            </div>
+                            <div class="rules-text">
+                                <h4>Wild Pokémon and Rarity</h4>
+                                <p>Use “Search for Wild Pokémon” to encounter a wild Pokémon. A random Pokémon will
+                                    spawn, with a higher chance for the area’s specific type.
+                                </p>
+                                <p>Rarity: Pokémon have a rarity value affecting their spawnrate. Rare
+                                    Pokémon are harder
+                                    to find.</p>
+                                <p>Catching: Reduce a wild Pokémon’s HP to 0, then use a Pokéball to catch it.</p>
+                            </div>
+                            <div class="rules-text">
+                                <h4>Strategy Tips</h4>
+                                <p>Heal Often: Visit Poké Centers and use Potions during battle.</p>
+                                <p>Catch Pokémon: Build a strong team by catching wild Pokémon.</p>
+                                <p>Battle Trainers: Gain EXP to strengthen your team.</p>
+                                <p>Evolve Pokémon: Use battles and Rare Candies to evolve Pokémon.</p>
+                            </div>
+                            <div id="rules-buttons">
+                                <button id="page-previous">Previous</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
