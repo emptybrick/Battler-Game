@@ -323,15 +323,25 @@ h4 {
 }
 
 .message-box.active {
+    position: absolute;
+    top: 220px;
     display: block;
     opacity: 1;
+    padding: 20px;
     width: fit-content;
-    background-color: #ffffffe3;
+    background-color: #fdf8acdf;
+    border-radius: 40px;
+}
+
+.message-box.fading {
+    transition: 1.0s ease;
+    opacity: 0;
 }
 
 .message-box {
     display: none;
     opacity: 0;
+    /* transition: 0.5s ease; */
 }
 
 h5,
@@ -408,11 +418,6 @@ h6 {
     justify-content: center;
     align-items: center;
     width: 100%;
-}
-
-.left-side,
-.right-side {
-    /* background-color: #c3e1ff; */
 }
 
 .right-side {
