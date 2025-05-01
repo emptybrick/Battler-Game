@@ -128,7 +128,7 @@
                             <div class="item">
                                 <div id="pokeBall">
                                     <div class="name">
-                                        <img src="images/poke-ball.png" class="poke-ball-icon">
+                                        <img src="images/pokeball.png" class="pokeball-icon">
                                         <h6>Poké Balls</h6>
                                     </div>
                                     <h5>Total:</h5>
@@ -181,37 +181,69 @@
                         </div>
                     </div>
                     <div id="main">
-                        <div class="main-screen area start active">
+                        <div class="main-screen area character active">
+                            <div class="areaTitle">
+                                <h2>Pick your character model to begin.</h2>
+                            </div>
+                            <div class="areaGoals">
+                                <p>After choosing a character model you will be taken to your room to choose a starter
+                                    pokemon.</p>
+                            </div>
+                            <div class="character-buttons">
+                                <!-- <div> -->
+                                <button class="character-image">
+                                    <p>Leaf</p>
+                                    <img src="images/leaf.png" alt="Leaf" class="image leaf">
+                                </button>
+                                <button class="character-image">
+                                    <p>Red</p>
+                                    <img src="images/red.png" alt="Red" class="image red">
+                                </button>
+                                <!-- </div>
+                                <div> -->
+                                <button class="character-image">
+                                    <p>Elaine</p>
+                                    <img src="images/elaine.png" alt="Elaine" class="image elaine">
+                                </button>
+                                <button class="character-image">
+                                    <p>Chase</p>
+                                    <img src="images/chase.png" alt="Chase" class="image chase">
+                                </button>
+                                <!-- </div> -->
+                            </div>
+                        </div>
+                        <div class="main-screen area start">
                             <div class="areaTitle">
                                 <h2>Your epic journey awaits, Trainer!
                                     Pick your Starter Pokémon and charge toward glory!</h2>
                             </div>
                             <div class="areaGoals">
-                                <p>After choosing a starting pokemon, you will be given an Item Bag
+                                <p>After choosing a starting pokemon, you will be given an Item Bag, and start your
+                                    adventure off in Pallet Town.
                                 </p>
                             </div>
 
                             <div class="start-buttons">
-                                <div id="start-button-left">
-                                    <button class="starter-pokemon">
-                                        <p>Pikachu</p>
-                                        <img src="images/pikachu.png" alt="Pikachu" class="image pikachu">
-                                    </button>
-                                    <button class="starter-pokemon">
-                                        <p>Bulbasaur</p>
-                                        <img src="images/bulbasaur.png" alt="Bulbasaur" class="image bulbasaur">
-                                    </button>
-                                </div>
-                                <div id="start-button-right">
-                                    <button class="starter-pokemon">
-                                        <p>Charmander</p>
-                                        <img src="images/charmander.png" alt="Charmander" class="image charmander">
-                                    </button>
-                                    <button class="starter-pokemon">
-                                        <p>Squirtle</p>
-                                        <img src="images/squirtle.png" alt="Squirtle" class="image squirtle">
-                                    </button>
-                                </div>
+                                <button class="starter-pokemon">
+                                    <p>Pikachu</p>
+                                    <img src="images/pikachu.png" alt="Pikachu" class="image pikachu">
+                                </button>
+                                <button class="starter-pokemon">
+                                    <p>Bulbasaur</p>
+                                    <img src="images/bulbasaur.png" alt="Bulbasaur" class="image bulbasaur">
+                                </button>
+                                <button class="starter-pokemon">
+                                    <p>Charmander</p>
+                                    <img src="images/charmander.png" alt="Charmander" class="image charmander">
+                                </button>
+                                <button class="starter-pokemon">
+                                    <p>Eevee</p>
+                                    <img src="images/eevee.png" alt="Eevee" class="image eevee">
+                                </button>
+                                <button class="starter-pokemon">
+                                    <p>Squirtle</p>
+                                    <img src="images/squirtle.png" alt="Squirtle" class="image squirtle">
+                                </button>
                             </div>
                         </div>
 
@@ -378,36 +410,51 @@
                         </div>
 
                         <div class="main-screen area battle">
-                            <div class="left-side battle">
-                                <div class="opponentText battle"></div>
-                                <div class="opponentImage battle"><img class="opponentImage-battle" src="" alt=""></div>
+                            <div class="left-side">
+                                <div><img id="opponent-image" src="" alt="">
+                                    <p class="opponent-text intro"></p>
+                                </div>
+                                <div><img id="opponent-pokemon" src="" alt="">
+                                    <p class="opponent-pokemon-text"></p>
+                                </div>
                             </div>
-                            <div class="right-side battle">
-                                <div class="playerImage battle"><img class="playerImage-battle" src="" alt=""></div>
-                                <div class="playerText battle"></div>
+                            <div class="right-side">
+                                <div><img class="player-pokemon mirror" src="" alt="">
+                                    <p class="player-text"></p>
+                                </div>
+                                <div><img class="player-image" src="" alt="">
+                                </div>
                             </div>
-                            <div class="bottom-side battle">
-                                <button class="dynamic-button battle">Action</button>
-                                <button class="switch-pokemon battle" disabled>Switch Pokemon</button>
-                                <button class="use-potion battle">Use Potion</button>
-                                <button class="leave battle">Leave</button>
+                            <div class="bottom-side">
+                                <button class="dynamic-button">Action</button>
+                                <button class="switch-pokemon" disabled>Switch Pokemon</button>
+                                <button class="use-potion">Use Potion</button>
+                                <button class="leave">Leave</button>
                             </div>
                         </div>
 
                         <div class="main-screen area gym">
-                            <div class="left-side gym">
-                                <div class="opponentText gym"><img class="opponentImage-leader" src="" alt=""></div>
-                                <div class="opponentImage gym"><img class="opponentImage-gym" src="" alt=""><p></p></div>
+                            <div class="left-side">
+                                <div><img id="leader-image" src="" alt="">
+                                    <p class="leader-text intro"></p>
+                                </div>
+                                <div><img id="leader-pokemon" src="" alt="">
+                                    <p class="leader-pokemon-text"></p>
+                                </div>
                             </div>
-                            <div class="right-side gym">
-                                <div class="playerImage gym"><img class="playerImage-gym" src="" alt=""></div>
-                                <div class="playerText gym"></div>
+                            <div class="right-side">
+                                <div><img class="player-pokemon mirror" src="" alt="">
+                                    <p class="player-text"></p>
+                                </div>
+                                <div><img class="player-image mirror">
+
+                                </div>
                             </div>
-                            <div class="bottom-side gym">
-                                <button class="dynamic-button gym">Action</button>
-                                <button class="switch-pokemon gym" disabled>Switch Pokemon</button>
-                                <button class="use-potion gym">Use Potion</button>
-                                <button class="leave gym">Leave</button>
+                            <div class="bottom-side">
+                                <button class="dynamic-button">Action</button>
+                                <button class="switch-pokemon" disabled>Switch Pokemon</button>
+                                <button class="use-potion">Use Potion</button>
+                                <button class="leave">Leave</button>
                             </div>
                         </div>
 

@@ -1,11 +1,11 @@
 const pokedex = [
-    { number: 1, name: 'Bulbasaur', type: 'grass', maxhp: 45,  hp: 45, maxxp: 10, xp: 0, starter: true, canEvolve: true, evolvesFrom: null, rarity: 0, image: 'images/bulbasaur.png' },
+    { number: 1, name: 'Bulbasaur', type: 'grass', maxhp: 45,  hp: 45, maxxp: 10, xp: 0, starter: true, canEvolve: true, evolvesFrom: null, rarity: 1, image: 'images/bulbasaur.png' },
     { number: 2, name: 'Ivysaur', type: 'grass', maxhp: 60,  hp: 60, maxxp: 20, xp: 0, starter: false, canEvolve: true, evolvesFrom: 'Bulbasaur', rarity: 0, image: 'images/ivysaur.png' },
     { number: 3, name: 'Venusaur', type: 'grass', maxhp: 90,  hp: 90, maxxp: 30, xp: 0, starter: false, canEvolve: false, evolvesFrom: 'Ivysaur', rarity: 0, image: 'images/venusaur.png' },
-    { number: 4, name: 'Charmander', type: 'fire', maxhp: 45,  hp: 45, maxxp: 10, xp: 0, starter: true, canEvolve: true, evolvesFrom: null, rarity: 0, image: 'images/charmander.png' },
+    { number: 4, name: 'Charmander', type: 'fire', maxhp: 45,  hp: 45, maxxp: 10, xp: 0, starter: true, canEvolve: true, evolvesFrom: null, rarity: 1, image: 'images/charmander.png' },
     { number: 5, name: 'Charmeleon', type: 'fire', maxhp: 60,  hp: 60, maxxp: 20, xp: 0, starter: false, canEvolve: true, evolvesFrom: 'Charmander', rarity: 0, image: 'images/charmeleon.png' },
     { number: 6, name: 'Charizard', type: 'fire', maxhp: 90,  hp: 90, maxxp: 30, xp: 0, starter: false, canEvolve: false, evolvesFrom: 'Charmeleon', rarity: 0, image: 'images/charizard.png' },
-    { number: 7, name: 'Squirtle', type: 'water', maxhp: 45,  hp: 45, maxxp: 10, xp: 0, starter: true, canEvolve: true, evolvesFrom: null, rarity: 0, image: 'images/squirtle.png' },
+    { number: 7, name: 'Squirtle', type: 'water', maxhp: 45,  hp: 45, maxxp: 10, xp: 0, starter: true, canEvolve: true, evolvesFrom: null, rarity: 1, image: 'images/squirtle.png' },
     { number: 8, name: 'Wartortle', type: 'water', maxhp: 60,  hp: 60, maxxp: 20, xp: 0, starter: false, canEvolve: true, evolvesFrom: 'Squirtle', rarity: 0, image: 'images/wartortle.png' },
     { number: 9, name: 'Blastoise', type: 'water', maxhp: 90,  hp: 90, maxxp: 30, xp: 0, starter: false, canEvolve: false, evolvesFrom: 'Wartortle', rarity: 0, image: 'images/blastoise.png' },
     { number: 10, name: 'Caterpie', type: 'bug', maxhp: 45,  hp: 45, maxxp: 5, xp: 0, starter: false, canEvolve: true, evolvesFrom: null, rarity: 10, image: 'images/caterpie.png' },
@@ -23,7 +23,7 @@ const pokedex = [
     { number: 22, name: 'Fearow', type: 'normal', maxhp: 65,  hp: 65, maxxp: 15, xp: 0, starter: false, canEvolve: false, evolvesFrom: 'Spearow', rarity: 0, image: 'images/fearow.png' },
     { number: 23, name: 'Ekans', type: 'poison', maxhp: 35,  hp: 35, maxxp: 5, xp: 0, starter: false, canEvolve: true, evolvesFrom: null, rarity: 7, image: 'images/ekans.png'},
     { number: 24, name: 'Arbok', type: 'poison', maxhp: 60,  hp: 60, maxxp: 15, xp: 0, starter: false, canEvolve: false, evolvesFrom: 'Ekans', rarity: 0, image: 'images/arbok.png' },
-    { number: 25, name: 'Pikachu', type: 'electric', maxhp: 45,  hp: 45, maxxp: 10, xp: 0, starter: true, canEvolve: true, evolvesFrom: null, rarity: 0, image: 'images/pikachu.png' },
+    { number: 25, name: 'Pikachu', type: 'electric', maxhp: 45,  hp: 45, maxxp: 10, xp: 0, starter: true, canEvolve: true, evolvesFrom: null, rarity: 1, image: 'images/pikachu.png' },
     { number: 26, name: 'Raichu', type: 'electric', maxhp: 90,  hp: 90, maxxp: 25, xp: 0, starter: false, canEvolve: false, evolvesFrom: 'Pikachu', rarity: 0, image: 'images/raichu.png' },
     { number: 27, name: 'Sandshrew', type: 'ground', maxhp: 50,  hp: 50, maxxp: 15, xp: 0, starter: false, canEvolve: true, evolvesFrom: null, rarity: 6, image: 'images/sandshrew.png' },
     { number: 28, name: 'Sandslash', type: 'ground', maxhp: 75,  hp: 75, maxxp: 25, xp: 0, starter: false, canEvolve: false, evolvesFrom: 'Sandshrew', rarity: 0, image: 'images/sandslash.png' },
@@ -264,4 +264,11 @@ const lanceParty = [
   { number: 148, name: 'Dragonair', type: 'dragon', hp: 90, maxhp: 90, image: 'images/dragonair.png' },
   { number: 142, name: 'Aerodactyl', type: 'rock', hp: 110, maxhp: 110, image: 'images/aerodactyl.png' },
   { number: 149, name: 'Dragonite', type: 'dragon', hp: 120, maxhp: 120, image: 'images/dragonite.png' }
+];
+
+const characters = [
+  { name: 'Leaf', image: 'images/leaf.png' },
+  { name: 'Red', image: 'images/red.png' },
+  { name: 'Elaine', image: 'images/elaine.png' },
+  { name: 'Chase', image: 'images/chase.png' }
 ];
