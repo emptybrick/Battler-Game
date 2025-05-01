@@ -48,8 +48,8 @@ const eliteFourStatus = [
 ]
 
 const items = [
-    { name: "potion", quantity: 2, cost: 2 },
-    { name: "pokeball", quantity: 5, cost: 1 },
+    { name: "potion", quantity: 2, cost: 2, msgName: "Potion" },
+    { name: "pokeball", quantity: 5, cost: 1, msgName: "Poké Ball" },
     { name: "rarecandy", quantity: 0, cost: null },
     { name: "gold", quantity: 10, cost: null }
 ];
@@ -80,6 +80,8 @@ let oppCurrentPokemon = {};
 let wildPokemonFound = {};
 let oppParty = [];
 
+let messageBox = document.querySelector('.message-box');
+
 let leaderTextElement = document.querySelector('.leader-text');
 let leaderPokemonTextElement = document.querySelector('.leader-pokemon-text');
 let leaderPokemonImageElement = document.querySelector('#leader-pokemon');
@@ -93,6 +95,7 @@ let opponentImageElement = document.querySelector('#opponent-image');
 let playerTextElement = document.querySelector('.player-text');
 let playerPokemonImageElement = document.querySelector('.player-pokemon');
 let playerImageElement = document.querySelector('.player-image');
+let playerPokemonTextElement = document.querySelector('.player-pokemon-text');
 
 let dynamicButtonTextElement = document.querySelector('.dynamic-button');
 let leaveButtonTextElement = document.querySelector('.leave');
@@ -136,15 +139,9 @@ function resetGame() {
     nextPage = null;
     lastPage = null;
     activeSlot = '';
-    encounter = '';
-    oppName = '';
-
-    oppParty = [];
-
     currentPokemon = {};
-    oppCurrentPokemon = {};
-    wildPokemonFound = {};
     characterModel = {};
+    clearOpponentData();
 
     document.querySelectorAll('.partyMember').forEach(slot => slot.classList.remove('active'));
     document.querySelectorAll('.icon').forEach(icon => icon.classList.remove('active'));
@@ -192,7 +189,7 @@ function switchScreen(screenClass) {
         };
 
         if (screenClass === 'palletTown') {
-            updateAreaButton();``
+            updateAreaButton(); ``
         }
 
         if (screenClass === 'gameOver' || screenClass === 'gameCleared') {
@@ -211,7 +208,7 @@ function switchScreen(screenClass) {
         //     // disableButtons('.leave');
         // }
         // updateGymButton();
-        
+
     };
 };
 
@@ -263,13 +260,15 @@ function clearOpponentData() {
     opponentImageElement.src = '';
     playerTextElement.textContent = '';
     playerPokemonImageElement.src = '';
+    playerPokemonTextElement.textContent = '';
     playerImageElement.src = '';
-    dynamicButtonTextElement.textContent = 'Action';
+    // dynamicButtonTextElement.textContent = 'Action';
     leaveButtonTextElement.textContent = 'Leave';
     oppCurrentPokemon = {};
     wildPokemonFound = {};
     oppParty = [];
     oppName = '';
+    encounter = '';
 };
 
 // function to choose random pokemon
@@ -447,7 +446,11 @@ function buyItem(itemName) {
         gold.quantity -= cost;
         item.quantity += 1;
         updateItemDisplay();
+        messageBox.classList.add('active');
+        messageBox.textContent = `Purchased 1 ${item.msgName}`
     } else {
+        messageBox.classList.add('active');
+        messageBox.textContent = "Not Enough Gold!";
         console.log("not enough gold");
     }
 }
@@ -533,14 +536,18 @@ function switchPokemonOpp() {
             opponentTextElement.textContent = 'Trainers party has been defeated.';
             opponentPokemonImageElement.src = '';
             disableButtons('.dynamic-button');
+            disableButtons('.switch-pokemon');
+            disableButtons('.use-potion');
+            enableButtons('.leave');
             getRewards('trainer');
+
         }
         oppParty = [];
         encounter = '';
         oppPartyCurrentIndex = null;
         console.log('opponent has no more pokemon left')
     }
-    updateBattleDisplay();
+    updateBattleDisplay(encounter);
 };
 
 // function to evolve, will look for 10-50xp values if they hit them it does different things
@@ -589,27 +596,20 @@ function updateXP() {
 
 // sets up initial battle state (screen and images) should only run once
 function battleSetup(eventText) {
-
-    // clearOpponentData();
-    //why is this not working?
-    // if (party.length < 2) {
-    //     disableButtons('.switch-pokemon.battle');
-    //     disableButtons('.switch-pokemon.gym');
-    //     disableButtons('.switch-pokemon')
-    // };
-
     let battleType = eventText.trim();
 
     if (battleType === 'Trainer Battle') {
 
-        leaveButtonTextElement.textContent = "Leave";
         encounter = 'trainer'
-        dynamicButtonTextElement.textContent = "Attack"
+        switchScreen('battle');
+        leaveButtonTextElement.textContent = "Leave";
+        dynamicButtonTextElement.textContent = "Accept Challenge"
 
-        playerTextElement.textContent = `You sent out ${currentPokemon.name}!`;
-        playerPokemonImageElement.src = currentPokemon.image
+        // playerTextElement.textContent = `You sent out ${currentPokemon.name}!`;
+        // playerPokemonImageElement.src = currentPokemon.image
 
         let possibleOppParty = [];
+        let trainerImage = `images/trainer${Math.ceil(Math.random() * 14)}.png`;
 
         switch (currentArea) {
             case 'pewterCity':
@@ -642,13 +642,13 @@ function battleSetup(eventText) {
         }
         oppCurrentPokemon = oppParty[0];
         oppPartyCurrentIndex = 0;
-        
 
-        opponentTextElement.textContent = `A Trainer has challenged you with a Party size of ${oppParty.length}! Trainer has sent out ${oppCurrentPokemon.name}!`;
-        opponentPokemonImageElement.src = oppCurrentPokemon.image
+        opponentImageElement.src = trainerImage;
+        opponentTextElement.textContent = `A Trainer has challenged you with a Party of ${oppParty.length} Pokemon!`;
+        // opponentPokemonImageElement.src = oppCurrentPokemon.image
+        playerImageElement.src = characterModel.image;
 
-        switchScreen('battle');
-        updateBattleDisplay('trainer');
+        // updateBattleDisplay('trainer');
         console.log("opponents party: ", oppParty);
     }
     else if (battleType === 'Search For Wild Pokemon') {
@@ -660,6 +660,7 @@ function battleSetup(eventText) {
         playerTextElement.textContent = `${characterModel.name} sent out ${currentPokemon.name}!`;
         playerPokemonImageElement.src = currentPokemon.image
         playerImageElement.src = characterModel.image;
+        playerPokemonTextElement.innerHTML = `Name: ${currentPokemon.name}<br>HP: ${currentPokemon.hp}`
 
         const randomPokemon = chooseRandomPokemon();
 
@@ -670,28 +671,28 @@ function battleSetup(eventText) {
             wildPokemonFound = structuredClone(randomPokemon);
             opponentTextElement.textContent = `A wild ${wildPokemonFound.name} appeared!`;
             opponentPokemonImageElement.src = wildPokemonFound.image
-            opponentPokemonTextElement.textContent = `Name: ${wildPokemonFound.name} \u00A0\u00A0\u00A0\u00A0 HP: ${wildPokemonFound.hp}`;
+            opponentPokemonTextElement.innerHTML = `Name: ${wildPokemonFound.name}<br>HP: ${wildPokemonFound.hp}`;
 
             return wildPokemonFound;
         };
     }
     else if (battleType === 'Gym') {
+
         encounter = 'gym'
-        
         switchScreen('gym');
 
+        console.log('dynamic button should change')
+        dynamicButtonTextElement.textContent = "Challenge";
+        console.log(dynamicButtonTextElement.textContent);
         const foundArea = areas.find((area) => area.location === currentArea)
         const foundGymLeader = leaders.find((leader) => leader.location === foundArea.location)
 
         oppName = foundGymLeader.name
         oppParty = foundGymLeader.leaderParty;
 
-        getBadge(foundArea.badge);
+        // getBadge(foundArea.badge);
 
         oppCurrentPokemon = oppParty[0];
-
-        console.log(oppCurrentPokemon);
-        console.log(oppParty);
 
         leaderTextElement.textContent = (`You dare challenge me? I am ${oppName}!`)
         leaderImageElement.src = foundGymLeader.leaderimage
@@ -703,12 +704,14 @@ function battleSetup(eventText) {
     else if (battleType === 'Lorelei' || battleType === 'Bruno' ||
         battleType === 'Agatha' || battleType === 'Lance') {
         encounter = 'elite'
+        switchScreen('gym');
         oppName = battleType;
+        dynamicButtonTextElement.textContent = "Challenge";
 
         let eliteImage = '';
-        console.log('elite four battle', oppName, encounter, battleType);
-        switchScreen('gym');
-        updateBattleDisplay('elite');
+        // console.log('elite four battle', oppName, encounter, battleType);
+
+        // updateBattleDisplay('elite');
 
         switch (battleType) {
             case "Lorelei":
@@ -735,9 +738,10 @@ function battleSetup(eventText) {
         console.log('current elite four pokemon is: ', oppCurrentPokemon);
 
         leaderImageElement.src = eliteImage
-        leaderPokemonImageElement.src = oppCurrentPokemon.image;
-        leaderTextElement.textContent = (`${oppName} sent out ${oppCurrentPokemon.name}!`);
-        updateBattleDisplay('elite')
+
+        // leaderPokemonImageElement.src = oppCurrentPokemon.image;
+        // leaderTextElement.textContent = (`${oppName} sent out ${oppCurrentPokemon.name}!`);
+        // updateBattleDisplay('elite')
 
         // updateAreaButton();
         // updatePartyDisplay();
@@ -747,35 +751,50 @@ function battleSetup(eventText) {
 
 function updateBattleDisplay(encounter) {
     if (encounter === "gym" || encounter === "elite") {
-        leaderPokemonTextElement.textContent = `Name: ${oppCurrentPokemon.name} \u00A0\u00A0\u00A0\u00A0 HP: ${oppCurrentPokemon.hp}`;
+        leaderPokemonTextElement.innerHTML = `Name: ${oppCurrentPokemon.name}<br>HP: ${oppCurrentPokemon.hp}`;
     }
     else if (encounter === "trainer") {
-        opponentPokemonTextElement.textContent = `Name: ${oppCurrentPokemon.name} \u00A0\u00A0\u00A0\u00A0 HP: ${oppCurrentPokemon.hp}`;
+        opponentPokemonTextElement.innerHTML = `Name: ${oppCurrentPokemon.name}<br>HP: ${oppCurrentPokemon.hp}`;
     }
     else if (encounter === "wildpokemon") {
-        opponentPokemonTextElement.textContent = `Name: ${wildPokemonFound.name} \u00A0\u00A0\u00A0\u00A0 HP: ${wildPokemonFound.hp}`;
+        opponentPokemonTextElement.innerHTML = `Name: ${wildPokemonFound.name}<br>HP: ${wildPokemonFound.hp}`;
     }
+    playerPokemonTextElement.innerHTML = `Name: ${currentPokemon.name}<br>HP: ${currentPokemon.hp}`;
 };
 
 // function for when action is clicked or resolveBattle is called for to compare hp values and switch pokemon out
 function resolveBattle(encounterData, encounterType) {
 
     if (encounterType === "wildpokemon") {
+
         let wildPokemon = encounterData;
 
-        // check for maxhp because 1 after the other is not correct math ie..
-        // currentPokemon.hp -= wildPokemon.hp
-        // wildPokemon.hp -= currentPokemon.hp
+        // let wildPokemonAttack = Math.floor((Math.random() * wildPokemon.maxhp) / 2);
+        // let currentPokemonAttack = Math.floor((Math.random() * currentPokemon.maxhp) / 2);
 
+        // remove and uncomment battle system
         currentPokemon.hp -= 0
         wildPokemon.hp -= 200
 
-        playerTextElement.textContent = `${currentPokemon.name} attacked!`;
-        opponentTextElement.textContent = `Wild ${wildPokemon.name} attacked!`;
+        // switch (wildPokemonAttack > 0) {
+        //     case true:
+        //         opponentTextElement.textContent = `Wild ${wildPokemon.name} attacked for ${wildPokemonAttack} damage!`;
+        //         break;
+        //     case false:
+        //         opponentTextElement.textContent = `Wild ${wildPokemon.name} missed ${currentPokemon.name}!`;
+        //         break;
+        // }
+        // switch (currentPokemonAttack > 0) {
+        //     case true:
+        //         playerTextElement.textContent = `${currentPokemon.name} attacked for ${currentPokemonAttack} damage!`;
+        //         break;
+        //     case false:
+        //         playerTextElement.textContent = `${currentPokemon.name} missed ${wildPokemon.name}!`;
+        //         break;
+        // }
 
         if (currentPokemon.hp <= 0) {
             playerTextElement.textContent = `${currentPokemon.name} fainted!`;
-            disableButtons('.dynamic-button');
             switchPokemon();
         }
         if (wildPokemon.hp <= 0) {
@@ -793,11 +812,32 @@ function resolveBattle(encounterData, encounterType) {
         updatePartyDisplay();
         updateItemDisplay();
     }
-
     else if (encounterType === 'trainer' || encounterType === 'gym' || encounterType === 'elite') {
         console.log('trying to resolve trainer battle')
 
+        //activate when ready for battle system implementation
+        // let opponentPokemonAttack = Math.floor((Math.random() * oppCurrentPokemon.maxhp) / 2);
+        // let currentPokemonAttack = Math.floor((Math.random() * currentPokemon.maxhp) / 2);
+
+        // switch (opponentPokemonAttack > 0) {
+        //     case true:
+        //         opponentTextElement.textContent = `${oppCurrentPokemon.name} attacked for ${opponentPokemonAttack} damage!`;
+        //         break;
+        //     case false:
+        //         opponentTextElement.textContent = `Wild ${oppCurrentPokemon.name} missed ${currentPokemon.name}!`;
+        //         break;
+        // }
+        // switch (currentPokemonAttack > 0) {
+        //     case true:
+        //         playerTextElement.textContent = `${currentPokemon.name} attacked for ${currentPokemonAttack} damage!`;
+        //         break;
+        //     case false:
+        //         playerTextElement.textContent = `${currentPokemon.name} missed ${oppCurrentPokemon.name}!`;
+        //         break;
+        // }
+
         if (currentPokemon.hp > 0) {
+            // change to -= opponentPokemonAttack
             currentPokemon.hp -= 0;
             if (currentPokemon.hp <= 0) {
                 currentPokemon.hp = 0;
@@ -808,16 +848,19 @@ function resolveBattle(encounterData, encounterType) {
                 playerTextElement.textContent = `You sent out ${currentPokemon.name}!`;
                 playerPokemonImageElement.src = currentPokemon.image
             }
+        } else {
+            console.log('issue with current pokemon hp')
         }
         if (oppCurrentPokemon.hp > 0) {
-            oppCurrentPokemon.hp -= 50;
+            // change to -= currentPokemonAttack when ready
+            oppCurrentPokemon.hp -= 200;
             if (oppCurrentPokemon.hp <= 0) {
                 console.log('trainers pokemon fainted, switching to next');
                 oppCurrentPokemon.hp = 0;
                 currentPokemon.xp += 1;
                 switchPokemonOpp();
                 updateBattleDisplay(encounterType);
-                if (encounterType === 'gym') {
+                if (encounterType === 'gym' || encounterType === 'elite') {
                     leaderTextElement.textContent = `${oppName} sent out ${oppCurrentPokemon.name}`;
                     leaderPokemonImageElement.src = oppCurrentPokemon.image
                 } else {
@@ -825,7 +868,9 @@ function resolveBattle(encounterData, encounterType) {
                     opponentPokemonImageElement.src = oppCurrentPokemon.image
                 };
             };
-        };
+        } else {
+            console.log('issue with opponent pokemon hp')
+        }
     };
 };
 
@@ -1040,25 +1085,45 @@ dynamicButton.forEach((button) => {
         else if (button.textContent === 'Throw Pokéball') {
             throwPokeball(wildPokemonFound);
         }
-        else if (button.textContent === 'Challenge') {
+        else if (button.textContent === 'Challenge' || button.textContent === 'Accept Challenge') {
 
-            playerTextElement.textContent = `You sent out ${currentPokemon.name}!`;
+            switch (button.textContent) {
+                case "Challenge":
+                    leaderPokemonImageElement.src = oppCurrentPokemon.image;
+                    leaderTextElement.textContent = `${oppName} sent out ${oppCurrentPokemon.name}`;
+                    break;
+                case "Accept Challenge":
+                    opponentPokemonImageElement.src = oppCurrentPokemon.image;
+                    opponentTextElement.textContent = `Trainer sent out ${oppCurrentPokemon.name}`;
+                    break;
+            }
+
+            playerTextElement.textContent = `${characterModel.name} sent out ${currentPokemon.name}!`;
             playerPokemonImageElement.src = currentPokemon.image
-            leaderPokemonImageElement.src = oppCurrentPokemon.image;
-            leaderTextClassAdd();
-            leaderTextElement.textContent = `${oppName} sent out ${oppCurrentPokemon.name}`;
+            // leaderTextClassAdd();
             dynamicButtonTextElement.textContent = "Attack";
             enableButtons('.use-potion');
+            disableButtons('.leave');
+            updateBattleDisplay(encounter);
 
             // need to check each p members health to see if atleast 1 has hp
             if (party.length > 1) {
                 enableButtons('.switch-pokemon');
-            };
+            }
         }
         else if (button.textContent === "Accept Badge") {
             const foundArea = areas.find((area) => area.location === currentArea)
             foundArea.completed = true;
             getBadge(foundArea.badge);
+            enableButtons('.leave');
+        }
+        else if (button.textContent === "Accept Defeat") {
+            const eliteFourName = eliteFourStatus.find(elite => elite.name === oppName)
+            eliteFourName.completed = true;
+            if (eliteFourStatus.every(elite => elite.completed)) {
+                document.querySelector('#game-clear-button').classList.add('active');
+            }
+            enableButtons('.leave');
         };
     });
 });

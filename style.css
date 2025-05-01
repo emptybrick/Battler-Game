@@ -18,8 +18,8 @@
     font-family: "Bangers", system-ui;
     font-weight: 400;
     font-style: normal;
-  }
-  
+}
+
 
 #game-box {
     display: flex;
@@ -162,7 +162,7 @@ button:active {
     align-items: center;
     padding: 5px;
     margin: 0;
-    max-height: 550px; 
+    max-height: 550px;
 }
 
 .page {
@@ -173,7 +173,7 @@ button:active {
     display: none;
     opacity: 0;
     pointer-events: none;
-    box-sizing: border-box;    
+    box-sizing: border-box;
 }
 
 .page.active {
@@ -269,7 +269,7 @@ h4 {
 }
 
 .partyMember.active {
-    background-color:  rgba(255, 215, 0, 0.866);
+    background-color: rgba(255, 215, 0, 0.866);
     border: 3px solid rgb(0, 0, 0);
 }
 
@@ -320,6 +320,18 @@ h4 {
     padding: 8px;
     border: 1px solid black;
     background-color: rgba(255, 255, 255, 0.491);
+}
+
+.message-box.active {
+    display: block;
+    opacity: 1;
+    width: fit-content;
+    background-color: #ffffffe3;
+}
+
+.message-box {
+    display: none;
+    opacity: 0;
 }
 
 h5,
@@ -411,21 +423,29 @@ h6 {
     margin-bottom: 10px;
 }
 
+#leader-image,
+.player-image,
+#leader-pokemon,
+#opponent-pokemon,
+#opponent-image,
+.player-pokemon {
+    position: absolute;
+}
 
 .player-image {
     width: 150px;
+    bottom: 20px;
 }
 
-#leader-pokemon,
-#opponent-pokemon,
-.player-pokemon {
-    width: 150px;
-    position: absolute;
+#opponent-image {
+    top: 60px;
+    height: 200px;
+    right: 10px;
 }
 
 #leader-pokemon {
     top: 180px;
-    right: 50px;    
+    right: 50px;
 }
 
 #leader-image {
@@ -435,20 +455,30 @@ h6 {
 }
 
 .player-pokemon {
+    width: 150px;
     left: 150px;
     bottom: 70px;
 }
 
-#leader-image,
+#opponent-pokemon {
+    width: 150px;
+    bottom: 200px;
+    right: 65px;
+}
+
+.player-pokemon-text,
 .player-text,
-.leader-text,
-.leader-pokemon-text {
+.opponent-pokemon-text,
+.opponent-text,
+.leader-pokemon-text,
+.leader-text {
     position: absolute;
+    width: fit-content;
+    height: fit-content;
 }
 
 .player-text {
-    width: 200px;
-    bottom: 60px;
+    top: 250px;
     left: 140px;
 }
 
@@ -458,43 +488,42 @@ h6 {
     left: 80px;
 }
 
+.opponent-text {
+    right: 100px;
+    top: 120px;
+}
+
+.player-pokemon-text,
+.leader-pokemon-text,
+.opponent-pokemon-text {
+    width: fit-content;
+    text-align: left;
+}
+
+.player-pokemon-text {
+    left: 170px;
+    bottom: 50px;
+}
+
 .leader-pokemon-text {
-    width: 200px;
     bottom: 120px;
     right: 20px;
+}
+
+.opponent-pokemon-text {
+    bottom: 180px;
+    right: 90px;
 }
 
 .pokeball {
     max-width: 35px;
     top: 230px;
     left: 475px;
-} 
-
-.opponent-pokemon-text {
-    position: absolute;
-    width: 220px;
-    bottom: 190px;
-    right: 40px;
-}
-
-#opponent-pokemon {
-    bottom: 200px;
-    right: 65px;
-}
-
-.opponent-text {
-    position: absolute;
-    width: 300px;
-    height: fit-content;
-    left: 80px;
-    top: 100px;
-    font-size: 18px;
-
 }
 
 .mirror {
     transform: scaleX(-1);
-  }
+}
 
 .bottom-side {
     position: relative;
@@ -584,7 +613,7 @@ button:disabled,
     background-color: #ffffffc8;
     align-items: center;
     font-size: 20px;
-    
+
 }
 
 .character-image p {
@@ -712,7 +741,7 @@ ul {
     position: absolute;
     top: 10px;
     right: 50px;
-} 
+}
 
 .main-screen.area.pokecenter-collection-box p {
     align-self: flex-start;
@@ -752,7 +781,7 @@ ul {
     width: 300px;
     max-width: 90%;
 }
- 
+
 .poke-button {
     justify-content: center;
     align-items: center;
@@ -838,4 +867,3 @@ ul {
 .main-screen.area.character {
     background-image: url('images/character-background.jpg');
 }
-
