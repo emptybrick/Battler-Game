@@ -832,8 +832,8 @@ function resolveBattle(encounterData, encounterType) {
 
         let wildPokemon = encounterData;
 
-        let wildPokemonAttack = Math.floor((Math.random() * wildPokemon.maxhp) / 2);
-        let currentPokemonAttack = Math.floor((Math.random() * currentPokemon.maxhp) / 2);
+        let wildPokemonAttack = Math.floor((Math.random() * wildPokemon.maxhp) / 3);
+        let currentPokemonAttack = Math.ceil((Math.random() * currentPokemon.maxhp) / 2);
 
         // remove and uncomment battle system
         // currentPokemon.hp -= 0
@@ -890,8 +890,8 @@ function resolveBattle(encounterData, encounterType) {
     else if (encounterType === 'trainer' || encounterType === 'gym' || encounterType === 'elite') {
         console.log('trying to resolve trainer battle')
 
-        let opponentPokemonAttack = Math.floor((Math.random() * oppCurrentPokemon.maxhp) / 2);
-        let currentPokemonAttack = Math.floor((Math.random() * currentPokemon.maxhp) / 2);
+        let opponentPokemonAttack = Math.floor((Math.random() * oppCurrentPokemon.maxhp) / 3);
+        let currentPokemonAttack = Math.ceil((Math.random() * currentPokemon.maxhp) / 2);
 
         switch (opponentPokemonAttack > 0) {
             case true:
