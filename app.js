@@ -80,7 +80,7 @@ let oppCurrentPokemon = {};
 let wildPokemonFound = {};
 let oppParty = [];
 
-let messageBox = document.querySelector('.message-box');
+let messageBox = document.querySelectorAll('.message-box');
 
 let leaderTextElement = document.querySelector('.leader-text');
 let leaderPokemonTextElement = document.querySelector('.leader-pokemon-text');
@@ -92,13 +92,13 @@ let opponentPokemonTextElement = document.querySelector('.opponent-pokemon-text'
 let opponentPokemonImageElement = document.querySelector('#opponent-pokemon');
 let opponentImageElement = document.querySelector('#opponent-image');
 
-let playerTextElement = document.querySelector('.player-text');
-let playerPokemonImageElement = document.querySelector('.player-pokemon');
-let playerImageElement = document.querySelector('.player-image');
-let playerPokemonTextElement = document.querySelector('.player-pokemon-text');
+let playerTextElement = document.querySelectorAll('.player-text');
+let playerPokemonImageElement = document.querySelectorAll('.player-pokemon');
+let playerImageElement = document.querySelectorAll('.player-image');
+let playerPokemonTextElement = document.querySelectorAll('.player-pokemon-text');
 
-let dynamicButtonTextElement = document.querySelector('.dynamic-button');
-let leaveButtonTextElement = document.querySelector('.leave');
+let dynamicButtonTextElement = document.querySelectorAll('.dynamic-button');
+let leaveButtonTextElement = document.querySelectorAll('.leave');
 
 let partyCurrentIndex = null;
 let oppPartyCurrentIndex = null;
@@ -155,12 +155,11 @@ function resetGame() {
 };
 
 function showMessageBox() {
-    messageBox.classList.add('active');
+    messageBox.forEach(box => box.classList.add('active'));
     setTimeout(() => {
-        messageBox.classList.add('fading');
+        messageBox.forEach(box => box.classList.add('fading'));
         setTimeout(() => {
-            // messageBox.style.display = 'none';
-            messageBox.classList.remove('fading', 'active');
+            messageBox.forEach(box => box.classList.remove('fading', 'active'));
         }, 500);
     }, 500);
 }
@@ -249,20 +248,24 @@ function removePokeballPokemon() {
 function updateImageElements(type) {
     switch (type) {
         case "player":
-            playerPokemonImageElement.src = currentPokemon.image
-            playerPokemonImageElement.alt = currentPokemon.name
+            playerPokemonImageElement.forEach(img => {
+                img.src = currentPokemon.image;
+                img.alt = currentPokemon.name;
+            })
             break;
         case "trainer":
             opponentPokemonImageElement.src = oppCurrentPokemon.image;
             opponentPokemonImageElement.alt = oppCurrentPokemon.name;
             break;
         case "leader":
-            leaderPokemonImageElement.src = oppCurrentPokemon.image
-            leaderPokemonImageElement.alt = oppCurrentPokemon.name
+            leaderPokemonImageElement.src = oppCurrentPokemon.image;
+            leaderPokemonImageElement.alt = oppCurrentPokemon.name;
             break;
         case 'player-image':
-            playerImageElement.src = characterModel.image;
-            playerImageElement.alt = characterModel.name;
+            playerImageElement.forEach(img => {
+                img.src = characterModel.image;
+                img.alt = characterModel.name;
+            })
             break;
     }
 }
@@ -281,13 +284,23 @@ function clearOpponentData() {
     opponentImageElement.src = '';
     opponentPokemonImageElement.alt = '';
     opponentImageElement.alt = '';
-    playerTextElement.textContent = '';
-    playerPokemonTextElement.textContent = '';
-    playerPokemonImageElement.src = '';
-    playerImageElement.src = '';
-    playerPokemonImageElement.alt = '';
-    playerImageElement.alt = '';
-    leaveButtonTextElement.textContent = 'Leave';
+    playerPokemonTextElement.forEach(p => {
+        p.textContent = '';
+    });
+    playerPokemonImageElement.forEach(img => {
+        img.src = '';
+        img.alt = '';
+    });
+    playerImageElement.forEach(img => {
+        img.src = '';
+        img.alt = '';
+    });
+    playerTextElement.forEach(p => {
+        p.textContent = '';
+    });
+    leaveButtonTextElement.forEach(button => {
+        button.textContent = 'Leave';
+    });
     oppCurrentPokemon = {};
     wildPokemonFound = {};
     oppParty = [];
@@ -468,7 +481,7 @@ function buyItem(itemName) {
     const item = items.find(item => item.name === itemIs);
     const cost = item.cost;
 
-    if (messageBox.classList.contains('active')) {
+    if (messageBox.forEach(box => box.classList.contains('active'))) {
         console.log('already showing');
         return;
     } else {
@@ -476,11 +489,11 @@ function buyItem(itemName) {
             gold.quantity -= cost;
             item.quantity += 1;
             updateItemDisplay();
-            messageBox.textContent = `Purchased 1 ${item.msgName}`
+            messageBox.forEach(box => box.textContent = `Purchased 1 ${item.msgName}`);
             showMessageBox();
         }
         else {
-            messageBox.textContent = "Not Enough Gold!";
+            messageBox.forEach(box => box.textContent = "Not Enough Gold!");
             showMessageBox();
             console.log("not enough gold");
         };
@@ -557,7 +570,9 @@ function switchPokemon() {
         document.querySelector(`.partyMember.${activeSlot}`).classList.add('active');
         updatePartyDisplay();
         updateImageElements('player');
-        playerTextElement.textContent = `${characterModel.name} switch to ${currentPokemon.name}!`
+        playerTextElement.forEach(p => {
+            p.textContent = `${characterModel.name} switch to ${currentPokemon.name}!`;
+        });
         updateBattleDisplay();
         console.log('ran switchpokemon function', currentPokemon.name, "in slot: ", activeSlot);
     } else {
@@ -600,7 +615,9 @@ function evolution(pokemonToEvolve, evolvesInto) {
     currentPokemon = evolvesInto;
     console.log('current pokemon is now: ', currentPokemon, "pokemon to evolve was/is: ", pokemonToEvolve, "\npokemon evolves into is: ", evolvesInto)
     console.log('pokemon to remove is: ', removePokemon);
-    playerTextElement.textContent = `${pokemonToEvolve.name} evolved into ${currentPokemon.name}!`
+    playerTextElement.forEach(p => {
+        p.textContent = `${pokemonToEvolve.name} evolved into ${currentPokemon.name}!`
+    });
     updateImageElements('player');
     updatePartyDisplay();
 };
@@ -649,8 +666,12 @@ function battleSetup(eventText) {
 
         encounter = 'trainer'
         switchScreen('battle');
-        leaveButtonTextElement.textContent = "Leave";
-        dynamicButtonTextElement.textContent = "Accept Challenge"
+        leaveButtonTextElement.forEach(button => {
+            button.textContent = 'Leave';
+        });
+        dynamicButtonTextElement.forEach(button => {
+            button.textContent = "Accept Challenge"
+        });
 
         let possibleOppParty = [];
         let trainerImage = `images/trainer${Math.ceil(Math.random() * 14)}.png`;
@@ -690,20 +711,30 @@ function battleSetup(eventText) {
         opponentImageElement.src = trainerImage;
         opponentImageElement.alt = "Random Trainer";
         opponentTextElement.textContent = `A Trainer has challenged you with a Party of ${oppParty.length} Pokemon!`;
-updateImageElements('player-image');
+        updateImageElements('player-image');
 
         console.log("opponents party: ", oppParty);
     }
     else if (battleType === 'Search For Wild Pokemon') {
 
-        leaveButtonTextElement.textContent = "Run Away";
-        dynamicButtonTextElement.textContent = "Attack";
+        leaveButtonTextElement.forEach(button => {
+            button.textContent = 'Run Away';
+        });
+        dynamicButtonTextElement.forEach(button => {
+            button.textContent = "Attack";
+        });
+
         encounter = 'wildpokemon';
 
-        playerTextElement.textContent = `${characterModel.name} sent out ${currentPokemon.name}!`;
+        playerTextElement.forEach(p => {
+            p.textContent = `${characterModel.name} sent out ${currentPokemon.name}!`;
+        });
+        playerPokemonTextElement.forEach(p => {
+            p.innerHTML = `Name: ${currentPokemon.name}<br>HP: ${currentPokemon.hp}`
+        });
+
         updateImageElements('player');
         updateImageElements('player-image');
-        playerPokemonTextElement.innerHTML = `Name: ${currentPokemon.name}<br>HP: ${currentPokemon.hp}`
 
         const randomPokemon = chooseRandomPokemon();
 
@@ -727,9 +758,10 @@ updateImageElements('player-image');
         encounter = 'gym'
         switchScreen('gym');
 
-        console.log('dynamic button should change')
-        dynamicButtonTextElement.textContent = "Challenge";
-        console.log(dynamicButtonTextElement.textContent);
+        dynamicButtonTextElement.forEach(button => {
+            button.textContent = "Challenge";
+        });
+
         const foundArea = areas.find((area) => area.location === currentArea)
         const foundGymLeader = leaders.find((leader) => leader.location === foundArea.location)
 
@@ -743,7 +775,7 @@ updateImageElements('player-image');
         leaderTextElement.textContent = (`You dare challenge me? I am ${oppName}!`)
         leaderImageElement.src = foundGymLeader.leaderimage;
         leaderImageElement.alt = oppName;
-
+        updateImageElements('player-image');
         // updateBattleDisplay('gym');
         disableButtons('.use-potion');
         disableButtons('.switch-pokemon');
@@ -753,12 +785,12 @@ updateImageElements('player-image');
         encounter = 'elite'
         switchScreen('gym');
         oppName = battleType;
-        dynamicButtonTextElement.textContent = "Challenge";
+        dynamicButtonTextElement.forEach(button => {
+            button.textContent = "Challenge";
+        });
 
+        leaderTextElement.textContent = (`You dare challenge me? I am ${oppName}!`)
         let eliteImage = '';
-        // console.log('elite four battle', oppName, encounter, battleType);
-
-        // updateBattleDisplay('elite');
 
         switch (battleType) {
             case "Lorelei":
@@ -786,15 +818,7 @@ updateImageElements('player-image');
 
         leaderImageElement.src = eliteImage;
         leaderImageElement.alt = oppName;
-
-        // leaderPokemonImageElement.src = oppCurrentPokemon.image;
-        // leaderPokemonImageElement.alt = oppCurrentPokemon.name;
-        // leaderTextElement.textContent = (`${oppName} sent out ${oppCurrentPokemon.name}!`);
-        // updateBattleDisplay('elite')
-
-        // updateAreaButton();
-        // updatePartyDisplay();
-        // updateItemDisplay();
+        updateImageElements('player-image');
     };
 }
 
@@ -808,7 +832,9 @@ function updateBattleDisplay(encounter) {
     else if (encounter === "wildpokemon") {
         opponentPokemonTextElement.innerHTML = `Name: ${wildPokemonFound.name}<br>HP: ${wildPokemonFound.hp}`;
     }
-    playerPokemonTextElement.innerHTML = `Name: ${currentPokemon.name}<br>HP: ${currentPokemon.hp}`;
+    playerPokemonTextElement.forEach(p => {
+        p.innerHTML = `Name: ${currentPokemon.name}<br>HP: ${currentPokemon.hp}`;
+    });
 };
 
 // function for when action is clicked or resolveBattle is called for to compare hp values and switch pokemon out
@@ -843,7 +869,10 @@ function resolveBattle(encounterData, encounterType) {
         // }
 
         if (currentPokemon.hp <= 0) {
-            playerTextElement.textContent = `${currentPokemon.name} fainted!`;
+            playerTextElement.forEach(p => {
+                p.textContent = `${currentPokemon.name} fainted!`;
+            });
+
             switchPokemon();
         }
         if (wildPokemon.hp <= 0) {
@@ -851,8 +880,12 @@ function resolveBattle(encounterData, encounterType) {
             encounter = '';
             currentPokemon.xp += 1;
             updateXP(currentPokemon);
-            dynamicButtonTextElement.textContent = "Throw Pokéball";
-            leaveButtonTextElement.textContent = "Leave";
+            dynamicButtonTextElement.forEach(button => {
+                button.textContent = "Throw Pokéball";
+            });
+            leaveButtonTextElement.forEach(button => {
+                button.textContent = 'Leave';
+            });
             opponentTextElement.textContent = `Wild ${wildPokemon.name} fainted!`;
             getRewards('wildpokemon');
             disableButtons('.use-potion');
@@ -891,8 +924,9 @@ function resolveBattle(encounterData, encounterType) {
                 currentPokemon.xp += 1;
                 updateXP(currentPokemon);
                 switchPokemon();
-
-                playerTextElement.textContent = `You sent out ${currentPokemon.name}!`;
+                playerTextElement.forEach(p => {
+                    p.textContent = `You sent out ${currentPokemon.name}!`;
+                });
                 updateImageElements('player');
             }
         } else {
@@ -904,8 +938,16 @@ function resolveBattle(encounterData, encounterType) {
             if (oppCurrentPokemon.hp <= 0 && oppPartyCurrentIndex === oppParty.length - 1) {
                 oppCurrentPokemon.hp = 0;
                 if (encounter === 'gym' || encounter === 'elite') {
-                    console.log('health check failed for gym or elite')
-                    dynamicButtonTextElement.textContent = 'Accept Badge';
+                    dynamicButtonTextElement.forEach(button => {
+                        if (encounter === 'gym') {
+                            button.textContent = "Accept Badge";
+
+                        } else {
+                            button.textContent = "Accept Defeat";
+                        }
+                        disableButtons('.use-potion')
+                        disableButtons('.switch-pokemon');
+                    });
 
                     // Maybe a direct line from gym leader? - can set them in dataset as intro: 'some string' and defeat: 'some string'
                     // for trainers i could have an array of strings of defeat messages and call math.random for 1
@@ -976,7 +1018,9 @@ function getRewards(rewardType) {
 };
 
 function throwPokeball(randomPokemon) {
-    leaveButtonTextElement.textContent = 'Leave';
+    leaveButtonTextElement.forEach(button => {
+        button.textContent = 'Leave';
+    });
 
     const pokeBall = items.find(item => item.name === 'pokeball');
     const partyPokemon = party.find(p => p.name === randomPokemon.name)
@@ -1010,7 +1054,9 @@ function throwPokeball(randomPokemon) {
 function heal() {
     party.forEach(pokemon => pokemon.hp = pokemon.maxhp);
     updatePartyDisplay();
-    messageBox.textContent = "Party is at Full Health!";
+    messageBox.forEach(msg => {
+        msg.textContent = "Party is at Full Health!";
+    });
     showMessageBox();
     updateSwitchPokemonButton("party");
 };
@@ -1155,13 +1201,16 @@ dynamicButton.forEach((button) => {
                 case "gym":
                     resolveBattle(oppParty, encounter);
                     break;
+                case "elite":
+                    resolveBattle(oppParty, encounter);
             }
+            console.log(encounter)
         }
         else if (button.textContent === 'Throw Pokéball') {
             throwPokeball(wildPokemonFound);
         }
         else if (button.textContent === 'Challenge' || button.textContent === 'Accept Challenge') {
-
+            console.log('clicked gym dynamic button')
             switch (button.textContent) {
                 case "Challenge":
                     updateImageElements('leader');
@@ -1172,13 +1221,17 @@ dynamicButton.forEach((button) => {
                     opponentTextElement.textContent = `Trainer sent out ${oppCurrentPokemon.name}`;
                     break;
             }
+            playerTextElement.forEach(p => {
+                p.textContent = `${characterModel.name} sent out ${currentPokemon.name}!`;
+            });
 
-            playerTextElement.textContent = `${characterModel.name} sent out ${currentPokemon.name}!`;
             updateImageElements('player');
-
-            dynamicButtonTextElement.textContent = "Attack";
+            dynamicButtonTextElement.forEach(button => {
+                button.textContent = "Attack";
+            });
             enableButtons('.use-potion');
             disableButtons('.leave');
+            disableButtons('.switch-pokemon.party');
             updateBattleDisplay(encounter);
             updateSwitchPokemonButton("battle");
         }
@@ -1187,10 +1240,13 @@ dynamicButton.forEach((button) => {
             foundArea.completed = true;
             getBadge(foundArea.badge);
             enableButtons('.leave');
+            disableButtons('.dynamic-button');
         }
         else if (button.textContent === "Accept Defeat") {
             const eliteFourName = eliteFourStatus.find(elite => elite.name === oppName)
             eliteFourName.completed = true;
+            disableButtons('.dynamic-button');
+            disableButtons(`.elite-four-button.${oppName.toLowerCase()}`)
             if (eliteFourStatus.every(elite => elite.completed)) {
                 document.querySelector('#game-clear-button').classList.add('active');
             }
