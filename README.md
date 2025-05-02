@@ -1,4 +1,4 @@
-**Bricks Pokémon Adventure \- Battle the Elite Four\!**
+***Bricks Pokémon Adventure \- Battle the Elite Four\!***
 
 **Disclaimer**: This project is a fan-made, educational endeavor created for learning purposes only. It is not affiliated with, endorsed by, or sponsored by Nintendo, Game Freak, The Pokémon Company, or any related entities. All Pokémon-related intellectual property, including characters, names, and assets, belongs to their respective owners. This game is non-commercial, free to play, and not intended for profit or distribution beyond educational use.  
 [\!\[License: MIT\](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)  
@@ -132,9 +132,6 @@ See the in-game "Game Rules and Explanations" (right panel, 8-page guide) for de
 
 **Known Issues**
 
-* **Potion Bug**: Using a Potion doesn’t decrement the inventory (`usePotion` listener uses `potion -= 1` instead of `potion.quantity -= 1`). **Fix**: Update to `potion.quantity -= 1`.  
-* **Reset Bug**: `resetGame` sets item quantities to `'-'` (string), breaking numeric operations (e.g., `buyItem`). **Fix**: Set quantities to numbers (e.g., `potion.quantity = 2`, `pokeball.quantity = 5`, `rarecandy.quantity = 0`, `gold.quantity = 10`).  
-* **Typo in Starter Selection**: `starterButton` listener has `activeSlot - 'slot-1'` (subtraction) instead of `activeSlot = 'slot-1'` (assignment). **Fix**: Correct to `activeSlot = 'slot-1'`.  
 * **Message Overlap**: Rapid actions cause message box text to overlap due to fixed 500ms timeouts in `showMessageBox`. **Fix**: Clear existing timeouts before starting new ones.  
 * **Collection Limitation**: Collection (`pokecenter-collection-box`) is view-only; no swapping with party. **Potential Feature**: Add swap functionality.
 
