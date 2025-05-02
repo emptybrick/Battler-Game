@@ -56,6 +56,8 @@ const badges = [];
 
 const collection = [];
 
+const potions = items.find(item => item.name === 'potion');
+
 /*-------------------Variables-------------------*/
 
 let currentArea = null;
@@ -136,16 +138,14 @@ function resetGame() {
     activeSlot = '';
     currentPokemon = {};
     characterModel = {};
-    clearOpponentData();
 
     document.querySelectorAll('.partyMember').forEach(slot => slot.classList.remove('active'));
     document.querySelectorAll('.icon').forEach(icon => icon.classList.remove('active'));
 
     clearOpponentData();
-    switchScreen('start');
+    switchScreen('character');
     updatePartyDisplay();
     updateItemDisplay();
-    updateAreaButton();
 };
 
 function showMessageBox() {
@@ -162,7 +162,7 @@ function showMessageBox() {
 function switchScreen(screenClass) {
     document.querySelectorAll('.main-screen').forEach(screen => screen.classList.remove('active'));
     document.querySelector(`.${screenClass}`).classList.add('active');
-    if (screenClass === 'start') {
+    if (screenClass === 'start' || screenClass === 'character') {
     } else {
         if (screenClass === 'palletTown' || screenClass === 'indigoPlateau') {
             currentArea = screenClass;
@@ -203,9 +203,8 @@ function switchScreen(screenClass) {
         if (screenClass === 'gym' || screenClass === 'battle') {
             disableButtons('.use-rare-candy');
             enableButtons('.dynamic-button');
-            enableButtons('.use-potion')
             disableButtons('.switch-pokemon.party');
-        }
+        };
     };
 };
 
@@ -486,6 +485,9 @@ function buyItem(itemName) {
             showMessageBox();
         };
     };
+    if (potions.quantity >= 1) {
+        enableButtons('.use-potion');
+    }
 };
 
 // function to update areas if condition is met allowing you to go to next area and marking current as complete
@@ -627,7 +629,9 @@ function updateXP() {
 // sets up initial battle state (screen and images) should only run once
 function battleSetup(eventText) {
     let battleType = eventText.trim();
-
+    if (potions.quantity >= 1) {
+        enableButtons('.use-potion');
+    };
     if (battleType === 'Trainer Battle') {
 
         encounter = 'trainer'
@@ -1121,6 +1125,9 @@ leaveButton.forEach((leave) => {
                 enableButtons('.use-rare-candy');
             };
         };
+        if (potions.quantity >= 1) {
+            enableButtons('.use-potion');
+        };
     });
 });
 
@@ -1163,7 +1170,9 @@ dynamicButton.forEach((button) => {
             dynamicButtonTextElement.forEach(button => {
                 button.textContent = "Attack";
             });
-            enableButtons('.use-potion');
+            if (potions.quantity >= 1) {
+                enableButtons('.use-potion');
+            };
             disableButtons('.leave');
             disableButtons('.switch-pokemon.party');
             updateBattleDisplay(encounter);
@@ -1239,6 +1248,9 @@ usePotion.forEach((button) => {
                 currentPokemon.hp = currentPokemon.maxhp;
             };
 
+        };
+        if (potion.quantity < 1) {
+            disableButtons('.use-potion');
         };
         updatePartyDisplay();
         updateItemDisplay();
