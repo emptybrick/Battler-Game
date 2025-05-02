@@ -458,7 +458,7 @@ h6 {
 #leader-image {
     height: 170px;
     top: 108px;
-    left: 225px;
+    left: 205px;
 }
 
 .player-pokemon {
@@ -485,14 +485,14 @@ h6 {
 }
 
 .player-text {
-    top: 250px;
-    left: 140px;
+    top: 280px;
+    left: 160px;
 }
 
 .leader-text {
     width: 150px;
     top: 100px;
-    left: 80px;
+    right: 180px;
 }
 
 .opponent-text {
@@ -735,7 +735,7 @@ ul {
 }
 
 .main-screen.area.start .areaGoals {
-    padding-bottom: 10px;
+    padding-bottom: 100px;
 }
 
 .main-screen.area.pokecenter-collection-box,
