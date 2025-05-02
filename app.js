@@ -522,7 +522,6 @@ function updateGymButton() {
         enableButtons('#gym');
     };
 };
-//-------------------------------------------------------------------------------------------------------------------------------------------------------issues
 
 function partyHealthStatus(party, currentIndex, key) {
     for (let i = currentIndex; ;) {
@@ -536,7 +535,6 @@ function partyHealthStatus(party, currentIndex, key) {
         };
     };
 };
-
 
 function updateSwitchPokemonButton(type) {
     if (party.length > 1) {
@@ -588,25 +586,18 @@ function switchPokemonOpp() {
     if (healthCheck !== oppPartyCurrentIndex && healthCheck !== 'false') {
         oppPartyCurrentIndex = healthCheck;
         oppCurrentPokemon = oppParty[oppPartyCurrentIndex];
-        console.log('health check opponent passed', oppCurrentPokemon.hp)
-        console.log("encounter type is: ", encounter);
-        if (encounter === 'gym' || encounter === 'elite') {
-            console.log("encounter is gym or elite");
 
+        if (encounter === 'gym' || encounter === 'elite') {
             leaderTextElement.textContent = `${oppName} switched to ${oppCurrentPokemon.name}!`;
             updateImageElements('leader');
-            if (encounter === 'trainer') {
-                console.log('encounter is trainer')
-                opponentTextElement.textContent = `Trainer switched to ${oppCurrentPokemon.name}!`;
-                updateImageElements('trainer');
-            };
+        } else {
+            opponentTextElement.textContent = `Trainer switched to ${oppCurrentPokemon.name}!`;
+            updateImageElements('trainer');
         };
     };
     updateBattleDisplay(encounter);
     updatePartyDisplay();
 };
-//-----------------------------------------------------------------------------------------------------------------------------------------------------------issues end
-
 
 // function to evolve, will look for 10-50xp values if they hit them it does different things
 function evolution(pokemonToEvolve, evolvesInto) {
@@ -656,8 +647,6 @@ function updateXP() {
     updatePartyDisplay();
 };
 
-
-// ----------------------------------------------------------------------------------------------------------------------------------issue with leadersetup
 // sets up initial battle state (screen and images) should only run once
 function battleSetup(eventText) {
     let battleType = eventText.trim();
@@ -776,7 +765,6 @@ function battleSetup(eventText) {
         leaderImageElement.src = foundGymLeader.leaderimage;
         leaderImageElement.alt = oppName;
         updateImageElements('player-image');
-        // updateBattleDisplay('gym');
         disableButtons('.use-potion');
         disableButtons('.switch-pokemon');
     }
@@ -844,36 +832,43 @@ function resolveBattle(encounterData, encounterType) {
 
         let wildPokemon = encounterData;
 
-        // let wildPokemonAttack = Math.floor((Math.random() * wildPokemon.maxhp) / 2);
-        // let currentPokemonAttack = Math.floor((Math.random() * currentPokemon.maxhp) / 2);
+        let wildPokemonAttack = Math.floor((Math.random() * wildPokemon.maxhp) / 2);
+        let currentPokemonAttack = Math.floor((Math.random() * currentPokemon.maxhp) / 2);
 
         // remove and uncomment battle system
-        currentPokemon.hp -= 0
-        wildPokemon.hp -= 200
+        // currentPokemon.hp -= 0
+        // wildPokemon.hp -= 200
 
-        // switch (wildPokemonAttack > 0) {
-        //     case true:
-        //         opponentTextElement.textContent = `Wild ${wildPokemon.name} attacked for ${wildPokemonAttack} damage!`;
-        //         break;
-        //     case false:
-        //         opponentTextElement.textContent = `Wild ${wildPokemon.name} missed ${currentPokemon.name}!`;
-        //         break;
-        // }
-        // switch (currentPokemonAttack > 0) {
-        //     case true:
-        //         playerTextElement.textContent = `${currentPokemon.name} attacked for ${currentPokemonAttack} damage!`;
-        //         break;
-        //     case false:
-        //         playerTextElement.textContent = `${currentPokemon.name} missed ${wildPokemon.name}!`;
-        //         break;
-        // }
+        switch (wildPokemonAttack > 0) {
+            case true:
+                opponentTextElement.textContent = `Wild ${wildPokemon.name} attacked for ${wildPokemonAttack} damage!`;
+                break;
+            case false:
+                opponentTextElement.textContent = `Wild ${wildPokemon.name} missed ${currentPokemon.name}!`;
+                break;
+        }
+        switch (currentPokemonAttack > 0) {
+            case true:
+                playerTextElement.forEach(p => {
+                    p.textContent = `${currentPokemon.name} attacked for ${currentPokemonAttack} damage!`;
+                });
+                break;
+            case false:
+                playerTextElement.forEach(p => {
+                    p.textContent = `${currentPokemon.name} missed ${wildPokemon.name}!`;
+                });
+                break;
+        }
+        currentPokemon.hp -= wildPokemonAttack;
+        wildPokemon.hp -= currentPokemonAttack;
 
         if (currentPokemon.hp <= 0) {
+            currentPokemon.hp = 0;
             playerTextElement.forEach(p => {
                 p.textContent = `${currentPokemon.name} fainted!`;
             });
-
             switchPokemon();
+            updateImageElements('player');
         }
         if (wildPokemon.hp <= 0) {
             wildPokemon.hp = 0;
@@ -895,69 +890,60 @@ function resolveBattle(encounterData, encounterType) {
     else if (encounterType === 'trainer' || encounterType === 'gym' || encounterType === 'elite') {
         console.log('trying to resolve trainer battle')
 
-        //activate when ready for battle system implementation
-        // let opponentPokemonAttack = Math.floor((Math.random() * oppCurrentPokemon.maxhp) / 2);
-        // let currentPokemonAttack = Math.floor((Math.random() * currentPokemon.maxhp) / 2);
+        let opponentPokemonAttack = Math.floor((Math.random() * oppCurrentPokemon.maxhp) / 2);
+        let currentPokemonAttack = Math.floor((Math.random() * currentPokemon.maxhp) / 2);
 
-        // switch (opponentPokemonAttack > 0) {
-        //     case true:
-        //         opponentTextElement.textContent = `${oppCurrentPokemon.name} attacked for ${opponentPokemonAttack} damage!`;
-        //         break;
-        //     case false:
-        //         opponentTextElement.textContent = `Wild ${oppCurrentPokemon.name} missed ${currentPokemon.name}!`;
-        //         break;
-        // }
-        // switch (currentPokemonAttack > 0) {
-        //     case true:
-        //         playerTextElement.textContent = `${currentPokemon.name} attacked for ${currentPokemonAttack} damage!`;
-        //         break;
-        //     case false:
-        //         playerTextElement.textContent = `${currentPokemon.name} missed ${oppCurrentPokemon.name}!`;
-        //         break;
-        // }
+        switch (opponentPokemonAttack > 0) {
+            case true:
+                opponentTextElement.textContent = `${oppCurrentPokemon.name} attacked for ${opponentPokemonAttack} damage!`;
+                break;
+            case false:
+                opponentTextElement.textContent = `Wild ${oppCurrentPokemon.name} missed ${currentPokemon.name}!`;
+                break;
+        }
+        switch (currentPokemonAttack > 0) {
+            case true:
+                playerTextElement.forEach(p => {
+                    p.textContent = `${currentPokemon.name} attacked for ${currentPokemonAttack} damage!`;
+                });
+                break;
+            case false:
+                playerTextElement.forEach(p => {
+                    p.textContent = `${currentPokemon.name} missed ${oppCurrentPokemon.name}!`;
+                });
+                break;
+        }
+        currentPokemon.hp -= opponentPokemonAttack;
+        oppCurrentPokemon.hp -= currentPokemonAttack;
 
-        if (currentPokemon.hp > 0) {
-            // change to -= opponentPokemonAttack
-            currentPokemon.hp -= 0;
-            if (currentPokemon.hp <= 0) {
-                currentPokemon.hp = 0;
+        if (currentPokemon.hp <= 0) {
+            currentPokemon.hp = 0;
+            playerTextElement.forEach(p => {
+                p.textContent = `${currentPokemon.name} fainted!`;
+            });
+            switchPokemon();
+            updateImageElements('player');
+        }
+        if (oppCurrentPokemon.hp <= 0) {
+            if (oppPartyCurrentIndex === oppParty.length - 1) {
+                oppCurrentPokemon.hp = 0;
                 currentPokemon.xp += 1;
                 updateXP(currentPokemon);
-                switchPokemon();
-                playerTextElement.forEach(p => {
-                    p.textContent = `You sent out ${currentPokemon.name}!`;
-                });
-                updateImageElements('player');
-            }
-        } else {
-            console.log('issue with current pokemon hp')
-        }
-        if (oppCurrentPokemon.hp > 0) {
-            // change to -= currentPokemonAttack when ready
-            oppCurrentPokemon.hp -= 200;
-            if (oppCurrentPokemon.hp <= 0 && oppPartyCurrentIndex === oppParty.length - 1) {
-                oppCurrentPokemon.hp = 0;
                 if (encounter === 'gym' || encounter === 'elite') {
                     dynamicButtonTextElement.forEach(button => {
                         if (encounter === 'gym') {
                             button.textContent = "Accept Badge";
-
                         } else {
                             button.textContent = "Accept Defeat";
                         }
                         disableButtons('.use-potion')
                         disableButtons('.switch-pokemon');
                     });
-
                     // Maybe a direct line from gym leader? - can set them in dataset as intro: 'some string' and defeat: 'some string'
                     // for trainers i could have an array of strings of defeat messages and call math.random for 1
                     leaderTextElement.textContent = `You defeated ${oppName}! Congratulations!`;
-                }
-                if (encounter === 'trainer') {
-                    console.log('health check failed for trainer, trying to set defeated message')
-                    // is this working??? ---------------------------------------------------------------------------------------------ISSUE
+                } else {
                     opponentTextElement.textContent = `Trainers party has been defeated.`;
-                    // is this working?
                     updateImageElements('trainer');
                     disableButtons('.dynamic-button');
                     disableButtons('.switch-pokemon');
@@ -966,30 +952,24 @@ function resolveBattle(encounterData, encounterType) {
                     getRewards('trainer');
                 }
             } else {
-                console.log('trainers pokemon fainted, switching to next');
                 oppCurrentPokemon.hp = 0;
                 currentPokemon.xp += 1;
                 updateXP(currentPokemon);
-                // -------------------------------------------------found issue to opponent text content.. need a status check for running switch pokemon
                 switchPokemonOpp();
                 if (encounterType === 'gym' || encounterType === 'elite') {
                     leaderTextElement.textContent = `${oppName} sent out ${oppCurrentPokemon.name}`;
                     updateImageElements('leader');
                 } else {
                     opponentTextElement.textContent = `Trainer has sent out ${oppCurrentPokemon.name}!`;
-                    updateImageElements('trainer');
                     console.log('train sent out a pokemon', oppCurrentPokemon)
                 };
             };
         };
-
     };
     updateBattleDisplay(encounterType);
     updatePartyDisplay();
     updateItemDisplay();
 };
-
-
 // should rewards show in the display and leave button needs to be pressed?
 // maybe add in message box or with defeat message what the rewards are?
 function getRewards(rewardType) {
@@ -1296,15 +1276,18 @@ eliteFourButton.forEach((button) => {
 usePotion.forEach((button) => {
     button.addEventListener('click', () => {
         let potion = items.find(item => item.name === 'potion');
-        if (currentPokemon.hp >= currentPokemon.maxhp) {
+        if (currentPokemon.hp > currentPokemon.maxhp) {
+            currentPokemon.hp = currentPokemon.maxhp;
         } else {
             currentPokemon.hp += 20;
             potion -= 1;
             if (currentPokemon.hp > currentPokemon.maxhp) {
                 currentPokemon.hp = currentPokemon.maxhp;
             };
-            updatePartyDisplay();
-            updateItemDisplay();
+
         };
+        updatePartyDisplay();
+        updateItemDisplay();
+        updateBattleDisplay(encounter);
     });
 });
