@@ -514,7 +514,7 @@ function updateGymButton() {
 };
 
 function partyHealthStatus(party, currentIndex, key) {
-    for (let i = currentIndex; ;) {
+    for (let i = currentIndex; i < array.length; i++) {
         i = (i + 1) % party.length;
 
         if (party[i][key] > 0) {
