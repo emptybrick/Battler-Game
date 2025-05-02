@@ -38,8 +38,6 @@ const areas = [
     { location: "indigoPlateau", completed: false, type: ["dragon", "special"] },
 ];
 
-// how to account for stats of, and disable button for fight after completing?
-// how will game-clear button become active?
 const eliteFourStatus = [
     { name: 'Lorelei', completed: false },
     { name: 'Bruno', completed: false },
@@ -57,9 +55,6 @@ const items = [
 const badges = [];
 
 const collection = [];
-
-// need to figure out if const or let
-// const currentPokemon = [];
 
 /*-------------------Variables-------------------*/
 
@@ -146,7 +141,6 @@ function resetGame() {
     document.querySelectorAll('.partyMember').forEach(slot => slot.classList.remove('active'));
     document.querySelectorAll('.icon').forEach(icon => icon.classList.remove('active'));
 
-    // leaderTextClassRemove();
     clearOpponentData();
     switchScreen('start');
     updatePartyDisplay();
@@ -212,10 +206,6 @@ function switchScreen(screenClass) {
             enableButtons('.use-potion')
             disableButtons('.switch-pokemon.party');
         }
-        // if (screenClass === 'gym') {
-        //     // disableButtons('.leave');
-        // }
-        // updateGymButton();
     };
 };
 
@@ -436,7 +426,7 @@ function updateItemDisplay() {
     });
 };
 
-// function to update DOM display of pokemon party
+// function to update display of pokemon party
 function updatePartyDisplay() {
     const slotIds = [
         { name: 'slot-1', hp: 'slot1Hp', xp: 'slot1Xp' },
@@ -482,7 +472,6 @@ function buyItem(itemName) {
     const cost = item.cost;
 
     if (messageBox.forEach(box => box.classList.contains('active'))) {
-        console.log('already showing');
         return;
     } else {
         if (gold && gold.quantity >= cost) {
@@ -495,7 +484,6 @@ function buyItem(itemName) {
         else {
             messageBox.forEach(box => box.textContent = "Not Enough Gold!");
             showMessageBox();
-            console.log("not enough gold");
         };
     };
 };
@@ -539,19 +527,15 @@ function partyHealthStatus(party, currentIndex, key) {
 function updateSwitchPokemonButton(type) {
     if (party.length > 1) {
         const healthCheck = partyHealthStatus(party, partyCurrentIndex, 'hp');
-        console.log(healthCheck)
         if (healthCheck !== partyCurrentIndex && healthCheck !== 'false') {
             if (type === "battle") {
                 enableButtons('.switch-pokemon');
                 disableButtons('.switch-pokemon.party')
-                console.log(type, healthCheck)
             } else {
                 enableButtons('.switch-pokemon.party');
-                console.log(type, healthCheck)
             };
         };
     } else {
-        console.log('need to disable switch pokemon button')
         disableButtons('.switch-pokemon.party')
     }
 }
@@ -559,7 +543,6 @@ function updateSwitchPokemonButton(type) {
 function switchPokemon() {
     const healthCheck = partyHealthStatus(party, partyCurrentIndex, 'hp');
 
-    // have pokemon go to pokeball image then next pokemon start from pokeball image
     if (healthCheck !== partyCurrentIndex && healthCheck !== 'false') {
         partyCurrentIndex = healthCheck;
         currentPokemon = party[partyCurrentIndex];
@@ -572,16 +555,13 @@ function switchPokemon() {
             p.textContent = `${characterModel.name} switch to ${currentPokemon.name}!`;
         });
         updateBattleDisplay();
-        console.log('ran switchpokemon function', currentPokemon.name, "in slot: ", activeSlot);
     } else {
-        // set timeout and screen fade to black then fade into game over screen
         switchScreen('gameOver');
     };
 };
 
 function switchPokemonOpp() {
     const healthCheck = partyHealthStatus(oppParty, oppPartyCurrentIndex, 'hp');
-    console.log(healthCheck);
 
     if (healthCheck !== oppPartyCurrentIndex && healthCheck !== 'false') {
         oppPartyCurrentIndex = healthCheck;
@@ -604,8 +584,6 @@ function evolution(pokemonToEvolve, evolvesInto) {
     let removePokemon = party[partyCurrentIndex];
     party.splice(removePokemon, 1, evolvesInto);
     currentPokemon = evolvesInto;
-    console.log('current pokemon is now: ', currentPokemon, "pokemon to evolve was/is: ", pokemonToEvolve, "\npokemon evolves into is: ", evolvesInto)
-    console.log('pokemon to remove is: ', removePokemon);
     playerTextElement.forEach(p => {
         p.textContent = `${pokemonToEvolve.name} evolved into ${currentPokemon.name}!`
     });
@@ -635,7 +613,6 @@ function updateXP() {
         }
     } else {
         let evolvedForm = pokedex.find((evolve) => evolve.evolvesFrom === currentPokemon.name);
-        console.log(`${currentPokemon.name} evolves into ${evolvedForm}`);
         if (currentPokemon.xp === currentPokemon.maxxp && evolvedForm) {
             evolution(currentPokemon, evolvedForm);
         }
@@ -692,7 +669,6 @@ function battleSetup(eventText) {
         for (let loopCount = 0; loopCount < possiblePartyAmount; loopCount++) {
             const randomIndex = Math.floor(Math.random() * possibleOppParty.length)
             oppParty.push(structuredClone(possibleOppParty[randomIndex]));
-            console.log('adding to opponent party: ', possibleOppParty[randomIndex])
         }
         oppCurrentPokemon = oppParty[0];
         oppPartyCurrentIndex = 0;
@@ -701,8 +677,6 @@ function battleSetup(eventText) {
         opponentImageElement.alt = "Random Trainer";
         opponentTextElement.textContent = `A Trainer has challenged you with a Party of ${oppParty.length} Pokemon!`;
         updateImageElements('player-image');
-
-        console.log("opponents party: ", oppParty);
     }
     else if (battleType === 'Search For Wild Pokemon') {
 
@@ -757,8 +731,6 @@ function battleSetup(eventText) {
         oppName = foundGymLeader.name
         oppParty = foundGymLeader.leaderParty;
 
-        // getBadge(foundArea.badge);
-
         oppCurrentPokemon = oppParty[0];
 
         leaderTextElement.textContent = (`You dare challenge me? I am ${oppName}!`)
@@ -798,12 +770,7 @@ function battleSetup(eventText) {
                 oppParty = structuredClone(lanceParty);
                 break;
         }
-        console.log("elite four party is:", oppParty);
-
         oppCurrentPokemon = oppParty[0];
-
-        console.log('current elite four pokemon is: ', oppCurrentPokemon);
-
         leaderImageElement.src = eliteImage;
         leaderImageElement.alt = oppName;
         updateImageElements('player-image');
@@ -825,7 +792,6 @@ function updateBattleDisplay(encounter) {
     });
 };
 
-// function for when action is clicked or resolveBattle is called for to compare hp values and switch pokemon out
 function resolveBattle(encounterData, encounterType) {
 
     if (encounterType === "wildpokemon") {
@@ -834,10 +800,6 @@ function resolveBattle(encounterData, encounterType) {
 
         let wildPokemonAttack = Math.floor((Math.random() * wildPokemon.maxhp) / 3);
         let currentPokemonAttack = Math.ceil((Math.random() * currentPokemon.maxhp) / 2);
-
-        // remove and uncomment battle system
-        // currentPokemon.hp -= 0
-        // wildPokemon.hp -= 200
 
         switch (wildPokemonAttack > 0) {
             case true:
@@ -888,7 +850,6 @@ function resolveBattle(encounterData, encounterType) {
         }
     }
     else if (encounterType === 'trainer' || encounterType === 'gym' || encounterType === 'elite') {
-        console.log('trying to resolve trainer battle')
 
         let opponentPokemonAttack = Math.floor((Math.random() * oppCurrentPokemon.maxhp) / 3);
         let currentPokemonAttack = Math.ceil((Math.random() * currentPokemon.maxhp) / 2);
@@ -939,8 +900,6 @@ function resolveBattle(encounterData, encounterType) {
                         disableButtons('.use-potion')
                         disableButtons('.switch-pokemon');
                     });
-                    // Maybe a direct line from gym leader? - can set them in dataset as intro: 'some string' and defeat: 'some string'
-                    // for trainers i could have an array of strings of defeat messages and call math.random for 1
                     leaderTextElement.textContent = `You defeated ${oppName}! Congratulations!`;
                 } else {
                     opponentTextElement.textContent = `Trainers party has been defeated.`;
@@ -961,7 +920,6 @@ function resolveBattle(encounterData, encounterType) {
                     updateImageElements('leader');
                 } else {
                     opponentTextElement.textContent = `Trainer has sent out ${oppCurrentPokemon.name}!`;
-                    console.log('train sent out a pokemon', oppCurrentPokemon)
                 };
             };
         };
@@ -970,10 +928,8 @@ function resolveBattle(encounterData, encounterType) {
     updatePartyDisplay();
     updateItemDisplay();
 };
-// should rewards show in the display and leave button needs to be pressed?
-// maybe add in message box or with defeat message what the rewards are?
+
 function getRewards(rewardType) {
-    console.log('trying to get rewards')
     const gold = items.find(item => item.name === 'gold');
     const rareCandy = items.find(item => item.name === "rarecandy");
     gold.quantity += Math.ceil(Math.random());
@@ -1128,7 +1084,7 @@ starterButton.forEach((starter) => {
                     break;
             }
         });
-        activeSlot - 'slot-1';
+        activeSlot = 'slot-1';
         document.querySelector(`.partyMember.slot-1`).classList.add('active');
         updatePartyDisplay();
         updateItemDisplay();
@@ -1184,13 +1140,11 @@ dynamicButton.forEach((button) => {
                 case "elite":
                     resolveBattle(oppParty, encounter);
             }
-            console.log(encounter)
         }
         else if (button.textContent === 'Throw Pokéball') {
             throwPokeball(wildPokemonFound);
         }
         else if (button.textContent === 'Challenge' || button.textContent === 'Accept Challenge') {
-            console.log('clicked gym dynamic button')
             switch (button.textContent) {
                 case "Challenge":
                     updateImageElements('leader');
@@ -1280,7 +1234,7 @@ usePotion.forEach((button) => {
             currentPokemon.hp = currentPokemon.maxhp;
         } else {
             currentPokemon.hp += 20;
-            potion -= 1;
+            potion.quantity -= 1;
             if (currentPokemon.hp > currentPokemon.maxhp) {
                 currentPokemon.hp = currentPokemon.maxhp;
             };

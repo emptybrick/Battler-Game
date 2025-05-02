@@ -20,7 +20,6 @@
     font-style: normal;
 }
 
-
 #game-box {
     display: flex;
     flex-direction: column;
@@ -341,7 +340,6 @@ h4 {
 .message-box {
     display: none;
     opacity: 0;
-    /* transition: 0.5s ease; */
 }
 
 .message-box.center {
@@ -642,11 +640,6 @@ button:disabled,
     background-color: #f0f0f0d5;
     text-align: center;
 }
-
-/* .elite-four-button.active {
-    opacity: 0.5;
-    pointer-events: none;
-} */
 
 .starter-pokemon {
     width: 120px;
