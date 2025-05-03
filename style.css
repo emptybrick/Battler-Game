@@ -31,12 +31,14 @@
     padding: 260px 310px;
     border: 10px solid rgb(0, 0, 0);
     border-radius: 10px;
+    animation: game-start 4s ease;  
 }
 
 #game-window-border {
     margin-left: 5px;
     margin-bottom: 5px;
     margin-top: 3px;
+    animation: game-start 5s ease;    
 }
 
 body {
@@ -92,6 +94,17 @@ header {
     border: 2px solid black;
     padding: 10px;
     text-align: center;
+    animation: game-start 8s ease;
+}
+
+@keyframes game-start {
+    0% {
+        opacity: 0;
+    }
+    
+    100% {
+        opacity: 1;
+    }
 }
 
 button {
@@ -409,6 +422,7 @@ h6 {
     height: 500px;
     position: relative;
     overflow: hidden;
+    background-color: #333;
 }
 
 .main-screen {
@@ -422,13 +436,41 @@ h6 {
     pointer-events: none;
     box-sizing: border-box;
     margin: auto;
+    animation: main-screen-fadeout 1s ease;
 }
 
 .main-screen.active {
     display: block;
     opacity: 1;
     pointer-events: all;
+    animation: main-screen-fadein 3s ease-in-out;
 }
+
+@keyframes main-screen-fadein {
+    0% {
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes main-screen-fadeout {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+
 
 .left-side,
 .right-side,
@@ -466,12 +508,35 @@ h6 {
     animation-name: enter-battle-player;
     animation-duration: 1s;
     animation-fill-mode: forwards;
-    animation-delay: 0.2s;
+    animation-delay: 4.2s;
+}
+
+.wildpokemon-image-animate {
+    animation-name: enter-battle-opponent-pokemon;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+    animation-delay: 3.0s;
+    transform: translateX(250px)
 }
 
 @keyframes enter-battle-player {
-    from { transform: translateX(-200px) }
-    to { transform: translateX(0) }
+    from {
+        transform: translateX(-200px)
+    }
+
+    to {
+        transform: translateX(0)
+    }
+}
+
+@keyframes enter-battle-opponent-pokemon {
+    from {
+        transform: translateX(250px)
+    }
+
+    to {
+        transform: translateX(0)
+    }
 }
 
 #opponent-image {
@@ -841,6 +906,7 @@ ul {
     border-radius: 100%;
     border: 10px solid black;
 }
+
 #sound-on {
     right: -85px;
 }

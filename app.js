@@ -161,8 +161,8 @@ function showMessageBox(type) {
                 opponentTextElement.classList.add('fading');
                 setTimeout(() => {
                     opponentTextElement.classList.remove('fading', 'active');
-                }, 1000);
-            }, 1000);
+                }, 800);
+            }, 800);
             break;
         case "leader":
             leaderTextElement.classList.add('active');
@@ -170,8 +170,8 @@ function showMessageBox(type) {
                 leaderTextElement.classList.add('fading');
                 setTimeout(() => {
                     leaderTextElement.classList.remove('fading', 'active');
-                }, 1000);
-            }, 1000);
+                }, 800);
+            }, 800);
             break;
         case "player":
             playerTextElement.forEach(p => p.classList.add('active'));
@@ -179,8 +179,8 @@ function showMessageBox(type) {
                 playerTextElement.forEach(p => p.classList.add('fading'));
                 setTimeout(() => {
                     playerTextElement.forEach(p => p.classList.remove('fading', 'active'));
-                }, 1000);
-            }, 1000);
+                }, 800);
+            }, 800);
             break;
         case "message":
             messageBox.forEach(box => box.classList.add('active'));
@@ -194,8 +194,48 @@ function showMessageBox(type) {
     };
 };
 
+function showMessageIntro(type) {
+    switch (type) {
+        case "leader":
+            leaderTextElement.classList.add('active');
+            setTimeout(() => {
+                leaderTextElement.classList.add('fading');
+                setTimeout(() => {
+                    leaderTextElement.classList.remove('fading', 'active');
+                }, 3000);
+            }, 1000);
+            break;
+        case "opponent":
+            setTimeout(() => {
+                opponentTextElement.classList.add('active');
+                setTimeout(() => {
+                    opponentTextElement.classList.add('fading');
+                    setTimeout(() => {
+                        opponentTextElement.classList.remove('fading', 'active');
+                    }, 3000);
+                }, 3000);
+            }, 1000);
+            break;
+    };
+};
+
+// disables buttons during screen switches saves states of ones already disabled to reenable after timeout
+function disableAllButtons() {
+    const buttonStates = new Map();
+    document.querySelectorAll('button').forEach(button => {
+        buttonStates.set(button, button.disabled);
+        button.disabled = true;
+    });
+    setTimeout(() => {
+        buttonStates.forEach((wasDisabled, button) => {
+            button.disabled = wasDisabled;
+        });
+    }, 3000);
+};
+
 // function to switch main area screen
 function switchScreen(screenClass) {
+
     document.querySelectorAll('.main-screen').forEach(screen => screen.classList.remove('active'));
     document.querySelector(`.${screenClass}`).classList.add('active');
     if (screenClass === 'start' || screenClass === 'character') {
@@ -224,13 +264,13 @@ function switchScreen(screenClass) {
         };
         if (screenClass === 'gym' || screenClass === 'battle') {
             disableButtons('.switch-pokemon, .leave, .switch-pokemon.party, .use-rare-candy, .use-potion, .dynamic-button')
-            setTimeout(() => {
-                enableButtons('.dynamic-button, .leave');
-                updatePotionButton();
-                updateSwitchPokemonButton();
-            }, 4000);
+            enableButtons('.dynamic-button, .leave');
+            updatePotionButton();
+            updateSwitchPokemonButton();
+
         };
     };
+    disableAllButtons();
 };
 
 // functions to add disabled to buttons or remove
@@ -319,6 +359,7 @@ function clearOpponentData() {
     leaveButtonTextElement.forEach(button => {
         button.textContent = 'Leave';
     });
+    opponentPokemonImageElement.classList.remove('wildpokemon-image-animate');
     oppCurrentPokemon = {};
     wildPokemonFound = {};
     oppParty = [];
@@ -718,11 +759,11 @@ function battleSetup(eventText) {
         opponentImageElement.alt = "Random Trainer";
         setTimeout(() => {
             opponentTextElement.textContent = trainerIntro;
-            showMessageBox('opponent');
+            showMessageIntro('opponent');
 
             playerTextElement.forEach(p => {
                 p.textContent = `A Trainer has challenged you with a Party of ${oppParty.length} Pokemon!`;
-                showMessageBox('player');
+                showMessageIntro('player');
             });
         }, 1000);
         updateImageElements('player-image');
@@ -764,7 +805,8 @@ function battleSetup(eventText) {
                 opponentPokemonImageElement.src = wildPokemonFound.image
                 opponentPokemonImageElement.alt = wildPokemonFound.name
                 opponentPokemonTextElement.innerHTML = `Name: ${wildPokemonFound.name}<br>HP: ${wildPokemonFound.hp}`;
-                showMessageBox('opponent');
+                opponentPokemonImageElement.classList.add('wildpokemon-image-animate');
+                showMessageIntro('opponent');
             }, 1000);
             updateSwitchPokemonButton("battle");
 
@@ -791,6 +833,7 @@ function battleSetup(eventText) {
 
         setTimeout(() => {
             leaderTextElement.textContent = foundGymLeader.intro
+            showMessageIntro('leader');
         }, 1000);
         leaderImageElement.src = foundGymLeader.image;
         leaderImageElement.alt = oppName;
@@ -812,6 +855,7 @@ function battleSetup(eventText) {
         oppLossMessage = foundEliteMember.loss;
         setTimeout(() => {
             leaderTextElement.textContent = foundEliteMember.intro;
+            showMessageIntro('leader');
         }, 1000);
         oppCurrentPokemon = oppParty[0];
         leaderImageElement.src = foundEliteMember.image;
