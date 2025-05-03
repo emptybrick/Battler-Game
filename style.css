@@ -321,6 +321,7 @@ h4 {
     background-color: rgba(255, 255, 255, 0.491);
 }
 
+
 .message-box.active {
     position: absolute;
     top: 220px;
@@ -332,14 +333,30 @@ h4 {
     border-radius: 40px;
 }
 
+.player-text.active,
+.opponent-text.active,
+.leader-text.active {
+    display: block;
+    opacity: 1;
+}
+
+.player-text.fading,
+.opponent-text.fading,
+.leader-text.fading,
 .message-box.fading {
-    transition: 1.0s ease;
     opacity: 0;
 }
 
-.message-box {
+.player-text,
+.opponent-text,
+.leader-text {
     display: none;
     opacity: 0;
+    transition: opacity 1.5s ease;
+}
+
+.message-box {
+    transition: opacity 1s ease;
 }
 
 .message-box.center {
@@ -442,6 +459,19 @@ h6 {
 .player-image {
     width: 150px;
     bottom: 20px;
+    transform: translateX(-200px);
+}
+
+.player-image-animate {
+    animation-name: enter-battle-player;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+    animation-delay: 0.2s;
+}
+
+@keyframes enter-battle-player {
+    from { transform: translateX(-200px) }
+    to { transform: translateX(0) }
 }
 
 #opponent-image {
@@ -451,6 +481,7 @@ h6 {
 }
 
 #leader-pokemon {
+    width: 150px;
     top: 180px;
     right: 50px;
 }
@@ -464,7 +495,7 @@ h6 {
 .player-pokemon {
     width: 150px;
     left: 150px;
-    bottom: 70px;
+    bottom: 60px;
 }
 
 #opponent-pokemon {
@@ -503,18 +534,19 @@ h6 {
 .player-pokemon-text,
 .leader-pokemon-text,
 .opponent-pokemon-text {
+    font-size: 12px;
     width: fit-content;
     text-align: left;
 }
 
 .player-pokemon-text {
-    left: 170px;
+    left: 185px;
     bottom: 50px;
 }
 
 .leader-pokemon-text {
-    bottom: 120px;
-    right: 20px;
+    bottom: 110px;
+    right: 80px;
 }
 
 .opponent-pokemon-text {
@@ -797,6 +829,20 @@ ul {
     margin: 10px;
     border-radius: 10px;
     width: 200px;
+}
+
+#music-on,
+#sound-on {
+    position: absolute;
+    bottom: -235px;
+    right: -30px;
+    scale: 8%;
+    background-color: #c3e1ff00;
+    border-radius: 100%;
+    border: 10px solid black;
+}
+#sound-on {
+    right: -85px;
 }
 
 .main-screen.area.start {
