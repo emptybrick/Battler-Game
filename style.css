@@ -38,7 +38,7 @@
     margin-left: 5px;
     margin-bottom: 5px;
     margin-top: 3px;
-    animation: game-start 5s ease;    
+    animation: game-start 3s ease;    
 }
 
 body {
@@ -94,7 +94,7 @@ header {
     border: 2px solid black;
     padding: 10px;
     text-align: center;
-    animation: game-start 8s ease;
+    animation: game-start 4s ease;
 }
 
 @keyframes game-start {
@@ -113,6 +113,7 @@ button {
     padding: 6px 12px;
     border: 1px solid black;
     background-color: white;
+    transition: all 0.5s linear;
 }
 
 button:hover {
@@ -369,7 +370,9 @@ h4 {
 }
 
 .message-box {
-    transition: opacity 1s ease;
+    display: none;
+    opacity: 0;
+    transition: opacity 2s ease;
 }
 
 .message-box.center {
@@ -596,9 +599,35 @@ h6 {
     top: 120px;
 }
 
+.player-pokemon-text.active,
+.leader-pokemon-text.active,
+.opponent-pokemon-text.active {
+    display: block;
+    opacity: 1;
+}
+
+.damaged {
+    animation: flash-red 1.0s ease;
+}
+
+@keyframes flash-red {
+    0% {
+        color: black;
+    }
+    50% {
+        background-color: #7e0e0e;
+        color: #ffffff;
+    }
+    100% {
+        color: black;
+    }
+}
+
 .player-pokemon-text,
 .leader-pokemon-text,
 .opponent-pokemon-text {
+    display: none;
+    opacity: 0;
     font-size: 12px;
     width: fit-content;
     text-align: left;
