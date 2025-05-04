@@ -44,14 +44,7 @@ const leaveButtonTextElement = document.querySelectorAll('.leave');
 const partyCollectionWindow = document.querySelector('#party-status-collection');
 const collectionPokemonWindow = document.querySelector('#collection-list');
 
-const party = [
-    { number: 128, name: 'Tauros', type: 'normal', maxhp: 75, hp: 75, maxxp: 25, xp: 0, starter: false, canEvolve: false, evolvesFrom: null, rarity: 4, image: 'images/tauros.png' },
-    { number: 129, name: 'Magikarp', type: 'water', maxhp: 20, hp: 20, maxxp: 15, xp: 0, starter: false, canEvolve: true, evolvesFrom: null, rarity: 1, image: 'images/magikarp.png' },
-    { number: 130, name: 'Gyarados', type: 'water', maxhp: 95, hp: 95, maxxp: 40, xp: 0, starter: false, canEvolve: false, evolvesFrom: 'Magikarp', rarity: 0, image: 'images/gyarados.png' },
-    { number: 131, name: 'Lapras', type: 'water', maxhp: 95, hp: 95, maxxp: 45, xp: 0, starter: false, canEvolve: false, evolvesFrom: null, rarity: 3, image: 'images/lapras.png' },
-    { number: 131, name: 'Lapras', type: 'water', maxhp: 95, hp: 95, maxxp: 45, xp: 0, starter: false, canEvolve: false, evolvesFrom: null, rarity: 3, image: 'images/lapras.png' },
-
-];
+const party = [];
 
 const areas = [
     { location: "palletTown", completed: false, type: "normal", condition: () => party.length >= 3 },
@@ -82,30 +75,7 @@ const items = [
 
 const badges = [];
 
-const collection = [
-    { number: 130, name: 'Gyarados', type: 'water', maxhp: 95, hp: 95, maxxp: 40, xp: 0, starter: false, canEvolve: false, evolvesFrom: 'Magikarp', rarity: 0, image: 'images/gyarados.png' },
-    { number: 131, name: 'Lapras', type: 'water', maxhp: 95, hp: 95, maxxp: 45, xp: 0, starter: false, canEvolve: false, evolvesFrom: null, rarity: 3, image: 'images/lapras.png' },
-    { number: 132, name: 'Ditto', type: 'normal', maxhp: 50, hp: 50, maxxp: 10, xp: 0, starter: false, canEvolve: false, evolvesFrom: null, rarity: 4, image: 'images/ditto.png' },
-    { number: 133, name: 'Eevee', type: 'normal', maxhp: 45, hp: 45, maxxp: 10, xp: 0, starter: false, canEvolve: true, evolvesFrom: null, rarity: 4, image: 'images/eevee.png' },
-    { number: 134, name: 'Vaporeon', type: 'water', maxhp: 70, hp: 70, maxxp: 25, xp: 0, starter: false, canEvolve: false, evolvesFrom: 'Eevee', rarity: 0, image: 'images/vaporeon.png' },
-    { number: 135, name: 'Jolteon', type: 'electric', maxhp: 70, hp: 70, maxxp: 25, xp: 0, starter: false, canEvolve: false, evolvesFrom: 'Eevee', rarity: 0, image: 'images/jolteon.png' },
-    { number: 136, name: 'Flareon', type: 'fire', maxhp: 70, hp: 70, maxxp: 25, xp: 0, starter: false, canEvolve: false, evolvesFrom: 'Eevee', rarity: 0, image: 'images/flareon.png' },
-    { number: 137, name: 'Porygon', type: 'normal', maxhp: 70, hp: 70, maxxp: 30, xp: 0, starter: false, canEvolve: false, evolvesFrom: null, rarity: 4, image: 'images/porygon.png' },
-    { number: 138, name: 'Omanyte', type: 'rock', maxhp: 35, hp: 35, maxxp: 10, xp: 0, starter: false, canEvolve: true, evolvesFrom: null, rarity: 2, image: 'images/omanyte.png' },
-    { number: 139, name: 'Omastar', type: 'rock', maxhp: 70, hp: 70, maxxp: 25, xp: 0, starter: false, canEvolve: false, evolvesFrom: 'Omanyte', rarity: 0, image: 'images/omastar.png' },
-    { number: 140, name: 'Kabuto', type: 'rock', maxhp: 30, hp: 30, maxxp: 10, xp: 0, starter: false, canEvolve: true, evolvesFrom: null, rarity: 2, image: 'images/kabuto.png' },
-    { number: 141, name: 'Kabutops', type: 'rock', maxhp: 70, hp: 70, maxxp: 25, xp: 0, starter: false, canEvolve: false, evolvesFrom: 'Kabuto', rarity: 0, image: 'images/kabutops.png' },
-    { number: 142, name: 'Aerodactyl', type: 'rock', maxhp: 80, hp: 80, maxxp: 40, xp: 0, starter: false, canEvolve: false, evolvesFrom: null, rarity: 1, image: 'images/aerodactyl.png' },
-    { number: 143, name: 'Snorlax', type: 'normal', maxhp: 80, hp: 80, maxxp: 40, xp: 0, starter: false, canEvolve: false, evolvesFrom: null, rarity: 2, image: 'images/snorlax.png' },
-    { number: 144, name: 'Articuno', type: 'ice', maxhp: 90, hp: 90, maxxp: 45, xp: 0, starter: false, canEvolve: false, evolvesFrom: null, rarity: 1, image: 'images/articuno.png' },
-    { number: 145, name: 'Zapdos', type: 'electric', maxhp: 90, hp: 90, maxxp: 45, xp: 0, starter: false, canEvolve: false, evolvesFrom: null, rarity: 1, image: 'images/zapdos.png' },
-    { number: 146, name: 'Moltres', type: 'fire', maxhp: 90, hp: 90, maxxp: 45, xp: 0, starter: false, canEvolve: false, evolvesFrom: null, rarity: 1, image: 'images/moltres.png' },
-    { number: 147, name: 'Dratini', type: 'dragon', maxhp: 40, hp: 40, maxxp: 10, xp: 0, starter: false, canEvolve: true, evolvesFrom: null, rarity: 4, image: 'images/dratini.png' },
-    { number: 148, name: 'Dragonair', type: 'dragon', maxhp: 60, hp: 60, maxxp: 20, xp: 0, starter: false, canEvolve: true, evolvesFrom: 'Dratini', rarity: 3, image: 'images/dragonair.png' },
-    { number: 149, name: 'Dragonite', type: 'dragon', maxhp: 90, hp: 90, maxxp: 30, xp: 0, starter: false, canEvolve: false, evolvesFrom: 'Dragonair', rarity: 0, image: 'images/dragonite.png' },
-    { number: 150, name: 'Mewtwo', type: 'special', maxhp: 100, hp: 100, maxxp: 50, xp: 0, starter: false, canEvolve: false, evolvesFrom: null, rarity: 1, image: 'images/mewtwo.png' },
-    { number: 151, name: 'Mew', type: 'special', maxhp: 100, hp: 100, maxxp: 50, xp: 0, starter: false, canEvolve: false, evolvesFrom: null, rarity: 1, image: 'images/mew.png' },
-];
+const collection = [];
 
 const potions = items.find(item => item.name === 'potion');
 const rareCandy = items.find(item => item.name === 'rarecandy');
@@ -129,8 +99,15 @@ let wildPokemonFound = {};
 let oppParty = [];
 let partyCurrentIndex = null;
 let oppPartyCurrentIndex = null;
+let nextUniqueID = 1;
 
 /*---------------------------------- Core Functions ----------------------------------------*/
+
+function assignUniqueID() {
+    const newID = nextUniqueID;
+    nextUniqueID++;
+    return newID;
+}
 
 // function to reset game state on Play Again or Try Again
 function resetGame() {
@@ -342,6 +319,76 @@ function updateRulesPage() {
             break;
     };
 };
+
+function transferPokemon(type, pokemon) {
+    if (type === 'party') {
+        const index = party.findIndex(p => p.id == pokemon.id);
+        const pokemonToTransfer = party.splice(index, 1)[0];
+        collection.push(pokemonToTransfer);
+    }
+    else if (type === 'collection') {
+        const index = collection.findIndex(p => p.id == pokemon.id);
+        const pokemonToTransfer = collection.splice(index, 1)[0];
+        party.push(pokemonToTransfer);
+    } else {
+        console.log('error in transferPokemon function');
+    }
+    updatePartyDisplay();
+    updateCollectionWindow();
+};
+
+function updateCollectionWindow() {
+    partyCollectionWindow.innerHTML = '';
+    collectionPokemonWindow.innerHTML = '';
+    party.forEach(element => {
+        const collectionPartyPokemon = document.createElement('button');
+        collectionPartyPokemon.innerHTML = `<div class="partyMember slot-1" data-id="${element.id}">
+                                    <div class="name party">${element.name}</div>
+                                    <div class="hp party">
+                                        <h5>HP:</h5>
+                                        <div class="slot1Hp party">${element.hp}</div>
+                                    </div>
+                                    <div class="xp party">
+                                        <h5>XP:</h5>
+                                        <div class="slot1Xp party">${element.xp}</div>
+                                    </div>
+                                </div>`
+        partyCollectionWindow.appendChild(collectionPartyPokemon);
+
+        collectionPartyPokemon.addEventListener('click', (event) => {
+            const pokemonID = event.currentTarget.querySelector('.partyMember').dataset.id;
+            console.log("clicked pokemon with ID", pokemonID);
+            const pokemon = party.find(p => p.id == pokemonID);
+            console.log(pokemon)
+            console.log(`Pokémon: ${pokemon.name}, HP: ${pokemon.hp}, XP: ${pokemon.xp}`);
+            transferPokemon('party', pokemon);
+        });
+    });
+
+    collection.forEach(element => {
+        const collectionPokemon = document.createElement('button');
+        collectionPokemon.innerHTML = `<div class="partyMember slot-1" data-id="${element.id}">
+                                    <div class="name party">${element.name}</div>
+                                    <div class="hp party">
+                                        <h5>HP:</h5>
+                                        <div class="slot1Hp party">${element.hp}</div>
+                                    </div>
+                                    <div class="xp party">
+                                        <h5>XP:</h5>
+                                        <div class="slot1Xp party">${element.xp}</div>
+                                    </div>
+                                </div>`
+        collectionPokemonWindow.appendChild(collectionPokemon);
+
+        collectionPokemon.addEventListener('click', (event) => {
+            const pokemonID = event.currentTarget.querySelector('.partyMember').dataset.id;
+            console.log("clicked pokemon with ID", pokemonID);
+            const pokemon = collection.find(p => p.id == pokemonID);
+            console.log(`Pokémon: ${pokemon.name}, HP: ${pokemon.hp}, XP: ${pokemon.xp}`);
+            transferPokemon('collection', pokemon);
+        });
+    });
+}
 
 // function to show badge after gym is completed
 function getBadge(badge) {
@@ -862,6 +909,7 @@ function switchPokemonOpp() {
 
 // function to evolve, will look for 10-50xp values if they hit them it does different things
 function evolution(pokemonToEvolve, evolvesInto) {
+    evolvesInto.id = pokemonToEvolve.id;
     party.splice(partyCurrentIndex, 1, evolvesInto);
     currentPokemon = evolvesInto;
     playerTextElement.forEach(p => {
@@ -1275,6 +1323,7 @@ function throwPokeball() {
             showMessagePerm('opponent');
         } else {
             addPokeballPokemon();
+            wildPokemonFound.id = assignUniqueID();
             party.push(wildPokemonFound);
             pokeBall.quantity -= 1;
             opponentTextElement.textContent = `You threw a Pokéball at ${wildPokemonFound.name}, and caught it!`;
@@ -1375,9 +1424,10 @@ starterButton.forEach((starter) => {
         } else {
             return;
         }
-        const selectedPokemon = structuredClone(pokedex.find(p => p.name.toLowerCase() === pokemonName.toLowerCase()));
+        const selectedPokemon = structuredClone(pokedex.find(p => p.name === pokemonName));
 
         if (selectedPokemon) {
+            selectedPokemon.id = assignUniqueID();
             party.push(selectedPokemon);
             currentPokemon = party[0];
             partyCurrentIndex = 0;
@@ -1428,8 +1478,6 @@ leaveButton.forEach((leave) => {
     leave.addEventListener('click', (event) => {
         if (event.target.textContent === 'Leave Collection') {
             switchScreen('pokecenter');
-            partyCollectionWindow.innerHTML = '';
-            collectionPokemonWindow.innerHTML = '';
             leaveButtonTextElement.forEach(button => {
                 button.textContent = 'Leave';
             });
@@ -1483,7 +1531,6 @@ dynamicButton.forEach((button) => {
                     showMessageBox('opponent');
                     break;
             };
-            console.log('tryin to set pokemon image for', currentPokemon);
             updateImageElements('player');
             playerTextElement.forEach(p => {
                 p.textContent = `${characterModel.name} sent out ${currentPokemon.name}!`;
@@ -1554,7 +1601,6 @@ useRareCandy.addEventListener('click', () => {
     updateXP(currentPokemon);
     updatePartyDisplay();
     updateItemDisplay();
-    console.log("used rare candy on: ", currentPokemon.name);
     setTimeout(() => {
         if (rareCandy.quantity <= 0) {
             rareCandy.quantity = 0;
@@ -1575,52 +1621,61 @@ healButton.addEventListener('click', () => {
 
 checkCollection.addEventListener('click', () => {
     switchScreen('pokecenter-collection-box')
+    updateCollectionWindow();
     leaveButtonTextElement.forEach(button => {
         button.textContent = 'Leave Collection';
     });
     enableButtons('.leave');
-    party.forEach(element => {
-        const collectionPartyPokemon = document.createElement('button');
-        collectionPartyPokemon.innerHTML = `<div class="partyMember slot-1">
-                                    <div class="name party">${element.name}</div>
-                                    <div class="hp party">
-                                        <h5>HP:</h5>
-                                        <div class="slot1Hp party">${element.hp}</div>
-                                    </div>
-                                    <div class="xp party">
-                                        <h5>XP:</h5>
-                                        <div class="slot1Xp party">${element.xp}</div>
-                                    </div>
-                                </div>`
-        partyCollectionWindow.appendChild(collectionPartyPokemon);
-    });
-    
-    collection.forEach(element => {
-        const collectionPokemon = document.createElement('button');
-        collectionPokemon.innerHTML = `<div class="partyMember slot-1">
-                                    <div class="name party">${element.name}</div>
-                                    <div class="hp party">
-                                        <h5>HP:</h5>
-                                        <div class="slot1Hp party">${element.hp}</div>
-                                    </div>
-                                    <div class="xp party">
-                                        <h5>XP:</h5>
-                                        <div class="slot1Xp party">${element.xp}</div>
-                                    </div>
-                                </div>`
-        collectionPokemonWindow.appendChild(collectionPokemon);
-        // collectionPokemon.forEach(button => {
-        //     button.addEventListener('click', () => {
-        //         if (party.length > 5) {
-        //             messageBox.textContent = "You have a full party!"
-        //             showMessageBox('message');
-        //         } else {
-        //             collection.splice()
-        //         }
-            // });
-        // });
-    });
+    // party.forEach(element => {
+    //     const collectionPartyPokemon = document.createElement('button');
+    //     collectionPartyPokemon.innerHTML = `<div class="partyMember slot-1" data-id="${element.id}">
+    //                                 <div class="name party">${element.name}</div>
+    //                                 <div class="hp party">
+    //                                     <h5>HP:</h5>
+    //                                     <div class="slot1Hp party">${element.hp}</div>
+    //                                 </div>
+    //                                 <div class="xp party">
+    //                                     <h5>XP:</h5>
+    //                                     <div class="slot1Xp party">${element.xp}</div>
+    //                                 </div>
+    //                             </div>`
+    //     partyCollectionWindow.appendChild(collectionPartyPokemon);
+
+    //     collectionPartyPokemon.addEventListener('click', (event) => {
+    //         const pokemonID = event.currentTarget.querySelector('.partyMember').dataset.id;
+    //         console.log("clicked pokemon with ID", pokemonID);
+    //         const pokemon = party.find(p => p.id == pokemonID);
+    //         console.log(pokemon)
+    //         console.log(`Pokémon: ${pokemon.name}, HP: ${pokemon.hp}, XP: ${pokemon.xp}`);
+    //         transferPokemon('party', pokemon);
+    //     });
+    // });
+
+    // collection.forEach(element => {
+    //     const collectionPokemon = document.createElement('button');
+    //     collectionPokemon.innerHTML = `<div class="partyMember slot-1" data-id="${element.id}">
+    //                                 <div class="name party">${element.name}</div>
+    //                                 <div class="hp party">
+    //                                     <h5>HP:</h5>
+    //                                     <div class="slot1Hp party">${element.hp}</div>
+    //                                 </div>
+    //                                 <div class="xp party">
+    //                                     <h5>XP:</h5>
+    //                                     <div class="slot1Xp party">${element.xp}</div>
+    //                                 </div>
+    //                             </div>`
+    //     collectionPokemonWindow.appendChild(collectionPokemon);
+
+    //     collectionPokemon.addEventListener('click', (event) => {
+    //         const pokemonID = event.currentTarget.querySelector('.partyMember').dataset.id;
+    //         console.log("clicked pokemon with ID", pokemonID);
+    //         const pokemon = collection.find(p => p.id == pokemonID);
+    //         console.log(`Pokémon: ${pokemon.name}, HP: ${pokemon.hp}, XP: ${pokemon.xp}`);
+    //         transferPokemon('collection', pokemon);
+    //     });
+    // });
 });
+
 
 gameClearButton.addEventListener('click', () => {
     switchScreen('gameCleared')
