@@ -366,14 +366,3 @@ const trainerLoss = [
   "I am happy! Happy, I tell you! Don’t look at me like that!",
   "You’re actually good, aren’t you?"
 ]
-
-const leaderIntro = {
-  brock: "",
-  misty: "",
-  surge: "",
-  erika: "",
-  koga: "",
-  sabrina: "",
-  blaine: "",
-}
-
