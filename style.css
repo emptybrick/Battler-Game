@@ -979,6 +979,23 @@ background-color: rgba(255, 255, 255, 0.735);
     margin-bottom: 5px;
 }
 
+#main > div.main-screen.area.pokecenter-collection-box.active > p.message-box\.collection {
+    position: absolute;
+    top: 220px;
+    display: block;
+    opacity: 1;
+    padding: 20px;
+    left: 210px;
+    width: fit-content;
+    background-color: #ef4e3c;
+    border-radius: 40px;
+}
+
+/* #main > div.main-screen.area.pokecenter-collection-box.active > p.message-box\.collection {
+    display: none;
+    opacity: 0;
+} */
+
 #party-status-collection,
 #collection-list {
     border: 2px solid black;

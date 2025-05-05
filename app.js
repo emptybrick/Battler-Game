@@ -227,7 +227,6 @@ function switchScreen(screenClass) {
             setTimeout(() => {
                 enableButtons('#trainer-battle, #poke-center, #poke-mart, #search-for-pokemon');
                 updateGymButton();
-                clearOpponentData();
             }, 2200);
             updateArea();
         };
@@ -321,18 +320,19 @@ function updateRulesPage() {
 };
 
 function transferPokemon(type, pokemon) {
-    if (type === 'party') {
+    if (type === 'party' && party.length > 1) {
         const index = party.findIndex(p => p.id == pokemon.id);
         const pokemonToTransfer = party.splice(index, 1)[0];
         collection.push(pokemonToTransfer);
     }
-    else if (type === 'collection') {
+    else if (type === 'collection' && party.length < 6) {
         const index = collection.findIndex(p => p.id == pokemon.id);
         const pokemonToTransfer = collection.splice(index, 1)[0];
         party.push(pokemonToTransfer);
     } else {
         console.log('error in transferPokemon function');
     }
+    currentPokemon = party[0];
     updatePartyDisplay();
     updateCollectionWindow();
 };
@@ -536,7 +536,7 @@ function showMessagePerm(type) {
 };
 
 function clearMessages() {
-    console.log('removing active class')
+    console.log('clearing messages')
     leaderTextElement.classList.remove('active');
     opponentTextElement.classList.remove('active');
     playerTextElement.forEach(p => p.classList.remove('active'));
@@ -778,7 +778,6 @@ function updateImageElements(type) {
     switch (type) {
         case "player":
             playerPokemonImageElement.forEach(img => {
-                console.log(img)
                 console.log('currentpokemon', currentPokemon)
                 img.src = currentPokemon.image;
                 img.alt = currentPokemon.name;
@@ -1118,6 +1117,14 @@ function battleSetup(eventText) {
 async function battleDamageAndOrder(encounterData) {
     let randomOrder = Math.ceil(Math.random() * 2);
     // order returns 1, opponent goes first -- returns 2, player goes first
+    setTimeout(() => {
+        enableButtons('.dynamic-button');
+        updateSwitchPokemonButton("battle");
+        updatePotionButton();
+        if (encounter === 'wildpokemon') {
+            enableButtons('.leave');
+        }
+    }, 4000);
     if (encounter === 'wildpokemon') {
         oppCurrentPokemon = encounterData;
     }
@@ -1162,11 +1169,6 @@ async function battleDamageAndOrder(encounterData) {
                 }
             }, 2500);
         };
-        setTimeout(() => {
-            enableButtons('.dynamic-button');
-            updateSwitchPokemonButton("battle");
-            updatePotionButton();
-        }, 4500);
     });
 };
 
@@ -1197,7 +1199,8 @@ async function resolveBattle() {
         if (encounter === 'wildpokemon') {
             oppCurrentPokemon.hp = 0
             updateBattleDisplay(encounter);
-            disableButtons('.use-potion, .switch-pokemon-battle, .dynamic-button, .leave');
+            // disableButtons('.use-potion, .switch-pokemon-battle, .dynamic-button, .leave');
+            disableButtons('.use-potion, .switch-pokemon-battle');
             opponentTextElement.textContent = `Wild ${wildPokemonFound.name} fainted!`;
             // showMessageBox('opponent')
             showMessagePerm('opponent');
@@ -1211,10 +1214,7 @@ async function resolveBattle() {
             leaveButtonTextElement.forEach(button => {
                 button.textContent = 'Leave';
             });
-            setTimeout(() => {
-                enableButtons('.dynamic-button, .leave');
-                getRewards('wildpokemon');
-            }, 4000);
+            getRewards('wildpokemon');
         } else {
             if (oppPartyCurrentIndex === oppParty.length - 1) {
                 oppCurrentPokemon.hp = 0;
@@ -1307,40 +1307,40 @@ function throwPokeball() {
     leaveButtonTextElement.forEach(button => {
         button.textContent = 'Leave';
     });
+    disableButtons('.dynamic-button');
     enableButtons('.leave');
     const pokeBall = items.find(item => item.name === 'pokeball');
-    const partyPokemon = party.find(p => p.name === wildPokemonFound.name)
-    const collectionPokemon = collection.find(p => p.name === wildPokemonFound.name)
-    if (partyPokemon || collectionPokemon) {
-        opponentTextElement.textContent = `You already have a ${wildPokemonFound.name}, you leave it alone.`;
-        // showMessageBox('opponent');
+    // const partyPokemon = party.find(p => p.name === wildPokemonFound.name)
+    // const collectionPokemon = collection.find(p => p.name === wildPokemonFound.name)
+    // if (partyPokemon || collectionPokemon) {
+    //     opponentTextElement.textContent = `You already have a ${wildPokemonFound.name}, you leave it alone.`;
+    //     showMessageBox('opponent');
+    //     showMessagePerm('opponent');
+    //     return;
+    // } else {
+    if (pokeBall.quantity < 1) {
+        opponentTextElement.textContent = 'You ran out of Pokéballs!'
         showMessagePerm('opponent');
-        return;
     } else {
-        if (pokeBall.quantity < 1) {
-            opponentTextElement.textContent = 'You ran out of Pokéballs!'
-            // showMessageBox('opponent');
-            showMessagePerm('opponent');
-        } else {
-            addPokeballPokemon();
-            wildPokemonFound.id = assignUniqueID();
-            party.push(wildPokemonFound);
-            pokeBall.quantity -= 1;
-            opponentTextElement.textContent = `You threw a Pokéball at ${wildPokemonFound.name}, and caught it!`;
-            // showMessageBox('opponent');
-            showMessagePerm('opponent');
+        addPokeballPokemon();
+        wildPokemonFound.id = assignUniqueID();
+        party.push(wildPokemonFound);
+        pokeBall.quantity -= 1;
+        opponentTextElement.textContent = `You threw a Pokéball at ${wildPokemonFound.name}, and caught it!`;
+        showMessagePerm('opponent');
 
-            if (party.length > 6) {
-                collection.push(party.pop());
-                opponentTextElement.textContent = `You threw a Pokéball at ${wildPokemonFound.name}, and caught it!,  It has been sent to Collection`;
-                // showMessageBox('opponent');
-                showMessagePerm('opponent');
-            };
+        if (party.length > 6) {
+            collection.push(party.pop());
+            opponentTextElement.textContent = `You threw a Pokéball at ${wildPokemonFound.name}, and caught it!,  It has been sent to Collection`;
+            showMessagePerm('opponent');
         };
-    }
+    };
     updatePartyDisplay();
     updateItemDisplay();
 };
+// updatePartyDisplay();
+// updateItemDisplay();
+// };
 
 // function used when heal pokemon button is clicked in pokemon center 
 function heal() {
@@ -1477,10 +1477,24 @@ nextAreaButton.forEach((button) => {
 leaveButton.forEach((leave) => {
     leave.addEventListener('click', (event) => {
         if (event.target.textContent === 'Leave Collection') {
-            switchScreen('pokecenter');
-            leaveButtonTextElement.forEach(button => {
-                button.textContent = 'Leave';
-            });
+            if (party.length === 1 && currentPokemon.hp <= 0) {
+                const message = document.createElement('p');
+                message.classList.add('message-box.collection');
+                message.innerHTML = "Party is at Zero HP!";
+                const container = document.querySelector('.main-screen.area.pokecenter-collection-box');
+                container.appendChild(message);
+                disableButtons('.leave');
+                setTimeout(() => {
+                    message.remove();
+                    enableButtons('.leave');
+                }, 1500);
+            } else {
+                switchScreen('pokecenter');
+                leaveButtonTextElement.forEach(button => {
+                    button.textContent = 'Leave';
+                });
+                switchPokemon();
+            }
         } else {
             disableButtons('.dynamic-button, .leave, .use-potion, .switch-pokemon-battle')
             removePokeballPokemon();
@@ -1626,54 +1640,6 @@ checkCollection.addEventListener('click', () => {
         button.textContent = 'Leave Collection';
     });
     enableButtons('.leave');
-    // party.forEach(element => {
-    //     const collectionPartyPokemon = document.createElement('button');
-    //     collectionPartyPokemon.innerHTML = `<div class="partyMember slot-1" data-id="${element.id}">
-    //                                 <div class="name party">${element.name}</div>
-    //                                 <div class="hp party">
-    //                                     <h5>HP:</h5>
-    //                                     <div class="slot1Hp party">${element.hp}</div>
-    //                                 </div>
-    //                                 <div class="xp party">
-    //                                     <h5>XP:</h5>
-    //                                     <div class="slot1Xp party">${element.xp}</div>
-    //                                 </div>
-    //                             </div>`
-    //     partyCollectionWindow.appendChild(collectionPartyPokemon);
-
-    //     collectionPartyPokemon.addEventListener('click', (event) => {
-    //         const pokemonID = event.currentTarget.querySelector('.partyMember').dataset.id;
-    //         console.log("clicked pokemon with ID", pokemonID);
-    //         const pokemon = party.find(p => p.id == pokemonID);
-    //         console.log(pokemon)
-    //         console.log(`Pokémon: ${pokemon.name}, HP: ${pokemon.hp}, XP: ${pokemon.xp}`);
-    //         transferPokemon('party', pokemon);
-    //     });
-    // });
-
-    // collection.forEach(element => {
-    //     const collectionPokemon = document.createElement('button');
-    //     collectionPokemon.innerHTML = `<div class="partyMember slot-1" data-id="${element.id}">
-    //                                 <div class="name party">${element.name}</div>
-    //                                 <div class="hp party">
-    //                                     <h5>HP:</h5>
-    //                                     <div class="slot1Hp party">${element.hp}</div>
-    //                                 </div>
-    //                                 <div class="xp party">
-    //                                     <h5>XP:</h5>
-    //                                     <div class="slot1Xp party">${element.xp}</div>
-    //                                 </div>
-    //                             </div>`
-    //     collectionPokemonWindow.appendChild(collectionPokemon);
-
-    //     collectionPokemon.addEventListener('click', (event) => {
-    //         const pokemonID = event.currentTarget.querySelector('.partyMember').dataset.id;
-    //         console.log("clicked pokemon with ID", pokemonID);
-    //         const pokemon = collection.find(p => p.id == pokemonID);
-    //         console.log(`Pokémon: ${pokemon.name}, HP: ${pokemon.hp}, XP: ${pokemon.xp}`);
-    //         transferPokemon('collection', pokemon);
-    //     });
-    // });
 });
 
 
