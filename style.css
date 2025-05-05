@@ -31,14 +31,14 @@
     padding: 260px 310px;
     border: 10px solid rgb(0, 0, 0);
     border-radius: 10px;
-    animation: game-start 4s ease;  
+    animation: game-start 4s ease;
 }
 
 #game-window-border {
     margin-left: 5px;
     margin-bottom: 5px;
     margin-top: 3px;
-    animation: game-start 3s ease;    
+    animation: game-start 3s ease;
 }
 
 body {
@@ -101,7 +101,7 @@ header {
     0% {
         opacity: 0;
     }
-    
+
     100% {
         opacity: 1;
     }
@@ -125,6 +125,13 @@ button:active {
     background-color: #014b9b;
     transform: scale(.95);
     color: white;
+}
+
+button:disabled,
+.disabled {
+    background: #999;
+    opacity: 0.5;
+    border: 2px solid #333;
 }
 
 .right-section {
@@ -380,6 +387,39 @@ h4 {
     top: 200px;
 }
 
+.reward-message-box.active {
+    position: absolute;
+    right: 80px;
+    bottom: 70px;
+    display: block;
+    opacity: 1;
+    padding: 10px;
+    width: 200px;
+    height: fit-content;
+    background-color: #fdf8acdf;
+    border-radius: 10px;
+    border: 2px solid black;
+}
+
+.reward-message-box {
+    display: none;
+    opacity: 0;
+}
+
+.reward-message-box h3,
+.reward-message-box p {
+    background-color: #014b9b00;
+    font-size: 15px;
+    padding: 0;
+    margin: 0;
+    margin-top: -6px;
+    border: none;
+}
+
+.reward-message-box p {
+    margin-top: 6px;
+}
+
 h5,
 h6 {
     margin: 0;
@@ -510,14 +550,14 @@ h6 {
     animation-name: enter-battle-player;
     animation-duration: 1s;
     animation-fill-mode: forwards;
-    animation-delay: 4.2s;
+    animation-delay: 3.0s;
 }
 
 .wildpokemon-image-animate {
     animation-name: enter-battle-opponent-pokemon;
     animation-duration: 1s;
     animation-fill-mode: forwards;
-    animation-delay: 3.0s;
+    animation-delay: 2.0s;
     transform: translateX(250px)
 }
 
@@ -544,12 +584,12 @@ h6 {
 #opponent-image {
     top: 60px;
     height: 200px;
-    right: 10px;
+    right: 20px;
 }
 
 #leader-pokemon {
-    width: 150px;
-    top: 180px;
+    /* width: 150px; */
+    top: 185px;
     right: 50px;
 }
 
@@ -560,16 +600,16 @@ h6 {
 }
 
 .player-pokemon {
-    width: 150px;
+    /* width: 150px; */
     left: 150px;
-    bottom: 60px;
+    bottom: 75px;
     transform: scaleX(-1);
 }
 
 #opponent-pokemon {
-    width: 150px;
-    bottom: 200px;
-    right: 65px;
+    /* width: 150px; */
+    bottom: 205px;
+    right: 100px;
 }
 
 .player-pokemon-text,
@@ -584,19 +624,20 @@ h6 {
 }
 
 .player-text {
-    top: 280px;
-    left: 160px;
+    top: 260px;
+    left: 140px;
 }
 
 .leader-text {
-    width: 150px;
+    max-width: 200px;
     top: 100px;
-    right: 180px;
+    right: 100px;
 }
 
 .opponent-text {
-    right: 100px;
+    right: 140px;
     top: 120px;
+    max-width: 400px;
 }
 
 .player-pokemon-text.active,
@@ -604,6 +645,8 @@ h6 {
 .opponent-pokemon-text.active {
     display: block;
     opacity: 1;
+    background-color: #ffffffc8;
+
 }
 
 .damaged {
@@ -614,10 +657,12 @@ h6 {
     0% {
         color: black;
     }
+
     50% {
         background-color: #7e0e0e;
         color: #ffffff;
     }
+
     100% {
         color: black;
     }
@@ -670,18 +715,18 @@ h6 {
 }
 
 .player-pokemon-text {
-    left: 185px;
-    bottom: 50px;
+    left: 150px;
+    bottom: 45px;
 }
 
 .leader-pokemon-text {
-    bottom: 110px;
-    right: 80px;
+    bottom: 160px;
+    right: 45px;
 }
 
 .opponent-pokemon-text {
-    bottom: 180px;
-    right: 90px;
+    bottom: 170px;
+    right: 80px;
 }
 
 .pokeball {
@@ -694,13 +739,6 @@ h6 {
     position: relative;
     gap: 20px;
     padding-bottom: 10px;
-}
-
-button:disabled,
-.disabled {
-    background: #999;
-    opacity: 0.5;
-    border: 2px solid #333;
 }
 
 .elite-buttons p,
@@ -778,13 +816,12 @@ button:disabled,
     background-color: #ffffffc8;
     align-items: center;
     font-size: 20px;
-
+    max-height: 250px;
 }
 
 .character-image p {
     border: none;
     background-color: #014b9b00;
-
 }
 
 .starter-pokemon,
@@ -801,10 +838,15 @@ button:disabled,
 
 .starter-pokemon {
     width: 120px;
+    overflow: hidden;
+    max-height: 140px;
 }
 
 .starter-pokemon p {
-    font-size: 12px;
+    font-size: 15px;
+    margin-top: 10px;
+    margin-bottom: 30px;
+    width: 100px;
 }
 
 .start-buttons {
@@ -910,10 +952,11 @@ ul {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    margin: 10px; 
+    margin: 10px;
 }
+
 .collection-window-party .partyMember {
-background-color: rgba(255, 255, 255, 0.735);
+    background-color: rgba(255, 255, 255, 0.735);
 }
 
 #collection-list {
@@ -979,7 +1022,7 @@ background-color: rgba(255, 255, 255, 0.735);
     margin-bottom: 5px;
 }
 
-#main > div.main-screen.area.pokecenter-collection-box.active > p.message-box\.collection {
+#main>div.main-screen.area.pokecenter-collection-box.active>p.message-box\.collection {
     position: absolute;
     top: 220px;
     display: block;
@@ -991,10 +1034,12 @@ background-color: rgba(255, 255, 255, 0.735);
     border-radius: 40px;
 }
 
-/* #main > div.main-screen.area.pokecenter-collection-box.active > p.message-box\.collection {
-    display: none;
-    opacity: 0;
-} */
+pre {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    background-color: #f0f0f000;
+    width: 150px;
+    text-align: center;
+}
 
 #party-status-collection,
 #collection-list {
