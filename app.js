@@ -78,36 +78,7 @@ const badges = [];
 
 const party = [];
 
-const collection = [
-    { id: null, number: 63, name: 'Abra', type: 'psychic', maxhp: 25, hp: 25, maxxp: 10, xp: 0, starter: false, canEvolve: true, evolvesFrom: null, rarity: 5, image: 'images/abra.png' },
-    { id: null, number: 63, name: 'Abra', type: 'psychic', maxhp: 25, hp: 25, maxxp: 10, xp: 0, starter: false, canEvolve: true, evolvesFrom: null, rarity: 5, image: 'images/abra.png' },
-    { id: null, number: 63, name: 'Abra', type: 'psychic', maxhp: 25, hp: 25, maxxp: 10, xp: 0, starter: false, canEvolve: true, evolvesFrom: null, rarity: 5, image: 'images/abra.png' },
-    { id: null, number: 63, name: 'Abra', type: 'psychic', maxhp: 25, hp: 25, maxxp: 10, xp: 0, starter: false, canEvolve: true, evolvesFrom: null, rarity: 5, image: 'images/abra.png' },
-    { id: null, number: 63, name: 'Abra', type: 'psychic', maxhp: 25, hp: 25, maxxp: 10, xp: 0, starter: false, canEvolve: true, evolvesFrom: null, rarity: 5, image: 'images/abra.png' },
-    { id: null, number: 63, name: 'Abra', type: 'psychic', maxhp: 25, hp: 25, maxxp: 10, xp: 0, starter: false, canEvolve: true, evolvesFrom: null, rarity: 5, image: 'images/abra.png' },
-    { id: null, number: 63, name: 'Abra', type: 'psychic', maxhp: 25, hp: 25, maxxp: 10, xp: 0, starter: false, canEvolve: true, evolvesFrom: null, rarity: 5, image: 'images/abra.png' },
-    { id: 654, number: 63, name: 'Abra', type: 'psychic', maxhp: 25, hp: 25, maxxp: 10, xp: 432, starter: false, canEvolve: true, evolvesFrom: null, rarity: 5, image: 'images/abra.png' },
-    { id: null, number: 63, name: 'Abra', type: 'psychic', maxhp: 25, hp: 25, maxxp: 10, xp: 0, starter: false, canEvolve: true, evolvesFrom: null, rarity: 5, image: 'images/abra.png' },
-    { id: null, number: 63, name: 'Abra', type: 'psychic', maxhp: 25, hp: 25, maxxp: 10, xp: 0, starter: false, canEvolve: true, evolvesFrom: null, rarity: 5, image: 'images/abra.png' },
-    { id: null, number: 63, name: 'Abra', type: 'psychic', maxhp: 25, hp: 25, maxxp: 10, xp: 0, starter: false, canEvolve: true, evolvesFrom: null, rarity: 5, image: 'images/abra.png' },
-    { id: null, number: 63, name: 'Abra', type: 'psychic', maxhp: 25, hp: 25, maxxp: 10, xp: 0, starter: false, canEvolve: true, evolvesFrom: null, rarity: 5, image: 'images/abra.png' },
-    { id: null, number: 63, name: 'Abra', type: 'psychic', maxhp: 25, hp: 25, maxxp: 10, xp: 0, starter: false, canEvolve: true, evolvesFrom: null, rarity: 5, image: 'images/abra.png' },
-    { id: null, number: 63, name: 'Abra', type: 'psychic', maxhp: 25, hp: 25, maxxp: 10, xp: 0, starter: false, canEvolve: true, evolvesFrom: null, rarity: 5, image: 'images/abra.png' },
-    { id: null, number: 63, name: 'Abra', type: 'psychic', maxhp: 25, hp: 25, maxxp: 10, xp: 0, starter: false, canEvolve: true, evolvesFrom: null, rarity: 5, image: 'images/abra.png' },
-    { id: null, number: 65, name: 'Alakazam', type: 'psychic', maxhp: 95, hp: 95, maxxp: 30, xp: 0, starter: false, canEvolve: false, evolvesFrom: 'Kadabra', rarity: 0, image: 'images/alakazam.png' },
-    { id: null, number: 65, name: 'Alakazam', type: 'psychic', maxhp: 95, hp: 95, maxxp: 30, xp: 0, starter: false, canEvolve: false, evolvesFrom: 'Kadabra', rarity: 0, image: 'images/alakazam.png' },
-    { id: null, number: 65, name: 'Alakazam', type: 'psychic', maxhp: 95, hp: 95, maxxp: 30, xp: 0, starter: false, canEvolve: false, evolvesFrom: 'Kadabra', rarity: 0, image: 'images/alakazam.png' },
-    { id: null, number: 65, name: 'Alakazam', type: 'psychic', maxhp: 95, hp: 95, maxxp: 30, xp: 0, starter: false, canEvolve: false, evolvesFrom: 'Kadabra', rarity: 0, image: 'images/alakazam.png' },
-    { id: null, number: 65, name: 'Alakazam', type: 'psychic', maxhp: 95, hp: 95, maxxp: 30, xp: 0, starter: false, canEvolve: false, evolvesFrom: 'Kadabra', rarity: 0, image: 'images/alakazam.png' },
-    { id: null, number: 65, name: 'Alakazam', type: 'psychic', maxhp: 95, hp: 95, maxxp: 30, xp: 0, starter: false, canEvolve: false, evolvesFrom: 'Kadabra', rarity: 0, image: 'images/alakazam.png' },
-    { id: null, number: 65, name: 'Alakazam', type: 'psychic', maxhp: 95, hp: 95, maxxp: 30, xp: 0, starter: false, canEvolve: false, evolvesFrom: 'Kadabra', rarity: 0, image: 'images/alakazam.png' },
-    { id: null, number: 65, name: 'Alakazam', type: 'psychic', maxhp: 95, hp: 95, maxxp: 30, xp: 0, starter: false, canEvolve: false, evolvesFrom: 'Kadabra', rarity: 0, image: 'images/alakazam.png' },
-    { id: null, number: 65, name: 'Alakazam', type: 'psychic', maxhp: 95, hp: 95, maxxp: 30, xp: 0, starter: false, canEvolve: false, evolvesFrom: 'Kadabra', rarity: 0, image: 'images/alakazam.png' },
-    { id: 1082, number: 65, name: 'Alakazam', type: 'psychic', maxhp: 95, hp: 95, maxxp: 30, xp: 9, starter: false, canEvolve: false, evolvesFrom: 'Kadabra', rarity: 0, image: 'images/alakazam.png' },
-    { id: null, number: 65, name: 'Alakazam', type: 'psychic', maxhp: 95, hp: 95, maxxp: 30, xp: 0, starter: false, canEvolve: false, evolvesFrom: 'Kadabra', rarity: 0, image: 'images/alakazam.png' },
-    { id: null, number: 65, name: 'Alakazam', type: 'psychic', maxhp: 95, hp: 95, maxxp: 30, xp: 0, starter: false, canEvolve: false, evolvesFrom: 'Kadabra', rarity: 0, image: 'images/alakazam.png' },
-    { id: null, number: 65, name: 'Alakazam', type: 'psychic', maxhp: 95, hp: 95, maxxp: 30, xp: 0, starter: false, canEvolve: false, evolvesFrom: 'Kadabra', rarity: 0, image: 'images/alakazam.png' },
-];
+const collection = [];
 
 const potions = items.find(item => item.name === 'potion');
 const rareCandy = items.find(item => item.name === 'rarecandy');
@@ -1144,8 +1115,7 @@ async function battleDamageAndOrder(encounterData) {
                 return;
             }
             setTimeout(() => {
-                // oppCurrentPokemon.hp -= currentPokemonAttack;
-                oppCurrentPokemon.hp -= 500;//------------------------------------------------------------------------------------------------------------------------------ test code
+                oppCurrentPokemon.hp -= currentPokemonAttack;
                 updateBattleDisplay(encounter);
                 battleMessageDisplay('player', currentPokemonAttack);
                 if (oppCurrentPokemon.hp <= 0) {
@@ -1154,8 +1124,7 @@ async function battleDamageAndOrder(encounterData) {
                 }
             }, 2500);
         } else {
-            // oppCurrentPokemon.hp -= currentPokemonAttack;
-            oppCurrentPokemon.hp -= 500; //--------------------------------------------------------------------------------------------------------------------------------test code
+            oppCurrentPokemon.hp -= currentPokemonAttack;
             updateBattleDisplay(encounter);
             battleMessageDisplay('player', currentPokemonAttack);
             if (oppCurrentPokemon.hp <= 0) {
@@ -1429,18 +1398,12 @@ pokeMartBuyButton.forEach((button) => {
 });
 
 gym.addEventListener('click', (event) => {
-
-    // clearOpponentData();
-    // battleSetup(event.target.textContent);
-    // disableButtons('.use-potion, .switch-pokemon, .dynamic-button, .leave');
-    // setTimeout(() => {
-    //     enableButtons('.dynamic-button, .leave');
-    // }, 5000);
-    //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------test code
-    // uncomment the 6 lines before this and delete the 3 after to enable gyms again --- this is to test elite four
-    const foundArea = areas.find((area) => area.location === currentArea)
-    foundArea.completed = true;
-    getBadge(foundArea.badge);
+    clearOpponentData();
+    battleSetup(event.target.textContent);
+    disableButtons('.use-potion, .switch-pokemon, .dynamic-button, .leave');
+    setTimeout(() => {
+        enableButtons('.dynamic-button, .leave');
+    }, 5000);
 });
 
 searchForPokemon.addEventListener('click', (event) => {
