@@ -43,11 +43,9 @@ const leaveButtonTextElement = document.querySelectorAll('.leave');
 const partyCollectionWindow = document.querySelector('#party-status-collection');
 const collectionPokemonWindow = document.querySelector('#collection-list');
 const rewardMessage = document.querySelectorAll('.reward-message');
-
-const party = [
-    { id: null, number: 144, name: 'Articuno', type: 'ice', maxhp: 90, hp: 90, maxxp: 45, xp: 0, starter: false, canEvolve: false, evolvesFrom: null, rarity: 1, image: 'images/articuno.png' },
-    { id: null, number: 151, name: 'Mew', type: 'special', maxhp: 100, hp: 100, maxxp: 50, xp: 0, starter: false, canEvolve: false, evolvesFrom: null, rarity: 1, image: 'images/mew.png' },
-];
+const releasePokemonButton = document.querySelector('.release-pokemon');
+const okReleaseButton = document.querySelector('.ok-release');
+const cancelReleaseButton = document.querySelector('.cancel-release');
 
 const areas = [
     { location: "palletTown", completed: false, type: "normal", condition: () => party.length >= 3 },
@@ -78,7 +76,38 @@ const items = [
 
 const badges = [];
 
-const collection = [];
+const party = [];
+
+const collection = [
+    { id: null, number: 63, name: 'Abra', type: 'psychic', maxhp: 25, hp: 25, maxxp: 10, xp: 0, starter: false, canEvolve: true, evolvesFrom: null, rarity: 5, image: 'images/abra.png' },
+    { id: null, number: 63, name: 'Abra', type: 'psychic', maxhp: 25, hp: 25, maxxp: 10, xp: 0, starter: false, canEvolve: true, evolvesFrom: null, rarity: 5, image: 'images/abra.png' },
+    { id: null, number: 63, name: 'Abra', type: 'psychic', maxhp: 25, hp: 25, maxxp: 10, xp: 0, starter: false, canEvolve: true, evolvesFrom: null, rarity: 5, image: 'images/abra.png' },
+    { id: null, number: 63, name: 'Abra', type: 'psychic', maxhp: 25, hp: 25, maxxp: 10, xp: 0, starter: false, canEvolve: true, evolvesFrom: null, rarity: 5, image: 'images/abra.png' },
+    { id: null, number: 63, name: 'Abra', type: 'psychic', maxhp: 25, hp: 25, maxxp: 10, xp: 0, starter: false, canEvolve: true, evolvesFrom: null, rarity: 5, image: 'images/abra.png' },
+    { id: null, number: 63, name: 'Abra', type: 'psychic', maxhp: 25, hp: 25, maxxp: 10, xp: 0, starter: false, canEvolve: true, evolvesFrom: null, rarity: 5, image: 'images/abra.png' },
+    { id: null, number: 63, name: 'Abra', type: 'psychic', maxhp: 25, hp: 25, maxxp: 10, xp: 0, starter: false, canEvolve: true, evolvesFrom: null, rarity: 5, image: 'images/abra.png' },
+    { id: 654, number: 63, name: 'Abra', type: 'psychic', maxhp: 25, hp: 25, maxxp: 10, xp: 432, starter: false, canEvolve: true, evolvesFrom: null, rarity: 5, image: 'images/abra.png' },
+    { id: null, number: 63, name: 'Abra', type: 'psychic', maxhp: 25, hp: 25, maxxp: 10, xp: 0, starter: false, canEvolve: true, evolvesFrom: null, rarity: 5, image: 'images/abra.png' },
+    { id: null, number: 63, name: 'Abra', type: 'psychic', maxhp: 25, hp: 25, maxxp: 10, xp: 0, starter: false, canEvolve: true, evolvesFrom: null, rarity: 5, image: 'images/abra.png' },
+    { id: null, number: 63, name: 'Abra', type: 'psychic', maxhp: 25, hp: 25, maxxp: 10, xp: 0, starter: false, canEvolve: true, evolvesFrom: null, rarity: 5, image: 'images/abra.png' },
+    { id: null, number: 63, name: 'Abra', type: 'psychic', maxhp: 25, hp: 25, maxxp: 10, xp: 0, starter: false, canEvolve: true, evolvesFrom: null, rarity: 5, image: 'images/abra.png' },
+    { id: null, number: 63, name: 'Abra', type: 'psychic', maxhp: 25, hp: 25, maxxp: 10, xp: 0, starter: false, canEvolve: true, evolvesFrom: null, rarity: 5, image: 'images/abra.png' },
+    { id: null, number: 63, name: 'Abra', type: 'psychic', maxhp: 25, hp: 25, maxxp: 10, xp: 0, starter: false, canEvolve: true, evolvesFrom: null, rarity: 5, image: 'images/abra.png' },
+    { id: null, number: 63, name: 'Abra', type: 'psychic', maxhp: 25, hp: 25, maxxp: 10, xp: 0, starter: false, canEvolve: true, evolvesFrom: null, rarity: 5, image: 'images/abra.png' },
+    { id: null, number: 65, name: 'Alakazam', type: 'psychic', maxhp: 95, hp: 95, maxxp: 30, xp: 0, starter: false, canEvolve: false, evolvesFrom: 'Kadabra', rarity: 0, image: 'images/alakazam.png' },
+    { id: null, number: 65, name: 'Alakazam', type: 'psychic', maxhp: 95, hp: 95, maxxp: 30, xp: 0, starter: false, canEvolve: false, evolvesFrom: 'Kadabra', rarity: 0, image: 'images/alakazam.png' },
+    { id: null, number: 65, name: 'Alakazam', type: 'psychic', maxhp: 95, hp: 95, maxxp: 30, xp: 0, starter: false, canEvolve: false, evolvesFrom: 'Kadabra', rarity: 0, image: 'images/alakazam.png' },
+    { id: null, number: 65, name: 'Alakazam', type: 'psychic', maxhp: 95, hp: 95, maxxp: 30, xp: 0, starter: false, canEvolve: false, evolvesFrom: 'Kadabra', rarity: 0, image: 'images/alakazam.png' },
+    { id: null, number: 65, name: 'Alakazam', type: 'psychic', maxhp: 95, hp: 95, maxxp: 30, xp: 0, starter: false, canEvolve: false, evolvesFrom: 'Kadabra', rarity: 0, image: 'images/alakazam.png' },
+    { id: null, number: 65, name: 'Alakazam', type: 'psychic', maxhp: 95, hp: 95, maxxp: 30, xp: 0, starter: false, canEvolve: false, evolvesFrom: 'Kadabra', rarity: 0, image: 'images/alakazam.png' },
+    { id: null, number: 65, name: 'Alakazam', type: 'psychic', maxhp: 95, hp: 95, maxxp: 30, xp: 0, starter: false, canEvolve: false, evolvesFrom: 'Kadabra', rarity: 0, image: 'images/alakazam.png' },
+    { id: null, number: 65, name: 'Alakazam', type: 'psychic', maxhp: 95, hp: 95, maxxp: 30, xp: 0, starter: false, canEvolve: false, evolvesFrom: 'Kadabra', rarity: 0, image: 'images/alakazam.png' },
+    { id: null, number: 65, name: 'Alakazam', type: 'psychic', maxhp: 95, hp: 95, maxxp: 30, xp: 0, starter: false, canEvolve: false, evolvesFrom: 'Kadabra', rarity: 0, image: 'images/alakazam.png' },
+    { id: 1082, number: 65, name: 'Alakazam', type: 'psychic', maxhp: 95, hp: 95, maxxp: 30, xp: 9, starter: false, canEvolve: false, evolvesFrom: 'Kadabra', rarity: 0, image: 'images/alakazam.png' },
+    { id: null, number: 65, name: 'Alakazam', type: 'psychic', maxhp: 95, hp: 95, maxxp: 30, xp: 0, starter: false, canEvolve: false, evolvesFrom: 'Kadabra', rarity: 0, image: 'images/alakazam.png' },
+    { id: null, number: 65, name: 'Alakazam', type: 'psychic', maxhp: 95, hp: 95, maxxp: 30, xp: 0, starter: false, canEvolve: false, evolvesFrom: 'Kadabra', rarity: 0, image: 'images/alakazam.png' },
+    { id: null, number: 65, name: 'Alakazam', type: 'psychic', maxhp: 95, hp: 95, maxxp: 30, xp: 0, starter: false, canEvolve: false, evolvesFrom: 'Kadabra', rarity: 0, image: 'images/alakazam.png' },
+];
 
 const potions = items.find(item => item.name === 'potion');
 const rareCandy = items.find(item => item.name === 'rarecandy');
@@ -203,7 +232,7 @@ function clearOpponentData() {
     oppPartyCurrentIndex = null
 };
 
-// function to switch main area screen  --- using to enable/disable buttons?
+// function to switch main area screen  --- using to enable/disable buttons with timeouts for simple transitions
 function switchScreen(screenClass) {
     document.querySelectorAll('.main-screen').forEach(screen => screen.classList.remove('active'));
     document.querySelector(`.${screenClass}`).classList.add('active');
@@ -216,14 +245,14 @@ function switchScreen(screenClass) {
             setTimeout(() => {
                 enableButtons('#search-for-pokemon, #poke-center, #poke-mart, .next-area, .last-area');
                 updateArea();
-            }, 3200);
+            }, 2500);
         }
         else if (screenClass === "pokemart" || screenClass === "pokecenter" || screenClass === "gameCleared" ||
             screenClass === "gameOver" || screenClass === 'start' || screenClass === 'pokecenter-collection-box') {
-            disableButtons('#trainer-battle, #gym, #poke-mart, #poke-center, #search-for-pokemon, .next-area, .last-area, .poke-button, .leave');
+            disableButtons('#trainer-battle, #gym, #poke-mart, #poke-center, #search-for-pokemon, .next-area, .last-area, .poke-button, .leave, .switch-pokemon, .use-rare-candy');
             setTimeout(() => {
                 enableButtons('.poke-button, .leave');
-            }, 3200);
+            }, 2500);
         }
         else if (screenClass === 'gym' || screenClass === 'battle') {
             disableButtons('.switch-pokemon.party, .use-rare-candy, .use-potion, #trainer-battle, #gym, #poke-mart, #poke-center, #search-for-pokemon');
@@ -235,7 +264,7 @@ function switchScreen(screenClass) {
                 enableButtons('#trainer-battle, #poke-center, #poke-mart, #search-for-pokemon, .next-area, .last-area');
                 updateGymButton();
                 updateArea();
-            }, 3200);
+            }, 2500);
         };
         if (screenClass === 'gameOver' || screenClass === 'gameCleared') {
             disableButtons('.switch-pokemon, .use-rare-candy, #trainer-battle, #gym, #poke-mart, #poke-center, #search-for-pokemon');
@@ -384,10 +413,12 @@ function updateCollectionWindow() {
             transferPokemon('collection', pokemon);
         });
     });
-    disableButtons('.pokemon-collection-button');
-    setTimeout(() => {
-        enableButtons('.pokemon-collection-button');
-    }, 3200);
+    currentPokemon = party[0];
+    partyCurrentIndex = 0;
+    activeSlot = `slot-${partyCurrentIndex + 1}`;
+    document.querySelectorAll('.partyMember').forEach(slot => slot.classList.remove('active'));
+    document.querySelector(`.partyMember.${activeSlot}`).classList.add('active');
+    updatePartyDisplay();
 };
 
 // function to show badge after gym is completed
@@ -395,9 +426,7 @@ function getBadge(badge) {
     badges.push(badge);
     document.querySelector(`.${badge}`).classList.add('active');
     updateGymButton();
-    // setTimeout(() => {
     updateArea();
-    // }, 3200);
 };
 
 // function to update item display for item totals
@@ -864,7 +893,7 @@ function partyHealthStatus(party, currentIndex) {
         if (party[i].hp > 0) {
             return i;
         }
-        if (i === currentIndex) {
+        else if (i === currentIndex) {
             return 'false';
         };
     };
@@ -890,6 +919,8 @@ function switchPokemon() {
         });
         updateBattleDisplay();
         updatePartyDisplay();
+    } else if (currentPokemon.hp > 0) {
+        return;
     } else {
         switchScreen('gameOver');
     };
@@ -913,11 +944,6 @@ function switchPokemonOpp() {
         };
     };
     updateBattleDisplay(encounter);
-    // setTimeout(() => {
-    //     enableButtons('.dynamic-button');
-    //     updatePotionButton();
-    //     updateSwitchPokemonButton('battle');
-    // }, 3000);
 };
 
 // function to evolve, will look for 10-50xp values if they hit them it does different things
@@ -1543,14 +1569,20 @@ leaveButton.forEach((leave) => {
                     enableButtons('.leave');
                 }, 1500);
             } else {
+                if (currentPokemon.hp <= 0) {
+                    switchPokemon();
+                };
                 switchScreen('pokecenter');
                 setTimeout(() => {
                     leaveButtonTextElement.forEach(button => {
                         button.textContent = 'Leave';
                     });
                 }, 1500);
-                switchPokemon();
-            }
+            };
+            disableButtons('.pokemon-collection-button, .release-pokemon');
+            setTimeout(() => {
+                enableButtons('.pokemon-collection-button, .release-pokemon');
+            }, 2500);
         } else {
             disableButtons('.dynamic-button, .leave, .use-potion, .switch-pokemon')
             removePokeballPokemon();
@@ -1559,7 +1591,7 @@ leaveButton.forEach((leave) => {
             setTimeout(() => {
                 enableButtons('.dynamic-button, .leave');
                 updateTownButtons();
-            }, 3200);
+            }, 2500);
         };
     });
 });
@@ -1691,6 +1723,10 @@ checkCollection.addEventListener('click', () => {
             button.textContent = 'Leave Collection';
         });
     }, 1500);
+    disableButtons('.pokemon-collection-button, .release-pokemon');
+    setTimeout(() => {
+        enableButtons('.pokemon-collection-button, .release-pokemon');
+    }, 2500);
 });
 
 
@@ -1730,4 +1766,42 @@ usePotion.forEach((button) => {
             updatePotionButton()
         }, 200);
     });
+});
+
+releasePokemonButton.addEventListener('click', () => {
+    document.querySelector('.release-warning').classList.add('active');
+});
+
+cancelReleaseButton.addEventListener('click', () => {
+    document.querySelector('.release-warning').classList.remove('active');
+});
+
+okReleaseButton.addEventListener('click', () => {
+    const collectionLength = collection.length;
+    const collectionReleased = Map.groupBy(collection, releasedPokemon => releasedPokemon.name);
+
+    const pokemonToKeep = Array.from(collectionReleased, ([_, copies]) => {
+        if (copies.length === 1) return copies[0];
+        return copies.reduce((max, current) => {
+            if (max.xp > current.xp) return max;
+            if (max.xp < current.xp) return current;
+            return max;
+        });
+    });
+
+    let writeIndex = 0;
+    for (let i = 0; i < collection.length; i++) {
+        if (pokemonToKeep.includes(collection[i])) {
+            collection[writeIndex] = collection[i]
+            writeIndex++;
+        }
+    }
+    collection.length = pokemonToKeep.length;
+
+    const removedPokemon = collectionLength - pokemonToKeep.length;
+    rareCandy.quantity += removedPokemon;
+    updateCollectionWindow();
+    updatePartyDisplay();
+    updateItemDisplay();
+    document.querySelector('.release-warning').classList.remove('active');
 });
