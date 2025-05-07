@@ -352,7 +352,7 @@ const trainerIntros = [
   "My last ever battle... That’s the way I’d like us to view this match...",
   "I will evaluate your ability.",
   "Shall I give you a tip for training good Pokémon?"
-]
+];
 
 const trainerLoss = [
   "No way... NO WAY! How could I lose again...",
@@ -365,4 +365,4 @@ const trainerLoss = [
   "Did you enjoy the battle with me?",
   "I am happy! Happy, I tell you! Don’t look at me like that!",
   "You’re actually good, aren’t you?"
-]
+];

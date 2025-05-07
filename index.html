@@ -18,16 +18,25 @@
 
 <body>
     <div id="game-box">
-        <div id="game-window-border">
-            <div class="header-box">
-                <header>Bricks Pokemon Adventure - Battle the Elite Four!</header>
+        
+        
+        <div class="title-screen active">
+            <button id="title-screen-button">
+                <img src="images/title-screen.png"
+                    alt="Title Screen">
+                </button>
             </div>
-
+        
+        
+                    <div id="game-window-border">
+            <div class="header-box">
+                <header>Bricks Pokémon Adventure - Battle the Elite Four!</header>
+            </div>
             <div class="game-window">
                 <div class="left-section">
                     <div id="party">
                         <div class="rules-title">
-                            <h3>Pokemon Party</h3>
+                            <h3>Pokémon Party</h3>
                         </div>
                         <div class="playerPokemonParty status">
                             <div class="player-pokemon-party">
@@ -104,7 +113,7 @@
                                 </div>
                             </div>
                             <div class="party-buttons">
-                                <button class="switch-pokemon party" disabled>Switch Pokemon</button>
+                                <button class="switch-pokemon party" disabled>Switch Pokémon</button>
                                 <button class="use-rare-candy party" disabled>Use Rare Candy</button>
                             </div>
                         </div>
@@ -178,7 +187,7 @@
                             <button id="poke-mart" disabled>Poké Mart</button>
                             <button id="poke-center" disabled>Poké Center</button>
                             <button id="trainer-battle" disabled>Trainer Battle</button>
-                            <button id="search-for-pokemon" disabled>Search For Wild Pokemon</button>
+                            <button id="search-for-pokemon" disabled>Search For Wild Pokémon</button>
                         </div>
                     </div>
                     <div id="main">
@@ -188,7 +197,7 @@
                             </div>
                             <div class="areaGoals">
                                 <p>After choosing a character model you will be taken to your room to choose a starter
-                                    pokemon.</p>
+                                    Pokémon.</p>
                             </div>
                             <div class="character-buttons">
                                 <button class="character-image">
@@ -253,8 +262,8 @@
                                 <p>Pallet Town is your beloved hometown! From your earliest memories,
                                     you've been captivated by Pokémon, dreaming of becoming a legendary Trainer.
                                     Now, your journey begins.</p>
-                                <p>Area Goal: Catch 2 wild Pokemon.</p>
-                                <p>After you have a party of at least 3 pokemon you can proceed.</p>
+                                <p>Area Goal: Catch 2 wild Pokémon.</p>
+                                <p>After you have a party of at least 3 Pokémon you can proceed.</p>
                             </div>
                             <div class="area-button">
                                 <button class="next-area palletTown" disabled>Go to Next Area </button>
@@ -379,7 +388,7 @@
                             </div>
                             <div class="areaGoals">
                                 <p>Area Goal: Defeat the Elite Four!</p>
-                                <p>Beat all of the Elite Four and be crowned the greatest Pokemon Trainer!</p>
+                                <p>Beat all of the Elite Four and be crowned the greatest Pokémon Trainer!</p>
                             </div>
                             <div class="elite-buttons">
                                 <button class="elite-four-button lorelei">
@@ -430,7 +439,7 @@
                             </div>
                             <div class="bottom-side">
                                 <button class="dynamic-button">Action</button>
-                                <button class="switch-pokemon battle" disabled>Switch Pokemon</button>
+                                <button class="switch-pokemon battle" disabled>Switch Pokémon</button>
                                 <button class="use-potion">Use Potion</button>
                                 <button class="leave">Leave</button>
                             </div>
@@ -460,7 +469,7 @@
                             </div>
                             <div class="bottom-side">
                                 <button class="dynamic-button">Action</button>
-                                <button class="switch-pokemon battle" disabled>Switch Pokemon</button>
+                                <button class="switch-pokemon battle" disabled>Switch Pokémon</button>
                                 <button class="use-potion">Use Potion</button>
                                 <button class="leave">Leave</button>
                             </div>
@@ -526,10 +535,12 @@
                             </div>
                             <button class="release-pokemon">Release Pokémon</button>
                             <div class="release-warning">
-                                <bold>WARNING</bold>By selecting OK you will release all copies of Pokémon except for one of
+                                <bold>WARNING</bold>By selecting OK you will release all copies of Pokémon except for
+                                one of
                                 each. You will keep the one with the highest XP. All others will be released and you
-                                will be given 1 Rare Candy for each Pokémon released.<div class="warning-buttons"><button
-                                    class="ok-release">OK</button><button class="cancel-release">CANCEL</button></div>
+                                will be given 1 Rare Candy for each Pokémon released.<div class="warning-buttons">
+                                    <button class="ok-release">OK</button><button class="cancel-release">CANCEL</button>
+                                </div>
                             </div>
                         </div>
 
@@ -585,7 +596,7 @@
                                     begin your journey in Pallet Town.</p>
                                 <p>Party and Inventory: Your chosen Pokémon is added to your party (up to 6 Pokémon).
                                     You also
-                                    start with a small amount of Gold and basic items (Pokeballs and Potions).</p>
+                                    start with a small amount of Gold and basic items (Poké Balls and Potions).</p>
                                 <p>Explore Areas: Navigate through 10 areas, each with unique backgrounds.
                                 </p>
                             </div>
@@ -599,7 +610,7 @@
                             </div>
                             <div class="rules-text">
                                 <h4>Areas and Progression</h4>
-                                <p>Each area has an increased difficulty to pokemon encountered:</p>
+                                <p>Each area has an increased difficulty to Pokémon encountered:</p>
                                 <ul>
                                     <li>Pallet Town</li>
                                     <li>Pewter City</li>
@@ -635,7 +646,7 @@
                                 <p>Party Size: You can have up to 6 Pokémon in your party. Extra Pokémon are stored
                                     in your
                                     Collection.</p>
-                                <p>Party Order: Outside of battle, rearrange your party using the "Switch Pokemon"
+                                <p>Party Order: Outside of battle, rearrange your party using the "Switch Pokémon"
                                     button on
                                     Party Status
                                     screen.</p>
@@ -691,7 +702,7 @@
                                 <p>Attack: Your Pokémon attacks the opponent. The Pokémon will attack for a random
                                     damage value based on their Max HP.
                                 </p>
-                                <p>Throw Pokéball: Available only in wild Pokémon battles after HP is 0. Catches the
+                                <p>Throw Poké Ball: Available only in wild Pokémon battles after HP is 0. Catches the
                                     Pokémon,
                                     adding it to your party (or Collection if your party is full).
                                 </p>
@@ -769,7 +780,7 @@
                                 <p>Rarity: Pokémon have a rarity value affecting their spawn chance. Rare
                                     Pokémon are harder
                                     to find.</p>
-                                <p>Catching: Reduce a wild Pokémon’s HP to 0, then use a Pokéball to catch it.</p>
+                                <p>Catching: Reduce a wild Pokémon’s HP to 0, then use a Poké Ball to catch it.</p>
                             </div>
                             <div class="rules-text">
                                 <h4>Strategy Tips</h4>
@@ -787,6 +798,10 @@
                         <div id="audio-controls">
                             <button id="music-on"><img src="images/music-on.png" alt="music toggle"></button>
                             <button id="sound-on"><img src="images/sound-on.png" alt="sound toggle"></button>
+                            <!-- <label for="music-volume">Music Volume:</label>
+                            <input type="range" id="music-volume" min="0" max="100" value="50">
+                            <label for="sound-volume">Sound Volume:</label>
+                            <input type="range" id="sound-volume" min="0" max="100" value="50"> -->
                         </div>
                     </div>
                 </div>
@@ -796,29 +811,39 @@
         </div>
     </div>
     <div id="audio-container" style="display: none;">
-        <audio src="sounds/game-clear.mp3"></audio>
-        <audio src="sounds/trainer-battle.mp3"></audio>
-        <audio src="sounds/celadon-city.mp3"></audio>
-        <audio src="sounds/pewter-city.mp3"></audio>
-        <audio src="sounds/gym-battle.mp3"></audio>
-        <audio src="sounds/title.mp3"></audio>
-        <audio src="sounds/cinnabar-island.mp3"></audio>
-        <audio src="sounds/indigo-plateau.mp3"></audio>
-        <audio src="sounds/pallet-town.mp3"></audio>
-        <audio src="sounds/wild-pokemon.mp3"></audio>
-        <audio src="sounds/vermillion-city.mp3"></audio>
-        <audio src="sounds/gym-victory.mp3"></audio>
-        <audio src="sounds/starter.mp3"></audio>
-        <audio src="sounds/celadon-city.mp3"></audio>
-        <audio src="sounds/cerulean-city.mp3"></audio>
-        <audio src="sounds/pokecenter.mp3"></audio>
-        <audio src="sounds/claim-victory.mp3"></audio>
-        <audio src="sounds/trainer-victory.mp3"></audio>
-        <audio src="sounds/badge.mp3"></audio>
-        <audio src="sounds/caught-pokemon.mp3"></audio>
-        <audio src="sounds/evolved.mp3"></audio>
-        <audio src="sounds/heal.mp3"></audio>
+        <audio id="game-clear" src="sounds/game-clear.mp3" loop preload="auto"></audio>
+        <audio id="trainer-music" src="sounds/trainer-battle.mp3" loop preload="auto"></audio>
+        <audio id="celadon" src="sounds/celadon-city.mp3" loop preload="auto"></audio>
+        <audio id="pewter" src="sounds/pewter-city.mp3" loop preload="auto"></audio>
+        <audio id="gym-battle" src="sounds/gym-battle.mp3" loop preload="auto"></audio>
+        <audio id="elite-battle" src="sounds/elite-battle.mp3" loop preload="auto"></audio>
+        <audio id="title" src="sounds/title.mp3" loop preload="auto"></audio>
+        <audio id="cinnabar" src="sounds/cinnabar-island.mp3" loop preload="auto"></audio>
+        <audio id="indigo" src="sounds/indigo-plateau.mp3" loop preload="auto"></audio>
+        <audio id="pallet" src="sounds/pallet-town.mp3" loop preload="auto"></audio>
+        <audio id="wild-pokemon" src="sounds/wild-pokemon.mp3" loop preload="auto"></audio>
+        <audio id="vermillion" src="sounds/vermillion-city.mp3" loop preload="auto"></audio>
+        <audio id="gym-victory" src="sounds/gym-victory.mp3" loop preload="auto"></audio>
+        <audio id="starter" src="sounds/starter.mp3" loop preload="auto"></audio>
+        <audio id="cerulean" src="sounds/cerulean-city.mp3" loop preload="auto"></audio>
+        <audio id="pokecenter" src="sounds/pokecenter.mp3" loop preload="auto"></audio>
+        <audio id="claim-victory" src="sounds/claim-victory.mp3" loop preload="auto"></audio>
+        <audio id="wild-victory" src="sounds/wildVictory.mp3" loop preload="auto"></audio>
+        <audio id="trainer-victory" src="sounds/trainer-victory.mp3" preload="auto"></audio>
+        <audio id="badge" src="sounds/badge.mp3" preload="auto"></audio>
+        <audio id="caught-pokemon" src="sounds/caught-pokemon.mp3" preload="auto"></audio>
+        <audio id="evolve" src="sounds/evolved.mp3" preload="auto"></audio>
+        <audio id="heal" src="sounds/heal.mp3" preload="auto"></audio>
+        <audio id="attack" src="sounds/attack.wav" preload="auto"></audio>
+        <audio id="missed-attack" src="sounds/missed.wav" preload="auto"></audio>
+        <audio id="pokeball-poof" src="sounds/pokeball-poof.wav" preload="auto"></audio>
+        <audio id="pokeball-throw" src="sounds/pokeball-throw.wav" preload="auto"></audio>
+        <audio id="pokeball-take-in" src="sounds/pokeball-take-in.wav" preload="auto"></audio>
+        <audio id="faint" src="sounds/faint.wav" preload="auto"></audio>
+        <audio id="button-clicked" src="sounds/button-clicked.wav" preload="auto"></audio>
+        <audio id="pokemon-cry" src="sounds/pokemon-cry.mp3" preload="auto"></audio>
     </div>
+
 </body>
 
 </html>
