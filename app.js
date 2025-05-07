@@ -1,3 +1,23 @@
+/*---------------------------------- Save Function -------------------------------------*/
+let loadedState = loadGameState();
+
+function saveGameState() {
+    localStorage.setItem('gameState', JSON.stringify(gameState));
+};
+
+function loadGameState() {
+    const savedState = localStorage.getItem('gameState');
+    return JSON.parse(savedState);
+};
+
+function updateGameState() {
+    gameState[6] = characterModel;
+    gameState[7] = currentArea;
+    gameState[8] = activeSlot;
+    gameState[9] = partyCurrentIndex;
+    gameState[10] = nextUniqueID;
+};
+
 /*------------------- Sound Toggle/Variables/Functions -----------------*/
 
 const muteMusicButton = document.querySelector('#music-on img');
@@ -107,8 +127,6 @@ const starterButton = document.querySelectorAll('.starter-pokemon');
 const nextAreaButton = document.querySelectorAll('.next-area');
 const lastAreaButton = document.querySelectorAll('.last-area')
 const leaveButton = document.querySelectorAll(".leave");
-const pageNextButton = document.querySelectorAll("#page-next");
-const pagePreviousButton = document.querySelectorAll("#page-previous");
 const playAgainButton = document.querySelectorAll('#play-again');
 const pokeMartBuyButton = document.querySelectorAll('.mart');
 const healButton = document.querySelector('.poke-button.heal');
@@ -139,9 +157,12 @@ const partyCollectionWindow = document.querySelector('#party-status-collection')
 const collectionPokemonWindow = document.querySelector('#collection-list');
 const rewardMessage = document.querySelectorAll('.reward-message');
 const releasePokemonButton = document.querySelector('.release-pokemon');
-const okReleaseButton = document.querySelector('.ok-release');
-const cancelReleaseButton = document.querySelector('.cancel-release');
+const okReleaseButton = document.querySelector('.ok-warning.release');
+const cancelReleaseButton = document.querySelector('.cancel-warning.release');
 const titleScreenButton = document.querySelector('#title-screen-button');
+const resetGameButton = document.querySelector('#clear-save-data');
+const okResetButton = document.querySelector('.ok-warning.reset');
+const cancelResetButton = document.querySelector('.cancel-warning.reset');
 
 const areas = [
     { location: "palletTown", music: 'palletTown', completed: false, type: "normal", condition: () => party.length >= 3 },
@@ -172,7 +193,7 @@ const items = [
 
 const badges = [];
 
-const party = [
+const party = [    
     { id: 442, number: 150, name: 'Super Mewtwo', type: 'special', maxhp: 1000, hp: 1000, maxxp: 50, xp: 0, starter: false, canEvolve: false, evolvesFrom: null, rarity: 1, image: 'images/mewtwo.png' },
     { id: 525, number: 150, name: 'Not So Super Mewtwo', type: 'special', maxhp: 1, hp: 1, maxxp: 50, xp: 0, starter: false, canEvolve: false, evolvesFrom: null, rarity: 1, image: 'images/mewtwo.png' },
 ];
@@ -187,9 +208,6 @@ const rareCandy = items.find(item => item.name === 'rarecandy');
 let currentArea = null;
 let nextArea = null;
 let lastArea = null;
-let currentPage = "page1";
-let nextPage = null;
-let lastPage = null;
 let activeSlot = '';
 let encounter = null;
 let oppName = '';
@@ -203,12 +221,23 @@ let partyCurrentIndex = null;
 let oppPartyCurrentIndex = null;
 let nextUniqueID = 1;
 let attackTimeOut;
+let saveGameInterval;
 
-/*---------------------------------- Core Functions ----------------------------------------*/
+let gameState = [
+    party,
+    collection,
+    areas,
+    eliteFourStatus,
+    items,
+    badges,
+    characterModel,
+    currentArea,
+    activeSlot,
+    partyCurrentIndex,
+    nextUniqueID
+];
 
-function musicToggle() {
-
-};
+/*---------------------------------- Core Functions -----------------------------------*/
 
 function assignUniqueID() {
     const newID = nextUniqueID;
@@ -246,20 +275,27 @@ function resetGame() {
     currentArea = null;
     nextArea = null;
     lastArea = null;
-    currentPage = "page1";
-    nextPage = null;
-    lastPage = null;
     activeSlot = '';
     currentPokemon = {};
     characterModel = {};
 
+    loadedState = null;
+
     document.querySelectorAll('.partyMember').forEach(slot => slot.classList.remove('active'));
     document.querySelectorAll('.icon').forEach(icon => icon.classList.remove('active'));
 
+    document.querySelector('.middle-section').classList.remove('active');
+    document.querySelector('.left-section').classList.remove('active');
+    document.querySelector('.right-section').classList.remove('active');
+    document.querySelector('.middle-section').classList.remove('active');
+    document.querySelector('.header-box').classList.remove('active');
+    document.querySelector('.title-screen').classList.add('active');
+
     clearOpponentData();
-    switchScreen('character');
     updatePartyDisplay();
     updateItemDisplay();
+
+    clearInterval(saveGameInterval);
 };
 
 // function to clear images and text from html
@@ -315,13 +351,15 @@ function switchScreen(screenClass) {
     document.querySelectorAll('.main-screen').forEach(screen => screen.classList.remove('active'));
     document.querySelector(`.${screenClass}`).classList.add('active');
     if (screenClass === 'start' || screenClass === 'character') {
-        // do nothing
+        disableButtons('#trainer-battle, #gym, #poke-mart, #poke-center, #search-for-pokemon, .switch-pokemon, .use-rare-candy');
     } else {
         if (screenClass === 'palletTown' || screenClass === 'indigoPlateau') {
             currentArea = screenClass;
-            disableButtons('#trainer-battle, #gym, #poke-mart, #poke-center, #search-for-pokemon, .next-area, .last-area');
+            disableButtons('#trainer-battle, #gym, #poke-mart, #poke-center, #search-for-pokemon, .next-area, .last-area, .switch-pokemon, .use-rare-candy');
             setTimeout(() => {
                 enableButtons('#search-for-pokemon, #poke-center, #poke-mart, .next-area, .last-area');
+                updateRareCandyButton();
+                updateSwitchPokemonButton();
                 updateArea();
             }, 2500);
             const area = areas.find(area => area.location === currentArea);
@@ -338,9 +376,11 @@ function switchScreen(screenClass) {
             disableButtons('.switch-pokemon.party, .use-rare-candy, .use-potion, #trainer-battle, #gym, #poke-mart, #poke-center, #search-for-pokemon');
         } else {
             currentArea = screenClass;
-            disableButtons('#trainer-battle, #gym, #poke-mart, #poke-center, #search-for-pokemon, .next-area, .last-area');
+            disableButtons('#trainer-battle, #gym, #poke-mart, #poke-center, #search-for-pokemon, .next-area, .last-area, .switch-pokemon, .use-rare-candy');
             setTimeout(() => {
                 enableButtons('#trainer-battle, #poke-center, #poke-mart, #search-for-pokemon, .next-area, .last-area');
+                updateRareCandyButton();
+                updateSwitchPokemonButton();
                 updateGymButton();
                 updateArea();
             }, 2500);
@@ -383,50 +423,6 @@ function updateArea() {
         area.completed = true;
     } else {
         disableButtons(selector);
-    };
-};
-
-
-// function to switch rules page
-function switchRules(rulesPage) {
-    document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
-    document.querySelector(`.${rulesPage}`).classList.add('active');
-    currentPage = rulesPage;
-};
-
-// function to update rules pages, for nextpage and lastpage to keep track
-function updateRulesPage() {
-    switch (currentPage) {
-        case "page1":
-            nextPage = "page2";
-            break;
-        case "page2":
-            lastPage = "page1";
-            nextPage = "page3";
-            break;
-        case "page3":
-            lastPage = "page2";
-            nextPage = "page4";
-            break;
-        case "page4":
-            lastPage = "page3";
-            nextPage = "page5";
-            break;
-        case "page5":
-            lastPage = "page4";
-            nextPage = "page6";
-            break;
-        case "page6":
-            lastPage = "page5";
-            nextPage = "page7";
-            break;
-        case "page7":
-            lastPage = "page6";
-            nextPage = "page8";
-            break;
-        default:
-            lastPage = "page7";
-            break;
     };
 };
 
@@ -561,6 +557,9 @@ function buyItem(itemName) {
 
 // function to update display of pokemon party
 function updatePartyDisplay() {
+    activeSlot = `slot-${partyCurrentIndex + 1}`;
+    document.querySelectorAll('.partyMember').forEach(slot => slot.classList.remove('active'));
+    document.querySelector(`.partyMember.${activeSlot}`).classList.add('active');
     const slotIds = [
         { name: 'slot-1', hp: 'slot1Hp', xp: 'slot1Xp' },
         { name: 'slot-2', hp: 'slot2Hp', xp: 'slot2Xp' },
@@ -588,6 +587,7 @@ function updatePartyDisplay() {
         }
     });
 };
+
 
 
 
@@ -1368,7 +1368,6 @@ async function battleDamageAndOrder(encounterData) {
     }
     let currentPokemonAttack = Math.ceil((Math.random() * currentPokemon.maxhp) / 2);
     let opponentPokemonAttack = Math.floor((Math.random() * oppCurrentPokemon.maxhp) / 3);
-    // let opponentPokemonAttack = 0;
 
     return new Promise((resolve) => {
         if (randomOrder === 1) {
@@ -1670,32 +1669,36 @@ titleScreenButton.addEventListener('click', () => {
     document.querySelector('.middle-section').classList.add('active');
     document.querySelector('.header-box').classList.add('active');
     document.querySelector('.title-screen').classList.remove('active');
-    switchScreen('character');
-    onGameStart();
+    if (loadedState) {
+        gameState = loadedState;
+
+        party.push(...gameState[0]);
+        collection.push(...gameState[1]);
+        areas.push(...gameState[2]);
+        eliteFourStatus.push(...gameState[3]);
+        items.push(...gameState[4]);
+        badges.push(...gameState[5]);
+        characterModel = gameState[6];
+        currentArea = gameState[7];
+        activeSlot = gameState[8];
+        partyCurrentIndex = gameState[9];
+        nextUniqueID = gameState[10];
+
+        updateNextArea(currentArea);
+        updateLastArea(currentArea);
+        updateItemDisplay();
+        updatePartyDisplay();
+        switchScreen(currentArea);
+    } else {
+        switchScreen('character')
+        onGameStart();
+    };
 });
 
 playAgainButton.forEach((button) => {
     button.addEventListener('click', () => {
         playSound('buttonclick');
         resetGame();
-    });
-});
-
-
-
-pageNextButton.forEach((button) => {
-    button.addEventListener('click', () => {
-        playSound('buttonclick');
-        updateRulesPage();
-        switchRules(nextPage);
-    });
-});
-
-pagePreviousButton.forEach((button) => {
-    button.addEventListener('click', () => {
-        playSound('buttonclick');
-        updateRulesPage();
-        switchRules(lastPage);
     });
 });
 
@@ -1819,6 +1822,10 @@ starterButton.forEach((starter) => {
         document.querySelector(`.partyMember.slot-1`).classList.add('active');
         updatePartyDisplay();
         updateItemDisplay();
+        // saveGameInterval = setInterval(() => { ------------------------------------------------------------uncomment to renable autosave
+        //     updateGameState();
+        //     saveGameState();
+        // }, 30000);
     });
 });
 
@@ -1844,6 +1851,8 @@ nextAreaButton.forEach((button) => {
 // battleSetup() and resolveBattle(), also removes added images and enables buttons as needed
 leaveButton.forEach((leave) => {
     leave.addEventListener('click', (event) => {
+        // updateGameState();---------------------------------------------------------------------------------uncomment to reenable autosave
+        // saveGameState();
         setTimeout(() => {
             leaveButtonTextElement.forEach(button => {
                 button.textContent = 'Leave';
@@ -1932,30 +1941,30 @@ dynamicButton.forEach((button) => {
             clearMessages();
             switch (button.textContent) {
                 case "Challenge":
-                        playSound('pokeballthrow')
+                    playSound('pokeballthrow')
+                    setTimeout(() => {
+                        addPokeballPokemon('leader');
                         setTimeout(() => {
-                            addPokeballPokemon('leader');
-                            setTimeout(() => {
-                                playSound('poof');
-                                removePokeballPokemon('leader');
-                                updateImageElements('leader');
-                                leaderTextElement.textContent = `Trainer sent out ${oppCurrentPokemon.name}`;
-                                showMessageBox('leader');
-                            }, 1000);
-                        }, 800);
+                            playSound('poof');
+                            removePokeballPokemon('leader');
+                            updateImageElements('leader');
+                            leaderTextElement.textContent = `Trainer sent out ${oppCurrentPokemon.name}`;
+                            showMessageBox('leader');
+                        }, 1000);
+                    }, 800);
                     break;
                 case "Accept Challenge":
-                        playSound('pokeballthrow')
+                    playSound('pokeballthrow')
+                    setTimeout(() => {
+                        addPokeballPokemon('opponent');
                         setTimeout(() => {
-                            addPokeballPokemon('opponent');
-                            setTimeout(() => {
-                                playSound('poof');
-                                removePokeballPokemon('opponent');
-                                updateImageElements('opponent');
-                                opponentTextElement.textContent = `Trainer sent out ${oppCurrentPokemon.name}`;
-                                showMessageBox('opponent');
-                            }, 1000);
-                        }, 800);
+                            playSound('poof');
+                            removePokeballPokemon('opponent');
+                            updateImageElements('opponent');
+                            opponentTextElement.textContent = `Trainer sent out ${oppCurrentPokemon.name}`;
+                            showMessageBox('opponent');
+                        }, 1000);
+                    }, 800);
                     break;
             };
             setTimeout(() => {
@@ -2115,11 +2124,13 @@ usePotion.forEach((button) => {
 releasePokemonButton.addEventListener('click', () => {
     playSound('buttonclick');
     document.querySelector('.release-warning').classList.add('active');
+    disableButtons('.release-pokemon, .leave, .pokemon-collection-button');
 });
 
 cancelReleaseButton.addEventListener('click', () => {
     playSound('buttonclick');
     document.querySelector('.release-warning').classList.remove('active');
+    enableButtons('.release-pokemon, .leave, .pokemon-collection-button');
 });
 
 okReleaseButton.addEventListener('click', () => {
@@ -2151,4 +2162,35 @@ okReleaseButton.addEventListener('click', () => {
     updatePartyDisplay();
     updateItemDisplay();
     document.querySelector('.release-warning').classList.remove('active');
+    enableButtons('.release-pokemon, .leave, .pokemon-collection-button');
+});
+
+resetGameButton.addEventListener('click', () => {
+    playSound('buttonclick');
+    document.querySelector('.reset-warning').classList.add('active');
+    disableButtons('#clear-save-data')
+});
+
+cancelResetButton.addEventListener('click', () => {
+    playSound('buttonclick');
+    document.querySelector('.reset-warning').classList.remove('active');
+    enableButtons('#clear-save-data')
+});
+
+okResetButton.addEventListener('click', () => {
+    playSound('buttonclick');
+    enableButtons('#clear-save-data')
+    localStorage.clear();
+    if (currentMusic) {
+        currentMusic.pause();
+    }
+    document.querySelector('.middle-section').classList.remove('active');
+    document.querySelector('.left-section').classList.remove('active');
+    document.querySelector('.right-section').classList.remove('active');
+    document.querySelector('.middle-section').classList.remove('active');
+    document.querySelector('.header-box').classList.remove('active');
+    document.querySelector('.title-screen').classList.add('active');
+    document.querySelector('.reset-warning').classList.remove('active');
+    loadedState = null;
+    resetGame();
 });

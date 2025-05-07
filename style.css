@@ -87,21 +87,27 @@ header {
     pointer-events: none;
 }
 
+#title-screen-button {
+    background-color: #719caca4;
+    justify-content: center;
+    transition: none;
+    transform: none;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    border: 2px solid black;
+}
+
 .title-screen.active {
     display: block;
     opacity: 1;
     width: 1220px;
-    margin-left: 2px;
+    margin-left: 5px;
     height: 760px;
-    margin-top: 5px;
+    margin-top: 17px;
     pointer-events: all;
     animation: main-screen-fadein 3s ease-in-out;
-    transition: none;
-    transform: none;
-}
-
-#title-screen-button {
-    background-color: #ffffff;
     transition: none;
     transform: none;
 }
@@ -226,20 +232,51 @@ button:disabled,
 }
 
 .page {
-    top: 0;
-    left: 0;
     width: 100%;
-    height: 100%;
+    height: 92%;
+    overflow-y: auto;
     display: none;
     opacity: 0;
     pointer-events: none;
     box-sizing: border-box;
 }
 
+::-webkit-scrollbar {
+    width: 20px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgb(177, 208, 255);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #014b9b;
+    border-radius: 10px;
+    border: 2px solid #ffffff;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #fff238;
+}
+
 .page.active {
     display: block;
     opacity: 1;
     pointer-events: all;
+}
+
+#clear-save-data {
+    position: absolute;
+    right: 15px;
+    bottom: 15px;
+    width: fit-content;
+    font-size: 16px;
+}
+
+#clear-save-data:hover {
+    background-color: #7e0e0e;
+    color: #ffffff;
 }
 
 #area {
@@ -628,7 +665,6 @@ h6 {
 }
 
 #leader-pokemon {
-    /* width: 150px; */
     bottom: 190px;
     right: 50px;
 }
@@ -640,14 +676,12 @@ h6 {
 }
 
 .player-pokemon {
-    /* width: 150px; */
     left: 150px;
     bottom: 75px;
     transform: scaleX(-1);
 }
 
 #opponent-pokemon {
-    /* width: 150px; */
     bottom: 205px;
     right: 100px;
 }
@@ -775,8 +809,6 @@ h6 {
     max-width: 35px;
     justify-content: center;
     align-items: center;
-    /* top: 230px;
-    left: 475px; */
 }
 
 .bottom-side {
@@ -1040,19 +1072,19 @@ ul {
 
 }
 
-.release-warning {
+.warning {
     display: none;
     opacity: 0;
 }
 
-.release-warning.active {
+.warning.active {
     display: flex;
     opacity: 1;
     flex-direction: column;
     gap: 8px;
     position: absolute;
     text-align: center;
-    font-size: 16px;
+    font-size: 20px;
     width: 275px;
     background-color: rgb(253, 214, 214);
     border: 2px solid black;
@@ -1062,15 +1094,31 @@ ul {
     bottom: 170px;
 }
 
+.warning.reset-warning.active {
+    position: absolute;
+    font-size: 30px;
+    bottom: 100px;
+    right: 310px;
+    width: 600px;
+    height: 300px;
+    justify-content: center;
+    gap: 40px;
+}
+
 .warning-buttons {
     display: flex;
     justify-content: center;
-    gap: 20px;
+    gap: 40px;
 }
 
+.ok-warning.reset,
+.cancel-warning.reset {
+    padding: 10px;
+    font-size: 16px;
+} 
 
-.ok-release,
-.cancel-release {
+.ok-warning,
+.cancel-warning {
     width: 100px;
     justify-content: center;
     align-items: center;
@@ -1246,4 +1294,3 @@ pre {
 .main-screen.area.character {
     background-image: url('images/character-background.jpg');
 }
-
