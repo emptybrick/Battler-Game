@@ -173,12 +173,8 @@ const items = [
 const badges = [];
 
 const party = [
-    { id: 442, number: 150, name: 'Mewtwo', type: 'special', maxhp: 1000, hp: 1000, maxxp: 50, xp: 0, starter: false, canEvolve: false, evolvesFrom: null, rarity: 1, image: 'images/mewtwo.png' },
-    { id: 525, number: 150, name: 'Mewtwo', type: 'special', maxhp: 1, hp: 1, maxxp: 50, xp: 0, starter: false, canEvolve: false, evolvesFrom: null, rarity: 1, image: 'images/mewtwo.png' },
-    { id: 243, number: 150, name: 'Mewtwo', type: 'special', maxhp: 1, hp: 1, maxxp: 50, xp: 0, starter: false, canEvolve: false, evolvesFrom: null, rarity: 1, image: 'images/mewtwo.png' },
-    { id: 243, number: 150, name: 'Mewtwo', type: 'special', maxhp: 1, hp: 1, maxxp: 50, xp: 0, starter: false, canEvolve: false, evolvesFrom: null, rarity: 1, image: 'images/mewtwo.png' },
-    { id: 243, number: 150, name: 'Mewtwo', type: 'special', maxhp: 1, hp: 1, maxxp: 50, xp: 0, starter: false, canEvolve: false, evolvesFrom: null, rarity: 1, image: 'images/mewtwo.png' },
-
+    { id: 442, number: 150, name: 'Super Mewtwo', type: 'special', maxhp: 1000, hp: 1000, maxxp: 50, xp: 0, starter: false, canEvolve: false, evolvesFrom: null, rarity: 1, image: 'images/mewtwo.png' },
+    { id: 525, number: 150, name: 'Not So Super Mewtwo', type: 'special', maxhp: 1, hp: 1, maxxp: 50, xp: 0, starter: false, canEvolve: false, evolvesFrom: null, rarity: 1, image: 'images/mewtwo.png' },
 ];
 
 const collection = [];
@@ -1723,14 +1719,19 @@ pokeMartBuyButton.forEach((button) => {
 });
 
 gym.addEventListener('click', (event) => {
-    playSound('buttonclick');
-    clearOpponentData();
-    battleSetup(event.target.textContent);
-    disableButtons('.use-potion, .switch-pokemon, .dynamic-button, .leave');
-    setTimeout(() => {
-        enableButtons('.dynamic-button, .leave');
-    }, 5500);
-    playMusic('gymBattle')
+
+    //--------------------------------------------------------------------------------------------------------------------------------------------test code
+    const foundArea = areas.find((area) => area.location === currentArea)
+    foundArea.completed = true;
+    getBadge(foundArea.badge);
+    // playSound('buttonclick');
+    // clearOpponentData();
+    // battleSetup(event.target.textContent);
+    // disableButtons('.use-potion, .switch-pokemon, .dynamic-button, .leave');
+    // setTimeout(() => {
+    //     enableButtons('.dynamic-button, .leave');
+    // }, 5500);
+    // playMusic('gymBattle')
 });
 
 searchForPokemon.addEventListener('click', (event) => {
