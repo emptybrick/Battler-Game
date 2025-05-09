@@ -58,7 +58,8 @@ const audioElements = {
     wildVictory: document.getElementById('wild-victory'),
     takein: document.getElementById('pokeball-take-in'),
     pokemoncry: document.getElementById('pokemon-cry'),
-    eliteBattle: document.getElementById('elite-battle')
+    eliteBattle: document.getElementById('elite-battle'),
+    gameOver: document.getElementById('game-over')
 };
 
 muteMusicButton.addEventListener('click', () => {
@@ -163,6 +164,7 @@ const titleScreenButton = document.querySelector('#title-screen-button');
 const resetGameButton = document.querySelector('#clear-save-data');
 const okResetButton = document.querySelector('.ok-warning.reset');
 const cancelResetButton = document.querySelector('.cancel-warning.reset');
+const battleTextElement = document.querySelectorAll('.battle-message');
 
 const areas = [
     { location: "palletTown", music: 'palletTown', completed: false, type: "normal", condition: () => party.length >= 3 },
@@ -193,9 +195,9 @@ const items = [
 
 const badges = [];
 
-const party = [    
+const party = [
     { id: 442, number: 150, name: 'Super Mewtwo', type: 'special', maxhp: 1000, hp: 1000, maxxp: 50, xp: 0, starter: false, canEvolve: false, evolvesFrom: null, rarity: 1, image: 'images/mewtwo.png' },
-    { id: 525, number: 150, name: 'Not So Super Mewtwo', type: 'special', maxhp: 1, hp: 1, maxxp: 50, xp: 0, starter: false, canEvolve: false, evolvesFrom: null, rarity: 1, image: 'images/mewtwo.png' },
+    { id: 154, number: 144, name: 'Articuno', type: 'ice', maxhp: 1, hp: 1, maxxp: 45, xp: 0, starter: false, canEvolve: false, evolvesFrom: null, rarity: 1, image: 'images/articuno.png' },
 ];
 
 const collection = [];
@@ -249,7 +251,6 @@ function assignUniqueID() {
 function resetGame() {
     party.length = 0;
     oppParty.length = 0;
-    badges.length = 0;
     collection.length = 0;
     items.forEach(item => {
         switch (item.name) {
@@ -268,8 +269,18 @@ function resetGame() {
         }
     });
 
+    badges.forEach(badge => {
+        document.querySelector(`.${badge}`).classList.remove('active');
+    });
+
+    badges.length = 0;
+
     areas.forEach(area => {
         area.completed = false;
+    });
+
+    eliteFourStatus.forEach(elite => {
+        elite.completed = false;
     });
 
     currentArea = null;
@@ -279,21 +290,22 @@ function resetGame() {
     currentPokemon = {};
     characterModel = {};
 
-    loadedState = null;
+    clearOpponentData();
+    updatePartyDisplay();
+    updateItemDisplay();
 
-    document.querySelectorAll('.partyMember').forEach(slot => slot.classList.remove('active'));
-    document.querySelectorAll('.icon').forEach(icon => icon.classList.remove('active'));
-
+    localStorage.clear();
+    if (currentMusic) {
+        currentMusic.pause();
+    }
     document.querySelector('.middle-section').classList.remove('active');
     document.querySelector('.left-section').classList.remove('active');
     document.querySelector('.right-section').classList.remove('active');
     document.querySelector('.middle-section').classList.remove('active');
     document.querySelector('.header-box').classList.remove('active');
     document.querySelector('.title-screen').classList.add('active');
-
-    clearOpponentData();
-    updatePartyDisplay();
-    updateItemDisplay();
+    document.querySelector('.reset-warning').classList.remove('active');
+    loadedState = null;
 
     clearInterval(saveGameInterval);
 };
@@ -325,6 +337,9 @@ function clearOpponentData() {
         img.classList.remove('player-image-animate');
     });
     playerTextElement.forEach(p => {
+        p.textContent = '';
+    });
+    battleTextElement.forEach(p => {
         p.textContent = '';
     });
     opponentPokemonImageElement.classList.remove('wildpokemon-image-animate');
@@ -525,32 +540,31 @@ function updateItemDisplay() {
 // function to run when buying items to add item and remove gold
 function buyItem(itemName) {
     let itemIs = itemName
-    switch (itemIs) {
-        case "Buy Poké Ball":
-            itemIs = "pokeball"
-            break;
-        case "Buy Potion":
-            itemIs = "potion"
-            break;
-    }
+    if (itemIs === "Buy Poké Ball" || itemIs === "Buy 5 Poké Balls") {
+        itemIs = "pokeball"
+    } else {
+        itemIs = "potion"
+    };
     const gold = items.find(item => item.name === 'gold');
     const item = items.find(item => item.name === itemIs);
     const cost = item.cost;
 
-    if (messageBox.forEach(box => box.classList.contains('active'))) {
-        return;
-    } else {
-        if (gold && gold.quantity >= cost) {
+    if (gold && gold.quantity >= cost) {
+        if (itemName.includes('5') && gold.quantity >= cost * 5) {
+            gold.quantity -= cost * 5;
+            item.quantity += 5;
+            messageBox.forEach(box => box.textContent = `Purchased 5 ${item.msgName}s`);
+        } else {
             gold.quantity -= cost;
             item.quantity += 1;
-            updateItemDisplay();
             messageBox.forEach(box => box.textContent = `Purchased 1 ${item.msgName}`);
-            showMessageBox('message');
         }
-        else {
-            messageBox.forEach(box => box.textContent = "Not Enough Gold!");
-            showMessageBox('message');
-        };
+        updateItemDisplay();
+        showMessageBox('pokemart');
+    }
+    else {
+        messageBox.forEach(box => box.textContent = "Not Enough Gold!");
+        showMessageBox('pokemart');
     };
     updatePotionButton();
 };
@@ -618,7 +632,16 @@ function showMessageBox(type) {
                 playerTextElement.forEach(p => p.classList.add('fading'));
                 setTimeout(() => {
                     playerTextElement.forEach(p => p.classList.remove('fading', 'active'));
-                }, 800);
+                }, 1000);
+            }, 4000);
+            break;
+        case "battle":
+            battleTextElement.forEach(p => p.classList.add('active'));
+            setTimeout(() => {
+                battleTextElement.forEach(p => p.classList.add('fading'));
+                setTimeout(() => {
+                    battleTextElement.forEach(p => p.classList.remove('fading', 'active'));
+                }, 1200);
             }, 800);
             break;
         case "message":
@@ -626,9 +649,21 @@ function showMessageBox(type) {
             setTimeout(() => {
                 messageBox.forEach(box => box.classList.add('fading'));
                 setTimeout(() => {
-                    messageBox.forEach(box => box.classList.remove('fading', 'active'));
-                }, 1200);
-            }, 800);
+                    messageBox.forEach(box => box.classList.remove('active', 'fading'));
+                }, 500);
+            }, 1500);
+            break;
+        case "pokemart":
+            if (!messageBox.forEach(box => box.classList.contains('fading')) || !messageBox.forEach(box => box.classList.contains('active'))) {
+                messageBox.forEach(box => box.classList.add('active'));
+                setTimeout(() => {
+                    messageBox.forEach(box => box.classList.add('fading'));
+                    setTimeout(() => {
+                        messageBox.forEach(box => box.classList.remove('fading', 'active'));
+                    }, 500);
+                }, 1000);
+
+            };
             break;
     };
 };
@@ -645,6 +680,9 @@ function showMessagePerm(type) {
             case "player":
                 playerTextElement.forEach(p => p.classList.add('active'));
                 break;
+            case "battle":
+                battleTextElement.forEach(p => p.classList.add('active'));
+                break;
         };
     }, 2000);
 };
@@ -653,6 +691,7 @@ function clearMessages() {
     leaderTextElement.classList.remove('active');
     opponentTextElement.classList.remove('active');
     playerTextElement.forEach(p => p.classList.remove('active'));
+    battleTextElement.forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.reward-message-box').forEach(box => {
         box.classList.remove('active');
     });
@@ -685,42 +724,6 @@ function clearPokemonFromBattle(type) {
     };
 };
 
-function showMessageIntro(type) {
-    switch (type) {
-        case "leader":
-            leaderTextElement.classList.add('active');
-            setTimeout(() => {
-                leaderTextElement.classList.add('fading');
-                setTimeout(() => {
-                    leaderTextElement.classList.remove('fading', 'active');
-                }, 3000);
-            }, 1000);
-            break;
-        case "opponent":
-            setTimeout(() => {
-                opponentTextElement.classList.add('active');
-                setTimeout(() => {
-                    opponentTextElement.classList.add('fading');
-                    setTimeout(() => {
-                        opponentTextElement.classList.remove('fading', 'active');
-                    }, 3500);
-                }, 3000);
-            }, 1000);
-            break;
-        case "player":
-            setTimeout(() => {
-                playerTextElement.forEach(p => p.classList.add('active'));
-                setTimeout(() => {
-                    playerTextElement.forEach(p => p.classList.add('fading'));
-                    setTimeout(() => {
-                        playerTextElement.forEach(p => p.classList.remove('fading', 'active'));
-                    }, 4000);
-                }, 3000);
-            }, 1000);
-            break;
-    };
-};
-
 function updateBattleDisplay(encounter) {
     if (encounter === "gym" || encounter === "elite") {
         leaderPokemonTextElement.innerHTML = `<pre>${oppCurrentPokemon.name}     HP: ${oppCurrentPokemon.hp}</pre>`;
@@ -747,20 +750,20 @@ function battleMessageDisplay(type, pokemonAttack) {
         case "player":
             switch (pokemonAttack > 0) {
                 case true:
-                    playerTextElement.forEach(p => {
+                    battleTextElement.forEach(p => {
                         p.textContent = `${currentPokemon.name} attacked for ${pokemonAttack} damage!`;
                         damageFlashDisplay('opponent');
                         attackAnimate('player');
                         playSound('attack');
-                        showMessageBox('player');
+                        showMessageBox('battle');
                     });
                     break;
                 case false:
-                    playerTextElement.forEach(p => {
+                    battleTextElement.forEach(p => {
                         p.textContent = `${currentPokemon.name} missed ${wildPokemonFound.name}!`;
                         attackAnimate('player');
                         playSound('missedAttack');
-                        showMessageBox('player');
+                        showMessageBox('battle');
                     });
                     break;
             };
@@ -769,28 +772,32 @@ function battleMessageDisplay(type, pokemonAttack) {
             switch (pokemonAttack > 0) {
                 case true:
                     if (encounter === 'wildpokemon') {
-                        opponentTextElement.textContent = `Wild ${wildPokemonFound.name} attacked for ${pokemonAttack} damage!`;
+                        battleTextElement.forEach(p => {
+                            p.textContent = `Wild ${wildPokemonFound.name} attacked for ${pokemonAttack} damage!`;
+                        });
                     } else {
-                        leaderTextElement.textContent = `${oppCurrentPokemon.name} attacked for ${pokemonAttack} damage!`;
-                        opponentTextElement.textContent = `${oppCurrentPokemon.name} attacked for ${pokemonAttack} damage!`;
+                        battleTextElement.forEach(p => {
+                            p.textContent = `${oppCurrentPokemon.name} attacked for ${pokemonAttack} damage!`;
+                        });
                     };
                     damageFlashDisplay('player');
                     attackAnimate('opponent');
                     playSound('attack');
-                    showMessageBox('opponent');
-                    showMessageBox('leader');
+                    showMessageBox('battle');
                     break;
                 case false:
                     if (encounter === 'wildpokemon') {
-                        opponentTextElement.textContent = `Wild ${wildPokemonFound.name} missed ${currentPokemon.name}!`;
+                        battleTextElement.forEach(p => {
+                            p.textContent = `Wild ${wildPokemonFound.name} missed ${currentPokemon.name}!`;
+                        });
                     } else {
-                        opponentTextElement.textContent = `${oppCurrentPokemon.name} missed ${currentPokemon.name}!`;
-                        leaderTextElement.textContent = `${oppCurrentPokemon.name} missed ${currentPokemon.name}!`;
+                        battleTextElement.forEach(p => {
+                            p.textContent = `${oppCurrentPokemon.name} missed ${currentPokemon.name}!`;
+                        });
                     };
-                    showMessageBox('opponent');
+                    showMessageBox('battle');
                     attackAnimate('opponent');
                     playSound('missedAttack');
-                    showMessageBox('leader');
                     break;
             }
             break;
@@ -1079,12 +1086,17 @@ function switchPokemon() {
                                 playSound('poof');
                                 removePokeballPokemon('player');
                                 updateImageElements('player');
-                                enableButtons('.leave, .dynamic-button');
-                                updateSwitchPokemonButton('battle');
-                                updatePotionButton();
-                                playerTextElement.forEach(p => {
+                                setTimeout(() => {
+                                    if (encounter === 'wildpokemon') {
+                                        enableButtons('.leave')
+                                    };
+                                    enableButtons('.dynamic-button');
+                                    updateSwitchPokemonButton('battle');
+                                    updatePotionButton();
+                                }, 2000);
+                                battleTextElement.forEach(p => {
                                     p.textContent = `${characterModel.name} switched to ${currentPokemon.name}!`;
-                                    showMessageBox('player');
+                                    showMessageBox('battle');
                                     updateBattleDisplay();
                                 });
                             }, 1000);
@@ -1098,6 +1110,7 @@ function switchPokemon() {
         return;
     } else {
         switchScreen('gameOver');
+        playMusic('gameOver')
     };
 };
 
@@ -1124,12 +1137,16 @@ function switchPokemonOpp() {
                                 playSound('poof');
                                 removePokeballPokemon('leader');
                                 updateImageElements('leader');
-                                leaderTextElement.textContent = `${oppName} sent out ${oppCurrentPokemon.name}`;
-                                showMessageBox('leader');
+                                battleTextElement.forEach(p => {
+                                    p.textContent = `${oppName} sent out ${oppCurrentPokemon.name}`;
+                                });
+                                showMessageBox('battle');
                                 updateBattleDisplay(encounter);
-                                enableButtons('.leave, .dynamic-button');
-                                updateSwitchPokemonButton('battle');
-                                updatePotionButton();
+                                setTimeout(() => {
+                                    enableButtons('.dynamic-button');
+                                    updateSwitchPokemonButton('battle');
+                                    updatePotionButton();
+                                }, 2000);
                             }, 1000);
                         }, 1000);
                     }, 1000);
@@ -1151,10 +1168,12 @@ function switchPokemonOpp() {
                                 playSound('poof');
                                 removePokeballPokemon('opponent');
                                 updateImageElements('opponent');
-                                opponentTextElement.textContent = `Trainer sent out ${oppCurrentPokemon.name}`;
-                                showMessageBox('opponent');
+                                battleTextElement.forEach(p => {
+                                    p.textContent = `Trainer sent out ${oppCurrentPokemon.name}`;
+                                });
+                                showMessageBox('battle');
                                 updateBattleDisplay(encounter);
-                                enableButtons('.leave, .dynamic-button');
+                                enableButtons('.dynamic-button');
                                 updateSwitchPokemonButton('battle');
                                 updatePotionButton();
                             }, 1000);
@@ -1252,16 +1271,14 @@ function battleSetup(eventText) {
         opponentImageElement.src = trainerImage;
         opponentImageElement.alt = "Random Trainer";
         setTimeout(() => {
+            opponentTextElement.textContent = trainerIntro;
+            showMessagePerm('opponent');
             setTimeout(() => {
-                opponentTextElement.textContent = trainerIntro;
-                showMessagePerm('opponent');
-                setTimeout(() => {
-                    playerTextElement.forEach(p => {
-                        p.textContent = `A Trainer has challenged you with ${oppParty.length} Pokémon!`;
-                        showMessagePerm('player');
-                    });
-                }, 1000);
-            }, 2000);
+                playerTextElement.forEach(p => {
+                    p.textContent = `A Trainer has challenged you with ${oppParty.length} Pokémon!`;
+                    showMessagePerm('player');
+                });
+            }, 1000);
         }, 2000);
         updateImageElements('player-image');
     }
@@ -1278,9 +1295,9 @@ function battleSetup(eventText) {
                 setTimeout(() => {
                     playSound('poof');
                     removePokeballPokemon('player');
-                    playerTextElement.forEach(p => {
+                    battleTextElement.forEach(p => {
                         p.textContent = `${characterModel.name} sent out ${currentPokemon.name}!`;
-                        showMessageBox('player');
+                        showMessageBox('battle');
                         updateImageElements('player');
                     });
                     setTimeout(() => {
@@ -1294,8 +1311,8 @@ function battleSetup(eventText) {
                             enableButtons('.dynamic-button, .leave');
                             updatePotionButton();
                             updateSwitchPokemonButton('battle');
-                        }, 1000);
-                    }, 1500);
+                        }, 1500);
+                    }, 1000);
                 }, 1300);
             }, 500);
         }, 6000);
@@ -1311,11 +1328,13 @@ function battleSetup(eventText) {
                 }, 4000)
             }, 1000);
             setTimeout(() => {
+                playerTextElement.forEach(p => {
+                    p.textContent = `A wild ${wildPokemonFound.name} appeared!`;
+                });
+                showMessageBox('player');
+            }, 4200);
+            setTimeout(() => {
                 playSound('pokemoncry')
-                setTimeout(() => {
-                    opponentTextElement.textContent = `A wild ${wildPokemonFound.name} appeared!`;
-                    showMessagePerm('opponent');
-                }, 300);
             }, 4000);
             return wildPokemonFound;
         };
@@ -1333,7 +1352,7 @@ function battleSetup(eventText) {
             setTimeout(() => {
                 leaderTextElement.textContent = foundGymLeader.intro
                 showMessagePerm('leader');
-            }, 3000);
+            }, 2000);
         } else {
             encounter = 'elite';
             const foundEliteMember = eliteFour.find(member => member.name === battleType);
@@ -1344,7 +1363,7 @@ function battleSetup(eventText) {
             setTimeout(() => {
                 leaderTextElement.textContent = foundEliteMember.intro;
                 showMessagePerm('leader');
-            }, 3000);
+            }, 2000);
         };
         switchScreen('gym');
         dynamicButtonTextElement.forEach(button => {
@@ -1424,18 +1443,19 @@ async function resolveBattle() {
     if (faintedPokemon === currentPokemon) {
         currentPokemon.hp = 0;
         currentPokemon.xp += 1;
+        clearTimeout(attackTimeOut);
         updateXP();
         updateBattleDisplay();
         setTimeout(() => {
-            playerTextElement.forEach(p => {
+            battleTextElement.forEach(p => {
                 p.textContent = `${currentPokemon.name} fainted!`;
                 playSound('faint');
-                showMessageBox('player');
+                showMessageBox('battle');
             });
             setTimeout(() => {
                 switchPokemon();
             }, 1000);
-        }, 2000);
+        }, 1000);
 
     } else if (faintedPokemon === oppCurrentPokemon) {
 
@@ -1443,12 +1463,13 @@ async function resolveBattle() {
             oppCurrentPokemon.hp = 0
             updateBattleDisplay(encounter);
             clearTimeout(attackTimeOut);
-
             setTimeout(() => {
-                opponentTextElement.textContent = `Wild ${wildPokemonFound.name} fainted!`;
+                playerTextElement.forEach(p => {
+                    p.textContent = `Wild ${wildPokemonFound.name} fainted!`;
+                });
                 playSound('faint');
                 playMusic('wildVictory');
-                showMessagePerm('opponent');
+                showMessagePerm('player');
                 setTimeout(() => {
                     clearBattleDisplay('player');
                     clearBattleDisplay('opponent');
@@ -1456,11 +1477,9 @@ async function resolveBattle() {
                 setTimeout(() => {
                     enableButtons('.dynamic-button');
                 }, 4000);
-            }, 1500);
-
+            }, 500);
             currentPokemon.xp += 1;
             updateXP(currentPokemon);
-
             dynamicButtonTextElement.forEach(button => {
                 button.textContent = "Use Poké Ball";
             });
@@ -1480,13 +1499,21 @@ async function resolveBattle() {
                 currentPokemon.xp += 1;
                 updateXP(currentPokemon);
                 setTimeout(() => {
-                    clearBattleDisplay('leader');
-                    clearPokemonFromBattle('opponent');
-                    clearBattleDisplay('opponent');
-                    clearPokemonFromBattle('leader');
-                    clearBattleDisplay('player')
-                    clearPokemonFromBattle('player')
-                }, 2000);
+                    battleTextElement.forEach(p => {
+                        p.textContent = `${oppCurrentPokemon.name} fainted!`;
+                    });
+                    showMessageBox('battle');
+                    playSound('faint');
+                    setTimeout(() => {
+                        clearBattleDisplay('leader');
+                        clearPokemonFromBattle('opponent');
+                        clearBattleDisplay('opponent');
+                        clearPokemonFromBattle('leader');
+                        clearBattleDisplay('player')
+                        clearPokemonFromBattle('player')
+                    }, 2000);
+                }, 2500);
+
 
                 if (encounter === 'gym' || encounter === 'elite') {
                     dynamicButtonTextElement.forEach(button => {
@@ -1497,46 +1524,44 @@ async function resolveBattle() {
                         }
                     });
                     setTimeout(() => {
-                        enableButtons('.dynamic-button');
+                        playerTextElement.forEach(p => {
+                            p.textContent = `You defeated ${oppName}! Congratulations!`;
+                        });
+                        showMessagePerm('player');
+                        playMusic('gymVictory')
+                        leaderTextElement.textContent = oppLossMessage;
+                        showMessagePerm('leader');
                     }, 3000);
-
-                    playerTextElement.forEach(p => {
-                        p.textContent = `You defeated ${oppName}! Congratulations!`;
-                    });
-                    showMessagePerm('player');
-                    playMusic('gymVictory')
-                    leaderTextElement.textContent = oppLossMessage;
-                    showMessagePerm('leader');
+                    setTimeout(() => {
+                        enableButtons('.dynamic-button');
+                    }, 6000);
                 } else {
-                    playerTextElement.forEach(p => {
-                        p.textContent = `Trainers party has been defeated.`;
-                    });
-                    showMessagePerm('player');
-                    opponentTextElement.textContent = trainerLoss[Math.floor(Math.random() * 10)];
-                    showMessagePerm('opponent');
-                    updateImageElements('opponent');
+                    setTimeout(() => {
+                        playerTextElement.forEach(p => {
+                            p.textContent = `Trainers party has been defeated.`;
+                        });
+                        showMessagePerm('player');
+                        opponentTextElement.textContent = trainerLoss[Math.floor(Math.random() * 10)];
+                        showMessagePerm('opponent');
+                        playMusic('trainerVictory')
+                        getRewards('trainer');
+                        updateItemDisplay();
+                    }, 3000);
                     setTimeout(() => {
                         enableButtons('.leave');
                     }, 6000);
-                    getRewards('trainer');
-                    playMusic('trainerVictory')
                 }
             } else {
-
                 oppCurrentPokemon.hp = 0;
                 updateBattleDisplay(encounter);
                 currentPokemon.xp += 1;
                 updateXP(currentPokemon);
                 clearTimeout(attackTimeOut);
-
                 setTimeout(() => {
-                    if (encounter === 'gym' || encounter === 'elite') {
-                        leaderTextElement.textContent = `${oppCurrentPokemon.name} fainted!`;
-                        showMessageBox('leader');
-                    } else {
-                        opponentTextElement.textContent = `${oppCurrentPokemon.name} fainted!`;
-                        showMessageBox('opponent');
-                    };
+                    battleTextElement.forEach(p => {
+                        p.textContent = `${oppCurrentPokemon.name} fainted!`;
+                    });
+                    showMessageBox('battle');
                     playSound('faint');
                     setTimeout(() => {
                         switchPokemonOpp();
@@ -1562,9 +1587,9 @@ function getRewards(rewardType) {
     setTimeout(() => {
         switch (rewardType) {
             case 'trainer':
-                gold.quantity += randomGoldTrainer
+                gold.quantity += randomGoldTrainer;
                 rewardMessage.forEach(message => {
-                    message.innerHTML = `You gained ${randomGold} gold!`
+                    message.innerHTML = `You gained ${randomGoldTrainer} gold!`
                     messageBox.forEach(box => {
                         box.classList.add('active');
                     });
@@ -1573,7 +1598,7 @@ function getRewards(rewardType) {
             case 'gym':
                 gold.quantity += randomGoldGym
                 rewardMessage.forEach(message => {
-                    message.innerHTML = `You gained ${randomGold} gold!`
+                    message.innerHTML = `You gained ${randomGoldGym} gold!`
                     messageBox.forEach(box => {
                         box.classList.add('active');
                     });
@@ -1601,7 +1626,7 @@ function getRewards(rewardType) {
             case 'elite':
                 gold.quantity += randomGoldElite;
                 rewardMessage.forEach(message => {
-                    message.innerHTML = `You gained ${randomGold} gold!`
+                    message.innerHTML = `You gained ${randomGoldElite} gold!`
                     messageBox.forEach(box => {
                         box.classList.add('active');
                     });
@@ -1617,28 +1642,38 @@ function getRewards(rewardType) {
 // add pokemon to party or send to collection as needed
 function throwPokeball() {
     clearTimeout(attackTimeOut);
-    setTimeout(() => {
-        enableButtons('.leave');
-    }, 4000);
+
 
     const pokeBall = items.find(item => item.name === 'pokeball');
     if (pokeBall.quantity < 1) {
-        opponentTextElement.textContent = 'You ran out of Poké Balls!'
-        showMessagePerm('opponent');
+        setTimeout(() => {
+            enableButtons('.leave');
+        }, 2000);
+        playerTextElement.forEach(p => {
+            p.textContent = 'You ran out of Poké Balls!';
+        });
+        showMessagePerm('player');
     } else {
+        setTimeout(() => {
+            enableButtons('.leave');
+        }, 4000);
         clearBattleDisplay('opponent');
         playSound('takein')
         addPokeballPokemon('opponent');
         wildPokemonFound.id = assignUniqueID();
         party.push(wildPokemonFound);
         pokeBall.quantity -= 1;
-        opponentTextElement.textContent = `You threw a Poké Ball at ${wildPokemonFound.name}, and caught it!`;
-        showMessagePerm('opponent');
+        playerTextElement.forEach(p => {
+            p.textContent = `You threw a Poké Ball at ${wildPokemonFound.name}, and caught it!`;
+        });
+        showMessagePerm('player');
 
         if (party.length > 6) {
             collection.push(party.pop());
-            opponentTextElement.textContent = `You threw a Poké Ball at ${wildPokemonFound.name}, and caught it!,  It has been sent to Collection`;
-            showMessagePerm('opponent');
+            playerTextElement.forEach(p => {
+                p.textContent = `You threw a Poké Ball at ${wildPokemonFound.name}, and caught it!,  It has been sent to Collection`;
+            });
+            showMessagePerm('player');
         };
         setTimeout(() => {
             playSound('caughtPokemon');
@@ -1656,7 +1691,6 @@ function heal() {
         msg.textContent = "Party is at Full Health!";
     });
     showMessageBox('message');
-    updateSwitchPokemonButton();
 };
 
 /*-------------------Event Listeners-------------------*/
@@ -1669,6 +1703,7 @@ titleScreenButton.addEventListener('click', () => {
     document.querySelector('.middle-section').classList.add('active');
     document.querySelector('.header-box').classList.add('active');
     document.querySelector('.title-screen').classList.remove('active');
+    disableButtons('.elite-four-button')
     if (loadedState) {
         gameState = loadedState;
 
@@ -1690,7 +1725,7 @@ titleScreenButton.addEventListener('click', () => {
         updatePartyDisplay();
         switchScreen(currentArea);
     } else {
-        switchScreen('character')
+        switchScreen('character');
         onGameStart();
     };
 });
@@ -1718,23 +1753,22 @@ pokeMartBuyButton.forEach((button) => {
     button.addEventListener('click', () => {
         playSound('buttonclick');
         buyItem(button.textContent);
+        disableButtons('.poke-button.mart')
+        setTimeout(() => {
+            enableButtons('.poke-button.mart');
+        }, 1500);
     });
 });
 
 gym.addEventListener('click', (event) => {
-
-    //--------------------------------------------------------------------------------------------------------------------------------------------test code
-    const foundArea = areas.find((area) => area.location === currentArea)
-    foundArea.completed = true;
-    getBadge(foundArea.badge);
-    // playSound('buttonclick');
-    // clearOpponentData();
-    // battleSetup(event.target.textContent);
-    // disableButtons('.use-potion, .switch-pokemon, .dynamic-button, .leave');
-    // setTimeout(() => {
-    //     enableButtons('.dynamic-button, .leave');
-    // }, 5500);
-    // playMusic('gymBattle')
+    playSound('buttonclick');
+    clearOpponentData();
+    battleSetup(event.target.textContent);
+    disableButtons('.use-potion, .switch-pokemon, .dynamic-button, .leave');
+    setTimeout(() => {
+        enableButtons('.dynamic-button, .leave');
+    }, 5500);
+    playMusic('gymBattle')
 });
 
 searchForPokemon.addEventListener('click', (event) => {
@@ -1775,7 +1809,7 @@ characterButton.forEach((character) => {
         }
         characterModel = structuredClone(characters.find(char => char.name.toLowerCase() === character.toLowerCase()));
         switchScreen('start');
-        playMusic('starter')
+        playMusic('starter');
     })
 })
 
@@ -1896,6 +1930,10 @@ leaveButton.forEach((leave) => {
                 updateTownButtons();
             }, 2500);
         };
+        if (eliteFourStatus.every(elite => elite.completed)) {
+            document.querySelector('#game-clear-button').classList.add('active');
+            playMusic('claimVictory');
+        };
     });
 });
 
@@ -1914,7 +1952,7 @@ dynamicButton.forEach((button) => {
                 if (encounter === 'wildpokemon') {
                     enableButtons('.leave');
                 }
-            }, 4000);
+            }, 5000);
 
             switch (encounter) {
                 case "wildpokemon":
@@ -1948,8 +1986,10 @@ dynamicButton.forEach((button) => {
                             playSound('poof');
                             removePokeballPokemon('leader');
                             updateImageElements('leader');
-                            leaderTextElement.textContent = `Trainer sent out ${oppCurrentPokemon.name}`;
-                            showMessageBox('leader');
+                            battleTextElement.forEach(p => {
+                                p.textContent = `Trainer sent out ${oppCurrentPokemon.name}`;
+                            });
+                            showMessageBox('battle');
                         }, 1000);
                     }, 800);
                     break;
@@ -1961,8 +2001,10 @@ dynamicButton.forEach((button) => {
                             playSound('poof');
                             removePokeballPokemon('opponent');
                             updateImageElements('opponent');
-                            opponentTextElement.textContent = `Trainer sent out ${oppCurrentPokemon.name}`;
-                            showMessageBox('opponent');
+                            battleTextElement.forEach(p => {
+                                p.textContent = `Trainer sent out ${oppCurrentPokemon.name}`;
+                            });
+                            showMessageBox('battle');
                         }, 1000);
                     }, 800);
                     break;
@@ -1974,9 +2016,9 @@ dynamicButton.forEach((button) => {
                     setTimeout(() => {
                         playSound('poof');
                         removePokeballPokemon('player');
-                        playerTextElement.forEach(p => {
+                        battleTextElement.forEach(p => {
                             p.textContent = `${characterModel.name} sent out ${currentPokemon.name}!`;
-                            showMessageBox('player');
+                            showMessageBox('battle');
                             playerPokemonTextElement.forEach(p => {
                                 p.innerHTML = `<pre>${currentPokemon.name}     HP: ${currentPokemon.hp}</pre>`
                                 p.classList.add('active');
@@ -1996,31 +2038,49 @@ dynamicButton.forEach((button) => {
                 updateSwitchPokemonButton("battle");
                 updatePotionButton();
                 enableButtons('.dynamic-button');
-            }, 6000);
+            }, 7000);
         }
         else if (button.textContent === "Accept Badge") {
             const foundArea = areas.find((area) => area.location === currentArea)
             foundArea.completed = true;
             getBadge(foundArea.badge);
-            playSound('badge')
+            playSound('badge');
+            getRewards('gym');
             setTimeout(() => {
                 enableButtons('.leave');
             }, 3000);
             disableButtons('.dynamic-button, .use-potion, .switch-pokemon');
+            if (badges.length === 8) {
+                enableButtons('.elite-four-button.lorelei');
+            };
         }
         else if (button.textContent === "Accept Defeat") {
             const eliteFourName = eliteFourStatus.find(elite => elite.name === oppName)
             eliteFourName.completed = true;
             disableButtons(`.elite-four-button.${oppName.toLowerCase()}`)
-            if (eliteFourStatus.every(elite => elite.completed)) {
-                document.querySelector('#game-clear-button').classList.add('active');
+            if (eliteFourName) {
+                playSound('badge');
+                getRewards('elite');
             }
-            enableButtons('.leave');
+            setTimeout(() => {
+                enableButtons('.leave');
+            }, 3000);
             disableButtons('.dynamic-button, .use-potion, .switch-pokemon');
+
+            switch (oppName) {
+                case "Lorelei":
+                    enableButtons('.elite-four-button.bruno');
+                    break;
+                case "Bruno":
+                    enableButtons('.elite-four-button.agatha');
+                    break;
+                case "Agatha":
+                    enableButtons('.elite-four-button.lance');
+                    break;
+            }
         };
     });
 });
-
 
 switchPokemonButton.forEach((button) => {
     button.addEventListener('click', () => {
@@ -2078,11 +2138,13 @@ checkCollection.addEventListener('click', () => {
     }, 2500);
 });
 
-
 gameClearButton.addEventListener('click', () => {
     playSound('buttonclick');
-    switchScreen('gameCleared')
+    switchScreen('gameCleared');
     playMusic('gameClear');
+    setTimeout(() => {
+        enableButtons('.elite-four-button');
+    }, 2000);
 });
 
 eliteFourButton.forEach((button) => {
@@ -2179,18 +2241,7 @@ cancelResetButton.addEventListener('click', () => {
 
 okResetButton.addEventListener('click', () => {
     playSound('buttonclick');
-    enableButtons('#clear-save-data')
-    localStorage.clear();
-    if (currentMusic) {
-        currentMusic.pause();
-    }
-    document.querySelector('.middle-section').classList.remove('active');
-    document.querySelector('.left-section').classList.remove('active');
-    document.querySelector('.right-section').classList.remove('active');
-    document.querySelector('.middle-section').classList.remove('active');
-    document.querySelector('.header-box').classList.remove('active');
-    document.querySelector('.title-screen').classList.add('active');
     document.querySelector('.reset-warning').classList.remove('active');
-    loadedState = null;
+    enableButtons('#clear-save-data')
     resetGame();
 });

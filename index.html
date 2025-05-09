@@ -414,6 +414,7 @@
                         </div>
 
                         <div class="main-screen area battle">
+                            <p class="battle-message"></p>
                             <div class="left-side">
                                 <div><img id="opponent-image" src="" alt="">
                                     <p class="opponent-text"></p>
@@ -443,6 +444,7 @@
                         </div>
 
                         <div class="main-screen area gym">
+                            <p class="battle-message"></p>
                             <div class="left-side">
                                 <div><img id="leader-image" src="" alt="">
                                     <p class="leader-text"></p>
@@ -478,12 +480,18 @@
                             </div>
                             <div class="areaGoals">
                                 <p class="message-box"></p>
-                                <p>Use the "Buy Poké Ball" button to buy 1 Poké Ball for 1 gold.</p>
-                                <p>Use the "Buy Potion" button to buy 1 Potion for 2 gold.</p>
+                                <p>Use the "Buy Poké Ball" buttons to buy Poké Balls for 1 gold each</p>
+                                <p>Use the "Buy Potion" buttons to buy Potions for 2 gold each</p>
                             </div>
-                            <div id="pokecenter-buttons">
-                                <button class="poke-button mart">Buy Poké Ball</button>
-                                <button class="poke-button mart">Buy Potion</button>
+                            <div id="pokemart-buttons">
+                                <div> 
+                                    <button class="poke-button mart">Buy Poké Ball</button>
+                                    <button class="poke-button mart">Buy 5 Poké Balls</button>
+                                </div>
+                                <div>
+                                    <button class="poke-button mart">Buy Potion</button>
+                                    <button class="poke-button mart">Buy 5 Potions</button>
+                                </div>
                             </div>
                             <div class="leaveButton">
                                 <button class="leave">Leave</button>
@@ -536,7 +544,8 @@
                                 one of
                                 each. You will keep the one with the highest XP. All others will be released and you
                                 will be given 1 Rare Candy for each Pokémon released.<div class="warning-buttons">
-                                    <button class="ok-warning release">OK</button><button class="cancel-warning release">CANCEL</button>
+                                    <button class="ok-warning release">OK</button><button
+                                        class="cancel-warning release">CANCEL</button>
                                 </div>
                             </div>
                         </div>
@@ -724,7 +733,8 @@
                         <div class="warning reset-warning">
                             <bold>WARNING</bold>By selecting OK you will reset the game back to Title Screen and Clear
                             all Save Data!<div class="warning-buttons">
-                                <button class="ok-warning reset">OK</button><button class="cancel-warning reset">CANCEL</button>
+                                <button class="ok-warning reset">OK</button><button
+                                    class="cancel-warning reset">CANCEL</button>
                             </div>
                         </div>
                     </div>
@@ -764,6 +774,7 @@
         <audio id="faint" src="sounds/faint.wav" preload="auto"></audio>
         <audio id="button-clicked" src="sounds/button-clicked.wav" preload="auto"></audio>
         <audio id="pokemon-cry" src="sounds/pokemon-cry.mp3" preload="auto"></audio>
+        <audio id="game-over" src="sounds/game-over.mp3" preload="auto"></audio>
     </div>
 
 </body>
