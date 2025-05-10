@@ -16,6 +16,7 @@ function updateGameState() {
     gameState[8] = activeSlot;
     gameState[9] = partyCurrentIndex;
     gameState[10] = nextUniqueID;
+    gameState[11] = currentPokemon;
 };
 
 /*------------------- Sound Toggle/Variables/Functions -----------------*/
@@ -233,7 +234,8 @@ let gameState = [
     currentArea,
     activeSlot,
     partyCurrentIndex,
-    nextUniqueID
+    nextUniqueID,
+    currentPokemon
 ];
 
 /*---------------------------------- Core Functions -----------------------------------*/
@@ -1715,6 +1717,7 @@ titleScreenButton.addEventListener('click', () => {
         activeSlot = gameState[8];
         partyCurrentIndex = gameState[9];
         nextUniqueID = gameState[10];
+        currentPokemon = gameState[11];
 
         updateNextArea(currentArea);
         updateLastArea(currentArea);
