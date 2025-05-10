@@ -195,10 +195,7 @@ const items = [
 
 const badges = [];
 
-const party = [
-    { id: 442, number: 150, name: 'Super Mewtwo', type: 'special', maxhp: 1000, hp: 1000, maxxp: 50, xp: 0, starter: false, canEvolve: false, evolvesFrom: null, rarity: 1, image: 'images/mewtwo.png' },
-    { id: 154, number: 144, name: 'Articuno', type: 'ice', maxhp: 1, hp: 1, maxxp: 45, xp: 0, starter: false, canEvolve: false, evolvesFrom: null, rarity: 1, image: 'images/articuno.png' },
-];
+const party = [];
 
 const collection = [];
 
@@ -1311,10 +1308,10 @@ function battleSetup(eventText) {
                             enableButtons('.dynamic-button, .leave');
                             updatePotionButton();
                             updateSwitchPokemonButton('battle');
-                        }, 1500);
+                        }, 1000);
                     }, 1000);
-                }, 1300);
-            }, 500);
+                }, 1000);
+            }, 800);
         }, 6000);
         wildPokemonFound = structuredClone(chooseRandomPokemon());
         if (wildPokemonFound) {
@@ -1509,8 +1506,8 @@ async function resolveBattle() {
                         clearPokemonFromBattle('opponent');
                         clearBattleDisplay('opponent');
                         clearPokemonFromBattle('leader');
-                        clearBattleDisplay('player')
-                        clearPokemonFromBattle('player')
+                        clearBattleDisplay('player');
+                        clearPokemonFromBattle('player');
                     }, 2000);
                 }, 2500);
 
@@ -1856,10 +1853,10 @@ starterButton.forEach((starter) => {
         document.querySelector(`.partyMember.slot-1`).classList.add('active');
         updatePartyDisplay();
         updateItemDisplay();
-        // saveGameInterval = setInterval(() => { ------------------------------------------------------------uncomment to renable autosave
-        //     updateGameState();
-        //     saveGameState();
-        // }, 30000);
+        saveGameInterval = setInterval(() => {
+            updateGameState();
+            saveGameState();
+        }, 30000);
     });
 });
 
@@ -1885,8 +1882,8 @@ nextAreaButton.forEach((button) => {
 // battleSetup() and resolveBattle(), also removes added images and enables buttons as needed
 leaveButton.forEach((leave) => {
     leave.addEventListener('click', (event) => {
-        // updateGameState();---------------------------------------------------------------------------------uncomment to reenable autosave
-        // saveGameState();
+        updateGameState();
+        saveGameState();
         setTimeout(() => {
             leaveButtonTextElement.forEach(button => {
                 button.textContent = 'Leave';
