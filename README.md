@@ -8,6 +8,9 @@ This project is a fan-made, educational endeavor created for learning purposes o
 
 A browser-based Pokémon game set in Kanto. Choose a trainer, catch Pokémon, earn badges, and defeat the Elite Four to become the Pokémon Champion\! Planned upgrades include enhanced catching mechanics, post-battle evolutions, animated Poké Balls, and a rival.
 
+![Main Gameplay Screenshot](/images/readme-image-1.png)  
+*A screenshot of the main gameplay screen, showing a battle in Pallet Town with the player’s trainer and a wild Pokémon.*
+
 ## FEATURES
 
 * Pick your trainer: Leaf, Red, Elaine, or Chase.   
@@ -19,6 +22,9 @@ A browser-based Pokémon game set in Kanto. Choose a trainer, catch Pokémon, ea
 * Progress through Kanto: Earn 8 badges to unlock the Indigo Plateau.   
 * Enjoy retro visuals: Classic sprites, area backgrounds (like Pallet Town), and fading message boxes for dialogue.   
 * Save your progress: Game state is saved locally and can be loaded on restart.
+
+![Battle Screenshot](/images/readme-image-2.png)  
+*Character selection screen image, showing each of the four character model choices.*
 
 ## DEMO
 
