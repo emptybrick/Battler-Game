@@ -1335,15 +1335,27 @@ pre {
 #sound-on {
     position: absolute;
     bottom: -235px;
-    right: -30px;
-    scale: 8%;
+    right: -40px;
+    scale: 7%;
     background-color: #c3e1ff00;
     border-radius: 100%;
     border: 10px solid black;
 }
 
 #sound-on {
-    right: -85px;
+    right: -65px;
+}
+
+#music-on {
+    right: -20px;
+}
+
+#speed-toggle {
+  position: absolute;
+  bottom: 11px;
+  right: 138px;
+  padding: 10px;
+  font-size: 16px;
 }
 
 .main-screen.area.start {

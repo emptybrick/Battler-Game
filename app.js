@@ -19,6 +19,21 @@ function updateGameState() {
     gameState[11] = currentPokemon;
 };
 
+/*-------------------- Game Speed Change Function ----------------------*/
+
+let speedMultiplier = 1;
+
+function gameTimeout(callback, delay) {
+    return setTimeout(callback, delay * speedMultiplier);
+}
+
+function toggleGameSpeed() {
+    speedMultiplier = speedMultiplier === 1 ? 0.5 : 1;
+    const button = document.getElementById('speed-toggle');
+    button.textContent = speedMultiplier === 1 ? 'x1' : 'x2';
+}
+
+
 /*------------------- Sound Toggle/Variables/Functions -----------------*/
 
 const muteMusicButton = document.querySelector('#music-on img');
@@ -70,12 +85,12 @@ muteMusicButton.addEventListener('click', () => {
         muteMusicButton.alt = 'music toggle';
     } else {
         musicEnabled = true;
+        currentMusic.volume = 0.03
         muteMusicButton.src = 'images/music-on.png';
         muteMusicButton.alt = 'music toggle';
     }
     if (!musicEnabled && currentMusic) {
-        currentMusic.pause();
-        currentMusic.currentTime = 0;
+        currentMusic.volume = 0;
     }
 });
 
@@ -92,16 +107,18 @@ muteSoundButton.addEventListener('click', () => {
 });
 
 function playMusic(music) {
-    if (!musicEnabled) return;
-
     if (currentMusic) {
         currentMusic.pause();
         currentMusic.currentTime = 0;
     }
-
     currentMusic = audioElements[music]
     currentMusic.play()
-    currentMusic.volume = 0.03
+
+    if (!musicEnabled) {
+        currentMusic.volume = 0
+    } else {
+        currentMusic.volume = 0.03
+    }
 }
 
 function playSound(sound) {
