@@ -1736,6 +1736,8 @@ function throwPokeball() {
 // function used when heal pokemon button is clicked in pokemon center 
 function heal() {
     party.forEach(pokemon => pokemon.hp = pokemon.maxhp);
+    currentPokemon = party[0];
+    partyCurrentIndex = 0;
     updatePartyDisplay();
     messageBox.forEach(msg => {
         msg.textContent = "Party is at Full Health!";
