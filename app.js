@@ -1797,11 +1797,29 @@ titleScreenButton.addEventListener('click', () => {
         onGameStart();
     };
     eliteFourStatus.forEach(elite => {
-        if (!elite.completed) {
+        const isLorelei = eliteFourStatus[0].completed;
+        const isBruno = eliteFourStatus[1].completed
+        const isAgatha = eliteFourStatus[2].completed
+        const isLance = eliteFourStatus[3].completed
+        if (elite.completed) {
             disableButtons(`.elite-four-button.${elite.name.toLowerCase()}`);
+        } else {
+            console.log(eliteFourStatus)
+            if (!isLorelei && !isBruno && !isAgatha && !isLance) {
+                disableButtons(".elite-four-button");
+                enableButtons(".elite-four-button.lorelei");
+            } else if (isLorelei && !isBruno && !isAgatha && !isLance) {
+                disableButtons(".elite-four-button");
+                enableButtons(".elite-four-button.bruno");
+            } else if (isLorelei && isBruno && !isAgatha && !isLance) {
+                disableButtons(".elite-four-button");
+                enableButtons(".elite-four-button.agatha");
+            } else if (isLorelei && isBruno && isAgatha && !isLance) {
+                disableButtons(".elite-four-button");
+                enableButtons(".elite-four-button.lance");
+            }
         }
-    })
-    disableButtons('.elite-four-button')
+    });
 });
 
 playAgainButton.forEach((button) => {
