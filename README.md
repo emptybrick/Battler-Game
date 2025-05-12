@@ -74,7 +74,9 @@ Play the game here: [**https://emptybrick.github.io/GA-Battler-Game-Project-1/**
 * Add post-battle evolution: Pokémon will evolve only after leaving a battle, with an evolution sound and area music playing afterward.   
 * Animate Poké Balls: Add animations for throwing Poké Balls when catching Pokémon or switching party members.   
 * Add a rival: Introduce a rival character for recurring battles throughout your journey.   
-* Balance rarity and HP: Adjust Pokémon rarity and HP values for better gameplay balance. Area-based typing: Increase the chance of encountering specific Pokémon types (e.g., Electric in certain areas) when searching for wild Pokémon.   
+* Balance rarity and HP: Adjust Pokémon rarity and HP values for better gameplay balance. Area-based typing: Increase the chance of encountering specific Pokémon types (e.g., Electric in certain areas) when searching for wild Pokémon.
+* Add functionality for Pokémon types by increasing/decreasing damage based on type vs type dependencies. (ie. grass is weak against fire).
+* Add chance to encounter wild Pokémon by area depending on type. (ie. increased chance to encounter water Pokémon in Cerulean City).
 * Replace max HP random damage: Replace the current max HP-based random damage with two attacks: a basic attack (unlimited) and a special attack (limited to 5 uses per battle).
 
 ## ABOUT ME
