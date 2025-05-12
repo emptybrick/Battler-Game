@@ -20,6 +20,10 @@
     font-style: normal;
 }
 
+:root {
+    --speed-multiplier: 1;
+}
+
 #game-box {
     display: flex;
     flex-direction: column;
@@ -159,7 +163,7 @@ button {
     padding: 6px 12px;
     border: 1px solid black;
     background-color: white;
-    transition: all 0.3s ease-in-out;
+    transition: all calc(0.3s * var(--speed-multiplier)) ease-in-out;
 }
 
 button:hover {
@@ -454,7 +458,7 @@ h4 {
 .leader-text {
     display: none;
     opacity: 0;
-    transition: opacity 1.5s ease;
+    transition: opacity calc(1.5s * var(--speed-multiplier)) ease;
 }
 
 .leader-text {
@@ -542,7 +546,7 @@ h4 {
 .message-box {
     display: none;
     opacity: 0;
-    transition: opacity 0.5s ease;
+    transition: opacity calc(0.5s * var(--speed-multiplier)) ease;
 }
 
 .message-box.center {
@@ -642,14 +646,14 @@ h6 {
     pointer-events: none;
     box-sizing: border-box;
     margin: auto;
-    animation: main-screen-fadeout 1s ease;
+    animation: main-screen-fadeout calc(1s * var(--speed-multiplier)) ease;
 }
 
 .main-screen.active {
     display: block;
     opacity: 1;
     pointer-events: all;
-    animation: main-screen-fadein 3s ease-in-out;
+    animation: main-screen-fadein calc(3s * var(--speed-multiplier)) ease-in-out;
 }
 
 @keyframes main-screen-fadein {
@@ -710,16 +714,16 @@ h6 {
 
 .player-image-animate {
     animation-name: enter-battle-player;
-    animation-duration: 1s;
+    animation-duration: calc(1s * var(--speed-multiplier));
     animation-fill-mode: forwards;
-    animation-delay: 3.0s;
+    animation-delay: calc(3s * var(--speed-multiplier));
 }
 
 .wildpokemon-image-animate {
     animation-name: enter-battle-opponent-pokemon;
-    animation-duration: 1s;
+    animation-duration: calc(1s * var(--speed-multiplier));
     animation-fill-mode: forwards;
-    animation-delay: 2.0s;
+    animation-delay: calc(2s * var(--speed-multiplier));
     transform: translateX(250px)
 }
 
@@ -820,7 +824,7 @@ h6 {
 }
 
 .damaged {
-    animation: flash-red 1.0s ease;
+    animation: flash-red calc(1s * var(--speed-multiplier)) ease;
 }
 
 @keyframes flash-red {
@@ -839,7 +843,7 @@ h6 {
 }
 
 .player-attack {
-    animation: player-attack 0.5s ease-in-out;
+    animation: player-attack calc(0.5s * var(--speed-multiplier)) ease-in-out;
 }
 
 @keyframes player-attack {
@@ -857,7 +861,7 @@ h6 {
 }
 
 .opponent-attack {
-    animation: opponent-attack 0.5s ease-in-out;
+    animation: opponent-attack calc(0.5s * var(--speed-multiplier)) ease-in-out;
 }
 
 @keyframes opponent-attack {
@@ -905,7 +909,7 @@ h6 {
     max-width: 35px;
     justify-content: center;
     align-items: center;
-    transition: opacity 0.5s ease;
+    transition: opacity calc(0.5s * var(--speed-multiplier)) ease;
 }
 
 .pokeball.fading {

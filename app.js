@@ -2,15 +2,24 @@
 let loadedState = loadGameState();
 
 function saveGameState() {
+    gameState[2] = areas
+        .filter(area => area.completed === true)
+        .map(area => ({ location: area.location }));
     localStorage.setItem('gameState', JSON.stringify(gameState));
-};
+}
 
 function loadGameState() {
     const savedState = localStorage.getItem('gameState');
+    if (!savedState) return null;
     return JSON.parse(savedState);
 };
 
 function updateGameState() {
+    gameState[0] = party;
+    gameState[1] = collection;
+    gameState[3] = eliteFourStatus;
+    gameState[4] = items;
+    gameState[5] = badges;
     gameState[6] = characterModel;
     gameState[7] = currentArea;
     gameState[8] = activeSlot;
@@ -28,9 +37,30 @@ function gameTimeout(callback, delay) {
 }
 
 function toggleGameSpeed() {
-    speedMultiplier = speedMultiplier === 1 ? 0.5 : 1;
+    switch (speedMultiplier) {
+        case 1:
+            speedMultiplier = 0.5;
+            break;
+        case 0.5:
+            speedMultiplier = 0.25;
+            break;
+        case 0.25:
+            speedMultiplier = 1;
+            break;
+    }
+    document.documentElement.style.setProperty('--speed-multiplier', speedMultiplier);
     const button = document.getElementById('speed-toggle');
-    button.textContent = speedMultiplier === 1 ? 'x1' : 'x2';
+    switch (speedMultiplier) {
+        case 1:
+            button.textContent = 'x1';
+            break;
+        case 0.5:
+            button.textContent = 'x2';
+            break;
+        case 0.25:
+            button.textContent = 'x4';
+            break;
+    }
 }
 
 
@@ -194,7 +224,7 @@ const areas = [
     { location: "saffronCity", music: 'pewterCity', completed: false, badge: 'Marsh', type: ["psychic", "ghost"], condition: () => badges.includes('Marsh') },
     { location: "cinnabarIsland", music: 'cinnabarIsland', completed: false, badge: 'Volcano', type: "fire", condition: () => badges.includes('Volcano') },
     { location: "viridianCity", music: 'pewterCity', completed: false, badge: 'Earth', type: "ground", condition: () => badges.includes('Earth') },
-    { location: "indigoPlateau", music: 'indigoPlateau', completed: false, type: ["dragon", "special"] },
+    { location: "indigoPlateau", music: 'indigoPlateau', completed: false, type: ["dragon", "special"], condition: () => eliteFourStatus.every(elite => elite.completed) }
 ];
 
 const eliteFourStatus = [
@@ -243,7 +273,7 @@ let saveGameInterval;
 let gameState = [
     party,
     collection,
-    areas,
+    [],
     eliteFourStatus,
     items,
     badges,
@@ -271,16 +301,16 @@ function resetGame() {
     items.forEach(item => {
         switch (item.name) {
             case "potion":
-                item.quantity = '-';
+                item.quantity = 0;
                 break;
             case "pokeball":
-                item.quantity = '-';
+                item.quantity = 0;
                 break;
             case "rarecandy":
-                item.quantity = '-';
+                item.quantity = 0;
                 break;
             case "gold":
-                item.quantity = '-';
+                item.quantity = 0;
                 break;
         }
     });
@@ -387,7 +417,7 @@ function switchScreen(screenClass) {
         if (screenClass === 'palletTown' || screenClass === 'indigoPlateau') {
             currentArea = screenClass;
             disableButtons('#trainer-battle, #gym, #poke-mart, #poke-center, #search-for-pokemon, .next-area, .last-area, .switch-pokemon, .use-rare-candy');
-            setTimeout(() => {
+            gameTimeout(() => {
                 enableButtons('#search-for-pokemon, #poke-center, #poke-mart, .next-area, .last-area');
                 updateRareCandyButton();
                 updateSwitchPokemonButton();
@@ -399,8 +429,9 @@ function switchScreen(screenClass) {
         else if (screenClass === "pokemart" || screenClass === "pokecenter" || screenClass === "gameCleared" ||
             screenClass === "gameOver" || screenClass === 'start' || screenClass === 'pokecenter-collection-box') {
             disableButtons('#trainer-battle, #gym, #poke-mart, #poke-center, #search-for-pokemon, .next-area, .last-area, .poke-button, .leave, .switch-pokemon, .use-rare-candy');
-            setTimeout(() => {
+            gameTimeout(() => {
                 enableButtons('.poke-button, .leave');
+                updateRareCandyButton();
             }, 2500);
         }
         else if (screenClass === 'gym' || screenClass === 'battle') {
@@ -408,7 +439,7 @@ function switchScreen(screenClass) {
         } else {
             currentArea = screenClass;
             disableButtons('#trainer-battle, #gym, #poke-mart, #poke-center, #search-for-pokemon, .next-area, .last-area, .switch-pokemon, .use-rare-candy');
-            setTimeout(() => {
+            gameTimeout(() => {
                 enableButtons('#trainer-battle, #poke-center, #poke-mart, #search-for-pokemon, .next-area, .last-area');
                 updateRareCandyButton();
                 updateSwitchPokemonButton();
@@ -626,45 +657,45 @@ function showMessageBox(type) {
     switch (type) {
         case "opponent":
             opponentTextElement.classList.add('active');
-            setTimeout(() => {
+            gameTimeout(() => {
                 opponentTextElement.classList.add('fading');
-                setTimeout(() => {
+                gameTimeout(() => {
                     opponentTextElement.classList.remove('fading', 'active');
                 }, 1200);
             }, 800);
             break;
         case "leader":
             leaderTextElement.classList.add('active');
-            setTimeout(() => {
+            gameTimeout(() => {
                 leaderTextElement.classList.add('fading');
-                setTimeout(() => {
+                gameTimeout(() => {
                     leaderTextElement.classList.remove('fading', 'active');
                 }, 1200);
             }, 800);
             break;
         case "player":
             playerTextElement.forEach(p => p.classList.add('active'));
-            setTimeout(() => {
+            gameTimeout(() => {
                 playerTextElement.forEach(p => p.classList.add('fading'));
-                setTimeout(() => {
+                gameTimeout(() => {
                     playerTextElement.forEach(p => p.classList.remove('fading', 'active'));
                 }, 1000);
             }, 4000);
             break;
         case "battle":
             battleTextElement.forEach(p => p.classList.add('active'));
-            setTimeout(() => {
+            gameTimeout(() => {
                 battleTextElement.forEach(p => p.classList.add('fading'));
-                setTimeout(() => {
+                gameTimeout(() => {
                     battleTextElement.forEach(p => p.classList.remove('fading', 'active'));
                 }, 1200);
             }, 800);
             break;
         case "message":
             messageBox.forEach(box => box.classList.add('active'));
-            setTimeout(() => {
+            gameTimeout(() => {
                 messageBox.forEach(box => box.classList.add('fading'));
-                setTimeout(() => {
+                gameTimeout(() => {
                     messageBox.forEach(box => box.classList.remove('active', 'fading'));
                 }, 500);
             }, 1500);
@@ -672,9 +703,9 @@ function showMessageBox(type) {
         case "pokemart":
             if (!messageBox.forEach(box => box.classList.contains('fading')) || !messageBox.forEach(box => box.classList.contains('active'))) {
                 messageBox.forEach(box => box.classList.add('active'));
-                setTimeout(() => {
+                gameTimeout(() => {
                     messageBox.forEach(box => box.classList.add('fading'));
-                    setTimeout(() => {
+                    gameTimeout(() => {
                         messageBox.forEach(box => box.classList.remove('fading', 'active'));
                     }, 500);
                 }, 1000);
@@ -685,7 +716,7 @@ function showMessageBox(type) {
 };
 
 function showMessagePerm(type) {
-    setTimeout(() => {
+    gameTimeout(() => {
         switch (type) {
             case "leader":
                 leaderTextElement.classList.add('active');
@@ -939,7 +970,7 @@ function damageFlashDisplay(type) {
             playerPokemonTextElement.forEach(e => {
                 e.classList.add('damaged');
             });
-            setTimeout(() => {
+            gameTimeout(() => {
                 playerPokemonTextElement.forEach(e => {
                     e.classList.remove('damaged');
                 });
@@ -948,7 +979,7 @@ function damageFlashDisplay(type) {
         case "opponent":
             opponentPokemonTextElement.classList.add('damaged');
             leaderPokemonTextElement.classList.add('damaged');
-            setTimeout(() => {
+            gameTimeout(() => {
                 opponentPokemonTextElement.classList.remove('damaged');
                 leaderPokemonTextElement.classList.remove('damaged');
             }, 1000);
@@ -962,7 +993,7 @@ function attackAnimate(type) {
             playerPokemonImageElement.forEach(e => {
                 e.classList.add('player-attack');
             });
-            setTimeout(() => {
+            gameTimeout(() => {
                 playerPokemonImageElement.forEach(e => {
                     e.classList.remove('player-attack');
                 });
@@ -971,7 +1002,7 @@ function attackAnimate(type) {
         case "opponent":
             opponentPokemonImageElement.classList.add('opponent-attack');
             leaderPokemonImageElement.classList.add('opponent-attack');
-            setTimeout(() => {
+            gameTimeout(() => {
                 opponentPokemonImageElement.classList.remove('opponent-attack');
                 leaderPokemonImageElement.classList.remove('opponent-attack');
             }, 1000);
@@ -1087,22 +1118,22 @@ function switchPokemon() {
         clearTimeout(attackTimeOut);
         disableButtons('.switch-pokemon.battle, .leave, .dynamic-button, .use-potion')
         if (encounter) {
-            setTimeout(() => {
+            gameTimeout(() => {
                 playSound('pokeballthrow')
-                setTimeout(() => {
+                gameTimeout(() => {
                     clearBattleDisplay('player');
                     addPokeballPokemon('player');
                     playSound('takein');
-                    setTimeout(() => {
+                    gameTimeout(() => {
                         removePokeballPokemon('player');
-                        setTimeout(() => {
+                        gameTimeout(() => {
                             playSound('pokeballthrow');
                             addPokeballPokemon('player');
-                            setTimeout(() => {
+                            gameTimeout(() => {
                                 playSound('poof');
                                 removePokeballPokemon('player');
                                 updateImageElements('player');
-                                setTimeout(() => {
+                                gameTimeout(() => {
                                     if (encounter === 'wildpokemon') {
                                         enableButtons('.leave')
                                     };
@@ -1138,18 +1169,18 @@ function switchPokemonOpp() {
         clearTimeout(attackTimeOut);
         disableButtons('.switch-pokemon.battle, .leave, .dynamic-button, .use-potion')
         if (encounter === 'gym' || encounter === 'elite') {
-            setTimeout(() => {
+            gameTimeout(() => {
                 playSound('pokeballthrow')
-                setTimeout(() => {
+                gameTimeout(() => {
                     clearBattleDisplay('leader');
                     addPokeballPokemon('leader');
                     playSound('takein');
-                    setTimeout(() => {
+                    gameTimeout(() => {
                         removePokeballPokemon('leader');
-                        setTimeout(() => {
+                        gameTimeout(() => {
                             playSound('pokeballthrow');
                             addPokeballPokemon('leader');
-                            setTimeout(() => {
+                            gameTimeout(() => {
                                 playSound('poof');
                                 removePokeballPokemon('leader');
                                 updateImageElements('leader');
@@ -1158,7 +1189,7 @@ function switchPokemonOpp() {
                                 });
                                 showMessageBox('battle');
                                 updateBattleDisplay(encounter);
-                                setTimeout(() => {
+                                gameTimeout(() => {
                                     enableButtons('.dynamic-button');
                                     updateSwitchPokemonButton('battle');
                                     updatePotionButton();
@@ -1169,18 +1200,18 @@ function switchPokemonOpp() {
                 }, 800);
             }, 400);
         } else {
-            setTimeout(() => {
+            gameTimeout(() => {
                 playSound('pokeballthrow')
-                setTimeout(() => {
+                gameTimeout(() => {
                     clearBattleDisplay('opponent');
                     addPokeballPokemon('opponent');
                     playSound('takein');
-                    setTimeout(() => {
+                    gameTimeout(() => {
                         removePokeballPokemon('opponent');
-                        setTimeout(() => {
+                        gameTimeout(() => {
                             playSound('pokeballthrow');
                             addPokeballPokemon('opponent');
-                            setTimeout(() => {
+                            gameTimeout(() => {
                                 playSound('poof');
                                 removePokeballPokemon('opponent');
                                 updateImageElements('opponent');
@@ -1249,6 +1280,8 @@ function updateXP() {
         }
     }
     updatePartyDisplay();
+    updateGameState();
+    saveGameState();
 };
 
 // sets up initial battle state (screen and images) should only run once
@@ -1286,10 +1319,10 @@ function battleSetup(eventText) {
         oppPartyCurrentIndex = 0;
         opponentImageElement.src = trainerImage;
         opponentImageElement.alt = "Random Trainer";
-        setTimeout(() => {
+        gameTimeout(() => {
             opponentTextElement.textContent = trainerIntro;
             showMessagePerm('opponent');
-            setTimeout(() => {
+            gameTimeout(() => {
                 playerTextElement.forEach(p => {
                     p.textContent = `A Trainer has challenged you with ${oppParty.length} Pokémon!`;
                     showMessagePerm('player');
@@ -1304,11 +1337,11 @@ function battleSetup(eventText) {
             button.textContent = "Attack";
         });
         encounter = 'wildpokemon';
-        setTimeout(() => {
+        gameTimeout(() => {
             playSound('pokeballthrow')
-            setTimeout(() => {
+            gameTimeout(() => {
                 addPokeballPokemon('player');
-                setTimeout(() => {
+                gameTimeout(() => {
                     playSound('poof');
                     removePokeballPokemon('player');
                     battleTextElement.forEach(p => {
@@ -1316,14 +1349,14 @@ function battleSetup(eventText) {
                         showMessageBox('battle');
                         updateImageElements('player');
                     });
-                    setTimeout(() => {
+                    gameTimeout(() => {
                         playerPokemonTextElement.forEach(p => {
                             p.innerHTML = `<pre>${currentPokemon.name}     HP: ${currentPokemon.hp}</pre>`
                             p.classList.add('active');
                         });
                         opponentPokemonTextElement.innerHTML = `<pre>${wildPokemonFound.name}     HP: ${wildPokemonFound.hp}</pre>`;
                         opponentPokemonTextElement.classList.add('active');
-                        setTimeout(() => {
+                        gameTimeout(() => {
                             enableButtons('.dynamic-button, .leave');
                             updatePotionButton();
                             updateSwitchPokemonButton('battle');
@@ -1335,21 +1368,21 @@ function battleSetup(eventText) {
         wildPokemonFound = structuredClone(chooseRandomPokemon());
         if (wildPokemonFound) {
             switchScreen('battle');
-            setTimeout(() => {
+            gameTimeout(() => {
                 opponentPokemonImageElement.src = wildPokemonFound.image
                 opponentPokemonImageElement.alt = wildPokemonFound.name
                 opponentPokemonImageElement.classList.add('wildpokemon-image-animate');
-                setTimeout(() => {
+                gameTimeout(() => {
                     opponentPokemonImageElement.classList.remove('wildpokemon-image-animate');
                 }, 4000)
             }, 1000);
-            setTimeout(() => {
+            gameTimeout(() => {
                 playerTextElement.forEach(p => {
                     p.textContent = `A wild ${wildPokemonFound.name} appeared!`;
                 });
                 showMessageBox('player');
             }, 4200);
-            setTimeout(() => {
+            gameTimeout(() => {
                 playSound('pokemoncry')
             }, 4000);
             return wildPokemonFound;
@@ -1365,7 +1398,7 @@ function battleSetup(eventText) {
             oppParty = structuredClone(foundGymLeader.party);
             oppLossMessage = foundGymLeader.loss;
             leaderImageElement.src = foundGymLeader.image;
-            setTimeout(() => {
+            gameTimeout(() => {
                 leaderTextElement.textContent = foundGymLeader.intro
                 showMessagePerm('leader');
             }, 2000);
@@ -1376,7 +1409,7 @@ function battleSetup(eventText) {
             oppParty = structuredClone(foundEliteMember.party);
             oppLossMessage = foundEliteMember.loss;
             leaderImageElement.src = foundEliteMember.image;
-            setTimeout(() => {
+            gameTimeout(() => {
                 leaderTextElement.textContent = foundEliteMember.intro;
                 showMessagePerm('leader');
             }, 2000);
@@ -1413,7 +1446,7 @@ async function battleDamageAndOrder(encounterData) {
                 resolve(currentPokemon);
                 return;
             }
-            setTimeout(() => {
+            gameTimeout(() => {
                 oppCurrentPokemon.hp -= currentPokemonAttack;
                 updateBattleDisplay(encounter);
                 battleMessageDisplay('player', currentPokemonAttack);
@@ -1430,7 +1463,7 @@ async function battleDamageAndOrder(encounterData) {
                 resolve(oppCurrentPokemon);
                 return;
             }
-            setTimeout(() => {
+            gameTimeout(() => {
                 currentPokemon.hp -= opponentPokemonAttack;
                 updateBattleDisplay();
                 battleMessageDisplay('opponent', opponentPokemonAttack);
@@ -1441,6 +1474,7 @@ async function battleDamageAndOrder(encounterData) {
             }, 2500);
 
         };
+        updatePartyDisplay();
     });
 };
 
@@ -1462,13 +1496,13 @@ async function resolveBattle() {
         clearTimeout(attackTimeOut);
         updateXP();
         updateBattleDisplay();
-        setTimeout(() => {
+        gameTimeout(() => {
             battleTextElement.forEach(p => {
                 p.textContent = `${currentPokemon.name} fainted!`;
                 playSound('faint');
                 showMessageBox('battle');
             });
-            setTimeout(() => {
+            gameTimeout(() => {
                 switchPokemon();
             }, 1000);
         }, 1000);
@@ -1479,18 +1513,18 @@ async function resolveBattle() {
             oppCurrentPokemon.hp = 0
             updateBattleDisplay(encounter);
             clearTimeout(attackTimeOut);
-            setTimeout(() => {
+            gameTimeout(() => {
                 playerTextElement.forEach(p => {
                     p.textContent = `Wild ${wildPokemonFound.name} fainted!`;
                 });
                 playSound('faint');
                 playMusic('wildVictory');
                 showMessagePerm('player');
-                setTimeout(() => {
+                gameTimeout(() => {
                     clearBattleDisplay('player');
                     clearBattleDisplay('opponent');
                 }, 2000);
-                setTimeout(() => {
+                gameTimeout(() => {
                     enableButtons('.dynamic-button');
                 }, 4000);
             }, 500);
@@ -1502,7 +1536,7 @@ async function resolveBattle() {
             leaveButtonTextElement.forEach(button => {
                 button.textContent = 'Leave';
             });
-            setTimeout(() => {
+            gameTimeout(() => {
                 getRewards('wildpokemon');
             }, 1000);
 
@@ -1512,15 +1546,20 @@ async function resolveBattle() {
                 oppCurrentPokemon.hp = 0;
                 clearTimeout(attackTimeOut);
                 updateBattleDisplay(encounter);
-                currentPokemon.xp += 1;
+                if (encounter === "trainer") {
+                    currentPokemon.xp += 2;
+                } else {
+                    currentPokemon.xp += 4;
+                }
+
                 updateXP(currentPokemon);
-                setTimeout(() => {
+                gameTimeout(() => {
                     battleTextElement.forEach(p => {
                         p.textContent = `${oppCurrentPokemon.name} fainted!`;
                     });
                     showMessageBox('battle');
                     playSound('faint');
-                    setTimeout(() => {
+                    gameTimeout(() => {
                         clearBattleDisplay('leader');
                         clearPokemonFromBattle('opponent');
                         clearBattleDisplay('opponent');
@@ -1539,7 +1578,7 @@ async function resolveBattle() {
                             button.textContent = "Accept Defeat";
                         }
                     });
-                    setTimeout(() => {
+                    gameTimeout(() => {
                         playerTextElement.forEach(p => {
                             p.textContent = `You defeated ${oppName}! Congratulations!`;
                         });
@@ -1548,11 +1587,11 @@ async function resolveBattle() {
                         leaderTextElement.textContent = oppLossMessage;
                         showMessagePerm('leader');
                     }, 3000);
-                    setTimeout(() => {
+                    gameTimeout(() => {
                         enableButtons('.dynamic-button');
                     }, 6000);
                 } else {
-                    setTimeout(() => {
+                    gameTimeout(() => {
                         playerTextElement.forEach(p => {
                             p.textContent = `Trainers party has been defeated.`;
                         });
@@ -1563,23 +1602,27 @@ async function resolveBattle() {
                         getRewards('trainer');
                         updateItemDisplay();
                     }, 3000);
-                    setTimeout(() => {
+                    gameTimeout(() => {
                         enableButtons('.leave');
                     }, 6000);
                 }
             } else {
                 oppCurrentPokemon.hp = 0;
                 updateBattleDisplay(encounter);
-                currentPokemon.xp += 1;
+                if (encounter === "trainer") {
+                    currentPokemon.xp += 2;
+                } else {
+                    currentPokemon.xp += 4;
+                }
                 updateXP(currentPokemon);
                 clearTimeout(attackTimeOut);
-                setTimeout(() => {
+                gameTimeout(() => {
                     battleTextElement.forEach(p => {
                         p.textContent = `${oppCurrentPokemon.name} fainted!`;
                     });
                     showMessageBox('battle');
                     playSound('faint');
-                    setTimeout(() => {
+                    gameTimeout(() => {
                         switchPokemonOpp();
                     }, 1000);
                 }, 2000);
@@ -1600,7 +1643,7 @@ function getRewards(rewardType) {
     let randomGoldGym = (Math.ceil(Math.random() * 20) + 10);
     let randomGoldElite = (Math.ceil(Math.random() * 30) + 20);
     let randomRareCandy = Math.floor(Math.random() * 3);
-    setTimeout(() => {
+    gameTimeout(() => {
         switch (rewardType) {
             case 'trainer':
                 gold.quantity += randomGoldTrainer;
@@ -1662,7 +1705,7 @@ function throwPokeball() {
 
     const pokeBall = items.find(item => item.name === 'pokeball');
     if (pokeBall.quantity < 1) {
-        setTimeout(() => {
+        gameTimeout(() => {
             enableButtons('.leave');
         }, 2000);
         playerTextElement.forEach(p => {
@@ -1670,7 +1713,7 @@ function throwPokeball() {
         });
         showMessagePerm('player');
     } else {
-        setTimeout(() => {
+        gameTimeout(() => {
             enableButtons('.leave');
         }, 4000);
         clearBattleDisplay('opponent');
@@ -1691,7 +1734,7 @@ function throwPokeball() {
             });
             showMessagePerm('player');
         };
-        setTimeout(() => {
+        gameTimeout(() => {
             playSound('caughtPokemon');
         }, 200);
     };
@@ -1723,12 +1766,6 @@ titleScreenButton.addEventListener('click', () => {
     if (loadedState) {
         gameState = loadedState;
 
-        party.push(...gameState[0]);
-        collection.push(...gameState[1]);
-        areas.push(...gameState[2]);
-        eliteFourStatus.push(...gameState[3]);
-        items.push(...gameState[4]);
-        badges.push(...gameState[5]);
         characterModel = gameState[6];
         currentArea = gameState[7];
         activeSlot = gameState[8];
@@ -1736,11 +1773,37 @@ titleScreenButton.addEventListener('click', () => {
         nextUniqueID = gameState[10];
         currentPokemon = gameState[11];
 
+
+        areas.forEach(area => {
+            const savedArea = gameState[2].find(saved => saved.location === area.location);
+            area.completed = savedArea ? savedArea.completed : false;
+        });
+
+
+        items.length = 0;
+        items.push(...gameState[4]);
+        eliteFourStatus.length = 0;
+        eliteFourStatus.push(...gameState[3]);
+        party.length = 0;
+        party.push(...gameState[0]);
+        collection.length = 0;
+        collection.push(...gameState[1]);
+
+        gameState[5].forEach(badge => {
+            getBadge(badge);
+        });
+
         updateNextArea(currentArea);
         updateLastArea(currentArea);
         updateItemDisplay();
         updatePartyDisplay();
         switchScreen(currentArea);
+
+        clearInterval(saveGameInterval);
+        saveGameInterval = setInterval(() => {
+            updateGameState();
+            saveGameState();
+        }, 30000);
     } else {
         switchScreen('character');
         onGameStart();
@@ -1771,7 +1834,7 @@ pokeMartBuyButton.forEach((button) => {
         playSound('buttonclick');
         buyItem(button.textContent);
         disableButtons('.poke-button.mart')
-        setTimeout(() => {
+        gameTimeout(() => {
             enableButtons('.poke-button.mart');
         }, 1500);
     });
@@ -1782,7 +1845,7 @@ gym.addEventListener('click', (event) => {
     clearOpponentData();
     battleSetup(event.target.textContent);
     disableButtons('.use-potion, .switch-pokemon, .dynamic-button, .leave');
-    setTimeout(() => {
+    gameTimeout(() => {
         enableButtons('.dynamic-button, .leave');
     }, 5500);
     playMusic('gymBattle')
@@ -1792,7 +1855,7 @@ searchForPokemon.addEventListener('click', (event) => {
     playSound('buttonclick');
     clearOpponentData();
     battleSetup(event.target.textContent);
-    setTimeout(() => {
+    gameTimeout(() => {
         leaveButtonTextElement.forEach(button => {
             button.textContent = 'Run Away';
         });
@@ -1806,7 +1869,7 @@ trainerBattle.addEventListener('click', (event) => {
     clearOpponentData();
     battleSetup(event.target.textContent);
     disableButtons('.use-potion, .switch-pokemon, .dynamic-button, .leave');
-    setTimeout(() => {
+    gameTimeout(() => {
         enableButtons('.dynamic-button, .leave');
     }, 5500);
     playMusic('trainerBattle')
@@ -1902,9 +1965,7 @@ nextAreaButton.forEach((button) => {
 // battleSetup() and resolveBattle(), also removes added images and enables buttons as needed
 leaveButton.forEach((leave) => {
     leave.addEventListener('click', (event) => {
-        updateGameState();
-        saveGameState();
-        setTimeout(() => {
+        gameTimeout(() => {
             leaveButtonTextElement.forEach(button => {
                 button.textContent = 'Leave';
             });
@@ -1917,7 +1978,7 @@ leaveButton.forEach((leave) => {
                 const container = document.querySelector('.main-screen.area.pokecenter-collection-box');
                 container.appendChild(message);
                 disableButtons('.leave');
-                setTimeout(() => {
+                gameTimeout(() => {
                     message.remove();
                     enableButtons('.leave');
                 }, 1500);
@@ -1927,14 +1988,14 @@ leaveButton.forEach((leave) => {
                 };
                 playSound('buttonclick');
                 switchScreen('pokecenter');
-                setTimeout(() => {
+                gameTimeout(() => {
                     leaveButtonTextElement.forEach(button => {
                         button.textContent = 'Leave';
                     });
                 }, 1500);
             };
             disableButtons('.pokemon-collection-button, .release-pokemon');
-            setTimeout(() => {
+            gameTimeout(() => {
                 enableButtons('.pokemon-collection-button, .release-pokemon');
             }, 2500);
         } else {
@@ -1942,7 +2003,7 @@ leaveButton.forEach((leave) => {
             disableButtons('.dynamic-button, .leave, .use-potion, .switch-pokemon')
             clearOpponentData();
             switchScreen(currentArea);
-            setTimeout(() => {
+            gameTimeout(() => {
                 enableButtons('.dynamic-button, .leave');
                 updateTownButtons();
             }, 2500);
@@ -1951,6 +2012,8 @@ leaveButton.forEach((leave) => {
             document.querySelector('#game-clear-button').classList.add('active');
             playMusic('claimVictory');
         };
+        updateGameState();
+        saveGameState();
     });
 });
 
@@ -1962,7 +2025,7 @@ dynamicButton.forEach((button) => {
 
             disableButtons('.dynamic-button, .use-potion, .switch-pokemon, .leave')
 
-            attackTimeOut = setTimeout(() => {
+            attackTimeOut = gameTimeout(() => {
                 enableButtons('.dynamic-button');
                 updateSwitchPokemonButton("battle");
                 updatePotionButton();
@@ -1988,7 +2051,7 @@ dynamicButton.forEach((button) => {
         else if (button.textContent === 'Use Poké Ball') {
             playSound('pokeballthrow');
             disableButtons('.dynamic-button, .use-potion, .switch-pokemon');
-            setTimeout(() => {
+            gameTimeout(() => {
                 throwPokeball(wildPokemonFound);
             }, 1000);
         }
@@ -1997,9 +2060,9 @@ dynamicButton.forEach((button) => {
             switch (button.textContent) {
                 case "Challenge":
                     playSound('pokeballthrow')
-                    setTimeout(() => {
+                    gameTimeout(() => {
                         addPokeballPokemon('leader');
-                        setTimeout(() => {
+                        gameTimeout(() => {
                             playSound('poof');
                             removePokeballPokemon('leader');
                             updateImageElements('leader');
@@ -2012,9 +2075,9 @@ dynamicButton.forEach((button) => {
                     break;
                 case "Accept Challenge":
                     playSound('pokeballthrow')
-                    setTimeout(() => {
+                    gameTimeout(() => {
                         addPokeballPokemon('opponent');
-                        setTimeout(() => {
+                        gameTimeout(() => {
                             playSound('poof');
                             removePokeballPokemon('opponent');
                             updateImageElements('opponent');
@@ -2026,11 +2089,11 @@ dynamicButton.forEach((button) => {
                     }, 800);
                     break;
             };
-            setTimeout(() => {
+            gameTimeout(() => {
                 playSound('pokeballthrow')
-                setTimeout(() => {
+                gameTimeout(() => {
                     addPokeballPokemon('player');
-                    setTimeout(() => {
+                    gameTimeout(() => {
                         playSound('poof');
                         removePokeballPokemon('player');
                         battleTextElement.forEach(p => {
@@ -2051,7 +2114,7 @@ dynamicButton.forEach((button) => {
                 button.textContent = "Attack";
             });
             disableButtons('.leave, .dynamic-button');
-            setTimeout(() => {
+            gameTimeout(() => {
                 updateSwitchPokemonButton("battle");
                 updatePotionButton();
                 enableButtons('.dynamic-button');
@@ -2063,7 +2126,7 @@ dynamicButton.forEach((button) => {
             getBadge(foundArea.badge);
             playSound('badge');
             getRewards('gym');
-            setTimeout(() => {
+            gameTimeout(() => {
                 enableButtons('.leave');
             }, 3000);
             disableButtons('.dynamic-button, .use-potion, .switch-pokemon');
@@ -2079,7 +2142,7 @@ dynamicButton.forEach((button) => {
                 playSound('badge');
                 getRewards('elite');
             }
-            setTimeout(() => {
+            gameTimeout(() => {
                 enableButtons('.leave');
             }, 3000);
             disableButtons('.dynamic-button, .use-potion, .switch-pokemon');
@@ -2120,7 +2183,7 @@ useRareCandy.addEventListener('click', () => {
     updateXP(currentPokemon);
     updatePartyDisplay();
     updateItemDisplay();
-    setTimeout(() => {
+    gameTimeout(() => {
         if (rareCandy.quantity <= 0) {
             rareCandy.quantity = 0;
             disableButtons('.use-rare-candy');
@@ -2135,7 +2198,7 @@ healButton.addEventListener('click', () => {
     disableButtons('.poke-button.heal');
     heal();
     playSound('heal');
-    setTimeout(() => {
+    gameTimeout(() => {
         enableButtons('.poke-button.heal');
     }, 5000);
 });
@@ -2144,13 +2207,13 @@ checkCollection.addEventListener('click', () => {
     playSound('buttonclick');
     switchScreen('pokecenter-collection-box')
     updateCollectionWindow();
-    setTimeout(() => {
+    gameTimeout(() => {
         leaveButtonTextElement.forEach(button => {
             button.textContent = 'Leave Collection';
         });
     }, 1500);
     disableButtons('.pokemon-collection-button, .release-pokemon');
-    setTimeout(() => {
+    gameTimeout(() => {
         enableButtons('.pokemon-collection-button, .release-pokemon');
     }, 2500);
 });
@@ -2159,7 +2222,7 @@ gameClearButton.addEventListener('click', () => {
     playSound('buttonclick');
     switchScreen('gameCleared');
     playMusic('gameClear');
-    setTimeout(() => {
+    gameTimeout(() => {
         enableButtons('.elite-four-button');
     }, 2000);
 });
@@ -2170,7 +2233,7 @@ eliteFourButton.forEach((button) => {
         playSound('buttonclick');
         battleSetup(button.textContent);
         disableButtons('.use-potion, .switch-pokemon, .dynamic-button, .leave');
-        setTimeout(() => {
+        gameTimeout(() => {
             enableButtons('.dynamic-button, .leave');
         }, 5500);
         playMusic('eliteBattle');
@@ -2194,7 +2257,7 @@ usePotion.forEach((button) => {
         updatePartyDisplay();
         updateItemDisplay();
         updateBattleDisplay();
-        setTimeout(() => {
+        gameTimeout(() => {
             updatePotionButton()
         }, 200);
     });
