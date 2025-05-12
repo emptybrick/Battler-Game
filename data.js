@@ -127,7 +127,7 @@ const pokedex = [
   { id: null, number: 126, name: 'Magmar', type: 'fire', maxhp: 65, hp: 65, maxxp: 25, xp: 0, starter: false, canEvolve: false, evolvesFrom: null, rarity: 5, image: 'images/magmar.png' },
   { id: null, number: 127, name: 'Pinsir', type: 'bug', maxhp: 65, hp: 65, maxxp: 25, xp: 0, starter: false, canEvolve: false, evolvesFrom: null, rarity: 5, image: 'images/pinsir.png' },
   { id: null, number: 128, name: 'Tauros', type: 'normal', maxhp: 75, hp: 75, maxxp: 25, xp: 0, starter: false, canEvolve: false, evolvesFrom: null, rarity: 4, image: 'images/tauros.png' },
-  { id: null, number: 129, name: 'Magikarp', type: 'water', maxhp: 20, hp: 20, maxxp: 15, xp: 0, starter: false, canEvolve: true, evolvesFrom: null, rarity: 1, image: 'images/magikarp.png' },
+  { id: null, number: 129, name: 'Magikarp', type: 'water', maxhp: 20, hp: 20, maxxp: 15, xp: 0, starter: false, canEvolve: true, evolvesFrom: null, rarity: 8, image: 'images/magikarp.png' },
   { id: null, number: 130, name: 'Gyarados', type: 'water', maxhp: 95, hp: 95, maxxp: 40, xp: 0, starter: false, canEvolve: false, evolvesFrom: 'Magikarp', rarity: 0, image: 'images/gyarados.png' },
   { id: null, number: 131, name: 'Lapras', type: 'water', maxhp: 95, hp: 95, maxxp: 45, xp: 0, starter: false, canEvolve: false, evolvesFrom: null, rarity: 3, image: 'images/lapras.png' },
   { id: null, number: 132, name: 'Ditto', type: 'normal', maxhp: 50, hp: 50, maxxp: 10, xp: 0, starter: false, canEvolve: false, evolvesFrom: null, rarity: 4, image: 'images/ditto.png' },
