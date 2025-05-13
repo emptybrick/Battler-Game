@@ -1146,7 +1146,8 @@ function switchPokemon() {
         return;
     } else {
         switchScreen('gameOver');
-        playMusic('gameOver')
+        playMusic('gameOver');
+        resetGame();
     };
 };
 
